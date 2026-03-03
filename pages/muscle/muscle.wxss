@@ -1,0 +1,190 @@
+/* pages/muscle/muscle.wxss */
+
+.container {
+  padding-bottom: 120rpx;
+}
+
+/* 标签栏 */
+.tabs {
+  background: #FFFFFF;
+  padding: 20rpx 30rpx;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 34rpx;
+  color: #666666;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #4A90D9;
+  font-weight: bold;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background: #4A90D9;
+  border-radius: 3rpx;
+}
+
+/* 肌肉介绍 */
+.muscle-intro {
+  margin: 20rpx;
+}
+
+.intro-header {
+  align-items: flex-start;
+}
+
+.intro-image {
+  width: 150rpx;
+  height: 150rpx;
+  margin-right: 30rpx;
+}
+
+.intro-text {
+  flex: 1;
+}
+
+.intro-name {
+  display: block;
+  font-size: 42rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 10rpx;
+}
+
+.intro-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #666666;
+  margin-bottom: 20rpx;
+  line-height: 1.5;
+}
+
+.muscle-tags {
+  gap: 16rpx;
+}
+
+.muscle-tag {
+  padding: 8rpx 20rpx;
+  background: #E3F2FD;
+  color: #4A90D9;
+  font-size: 26rpx;
+  border-radius: 20rpx;
+}
+
+/* 锻炼板块 */
+.exercise-section {
+  padding: 20rpx;
+}
+
+.section-header {
+  margin-bottom: 20rpx;
+}
+
+.loading {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999999;
+}
+
+/* 锻炼卡片 */
+.exercise-card {
+  margin-bottom: 30rpx;
+}
+
+.card-header {
+  margin-bottom: 20rpx;
+}
+
+.exercise-name {
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.difficulty-tag {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+}
+
+.difficulty-tag.easy {
+  background: #E8F5E9;
+  color: #4CAF50;
+}
+
+.difficulty-tag.medium {
+  background: #FFF3E0;
+  color: #FF9800;
+}
+
+.exercise-image {
+  width: 100%;
+  height: 350rpx;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-info {
+  background: #F5F7FA;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.info-row {
+  margin-bottom: 16rpx;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #999999;
+  width: 180rpx;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+/* 语音按钮 */
+.btn-audio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 90rpx;
+  background: #4A90D9;
+  color: #FFFFFF;
+  border-radius: 45rpx;
+  font-size: 32rpx;
+  border: none;
+}
+
+.btn-audio::after {
+  border: none;
+}
+
+.audio-icon {
+  margin-right: 10rpx;
+  font-size: 36rpx;
+}

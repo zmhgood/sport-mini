@@ -1,0 +1,78 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 顶部用户区域 -->
+  <view class="header">
+    <view class="user-info" wx:if="{{isLoggedIn}}">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <text class="username">{{userInfo.nickName || '老年朋友'}}</text>
+    </view>
+    <view class="user-info" wx:else bindtap="handleLogin">
+      <image class="avatar" src="/images/default-avatar.png" mode="aspectFill"></image>
+      <text class="username">点击登录</text>
+    </view>
+    
+    <!-- 今日进度 -->
+    <view class="today-progress card">
+      <view class="progress-header flex-between">
+        <text class="title-medium">今日锻炼</text>
+        <text class="text-primary">{{todayProgress.completed}}/{{todayProgress.total}}</text>
+      </view>
+      <progress class="progress-bar" percent="{{todayProgress.completed / todayProgress.total * 100}}" 
+                stroke-width="12" activeColor="#4A90D9" backgroundColor="#E5E5E5" />
+      <button class="btn-large mt-20" bindtap="startTodayExercise">开始锻炼</button>
+    </view>
+  </view>
+
+  <!-- 轮播图 -->
+  <swiper class="banner" indicator-dots autoplay circular interval="5000">
+    <swiper-item wx:for="{{bannerList}}" wx:key="id">
+      <view class="banner-item">
+        <image class="banner-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="banner-text">
+          <text class="banner-title">{{item.title}}</text>
+          <text class="banner-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 肌肉部位分类 -->
+  <view class="section">
+    <view class="section-header flex-between">
+      <text class="title-medium">肌肉部位</text>
+      <text class="text-hint" bindtap="goToMuscle">查看全部 ></text>
+    </view>
+    <view class="muscle-groups flex-row flex-wrap">
+      <view class="muscle-item" wx:for="{{muscleGroups}}" wx:key="id" 
+            bindtap="goToMuscle" data-id="{{item.id}}">
+        <image class="muscle-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <text class="muscle-name">{{item.name}}</text>
+        <text class="muscle-desc">{{item.desc}}</text>
+        <text class="muscle-count">{{item.count}}个动作</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 推荐锻炼 -->
+  <view class="section">
+    <view class="section-header flex-between">
+      <text class="title-medium">推荐锻炼</text>
+    </view>
+    <view class="exercise-list">
+      <view class="exercise-item card" wx:for="{{recommendExercises}}" wx:key="id"
+            bindtap="goToExercise" data-id="{{item.id}}">
+        <image class="exercise-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="exercise-info">
+          <text class="exercise-name">{{item.name}}</text>
+          <text class="exercise-target">目标肌肉：{{item.targetMuscle}}</text>
+          <view class="exercise-meta flex-row">
+            <text class="exercise-difficulty {{item.difficulty === '简单' ? 'easy' : 'medium'}}">
+              {{item.difficulty}}
+            </text>
+            <text class="exercise-duration ml-20">{{item.duration}}分钟</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

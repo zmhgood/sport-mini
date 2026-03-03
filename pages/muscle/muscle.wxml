@@ -1,0 +1,71 @@
+<!--pages/muscle/muscle.wxml-->
+<view class="container">
+  <!-- 标签切换 -->
+  <view class="tabs flex-row">
+    <view class="tab-item {{currentTab === index ? 'active' : ''}}" 
+          wx:for="{{tabs}}" wx:key="index" 
+          bindtap="switchTab" data-index="{{index}}">
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 当前部位介绍 -->
+  <view class="muscle-intro card" wx:if="{{muscleGroups[currentTab]}}">
+    <view class="intro-header flex-row">
+      <image class="intro-image" src="{{muscleGroups[currentTab].image}}" mode="aspectFit"></image>
+      <view class="intro-text">
+        <text class="intro-name">{{muscleGroups[currentTab].name}}</text>
+        <text class="intro-desc">{{muscleGroups[currentTab].description}}</text>
+        <view class="muscle-tags flex-row flex-wrap">
+          <text class="muscle-tag" wx:for="{{muscleGroups[currentTab].muscles}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 锻炼列表 -->
+  <view class="exercise-section">
+    <view class="section-header">
+      <text class="title-medium">推荐动作</text>
+      <text class="text-hint">共{{exercises.length}}个动作</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:else class="exercise-list">
+      <view class="exercise-card card" wx:for="{{exercises}}" wx:key="id" 
+            bindtap="goToExercise" data-id="{{item.id}}">
+        <view class="card-header flex-between">
+          <text class="exercise-name">{{item.name}}</text>
+          <view class="difficulty-tag {{item.difficulty === '简单' ? 'easy' : 'medium'}}">
+            {{item.difficulty}}
+          </view>
+        </view>
+        
+        <image class="exercise-image" src="{{item.image}}" mode="aspectFill"></image>
+        
+        <view class="card-info">
+          <view class="info-row flex-row">
+            <text class="info-label">目标肌肉：</text>
+            <text class="info-value">{{item.targetMuscle}}</text>
+          </view>
+          <view class="info-row flex-row">
+            <text class="info-label">锻炼时长：</text>
+            <text class="info-value">{{item.duration}}分钟</text>
+          </view>
+          <view class="info-row flex-row">
+            <text class="info-label">建议组数：</text>
+            <text class="info-value">{{item.sets}}组</text>
+          </view>
+        </view>
+
+        <button class="btn-audio" catchtap="playAudio" data-name="{{item.name}}" data-target-muscle="{{item.targetMuscle}}">
+          <text class="audio-icon">🔊</text>
+          <text>语音讲解</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

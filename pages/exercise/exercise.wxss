@@ -1,0 +1,309 @@
+/* pages/exercise/exercise.wxss */
+
+.container {
+  padding-bottom: 180rpx;
+}
+
+/* 媒体区域 */
+.media-section {
+  position: relative;
+  width: 100%;
+  height: 450rpx;
+}
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+}
+
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(74, 144, 217, 0.9);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-icon {
+  font-size: 50rpx;
+  color: #FFFFFF;
+  margin-left: 10rpx;
+}
+
+.timer-box {
+  position: absolute;
+  bottom: 20rpx;
+  right: 20rpx;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10rpx 20rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: baseline;
+}
+
+.timer-text {
+  font-size: 36rpx;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.timer-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: 10rpx;
+}
+
+/* 信息区域 */
+.info-section {
+  margin: 20rpx;
+}
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.exercise-name {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 20rpx;
+}
+
+.difficulty-tag {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+}
+
+.difficulty-tag.easy {
+  background: #E8F5E9;
+  color: #4CAF50;
+}
+
+.difficulty-tag.medium {
+  background: #FFF3E0;
+  color: #FF9800;
+}
+
+.info-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.info-item {
+  text-align: center;
+  flex: 1;
+}
+
+.info-value {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4A90D9;
+  margin-bottom: 10rpx;
+}
+
+.info-label {
+  display: block;
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.description {
+  font-size: 30rpx;
+  color: #666666;
+  line-height: 1.8;
+  padding: 20rpx;
+  background: #F5F7FA;
+  border-radius: 16rpx;
+}
+
+/* 步骤区域 */
+.steps-section {
+  margin: 20rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20rpx;
+}
+
+.step-nav {
+  justify-content: center;
+  margin-bottom: 30rpx;
+  gap: 16rpx;
+}
+
+.step-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #E5E5E5;
+}
+
+.step-dot.active {
+  background: #4A90D9;
+}
+
+.step-content {
+  text-align: center;
+}
+
+.step-header {
+  justify-content: center;
+  margin-bottom: 30rpx;
+}
+
+.step-number {
+  width: 60rpx;
+  height: 60rpx;
+  background: #4A90D9;
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.step-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.step-image {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.step-desc {
+  display: block;
+  font-size: 32rpx;
+  color: #666666;
+  line-height: 1.6;
+  margin-bottom: 30rpx;
+  padding: 0 20rpx;
+}
+
+.step-nav-btns {
+  padding: 0 40rpx;
+}
+
+.nav-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 30rpx;
+  border-radius: 40rpx;
+  margin: 0 10rpx;
+  background: #F5F7FA;
+  color: #333333;
+}
+
+.nav-btn.disabled {
+  opacity: 0.5;
+}
+
+/* 益处区域 */
+.benefits-section {
+  margin: 20rpx;
+}
+
+.benefit-item {
+  margin-bottom: 20rpx;
+  align-items: flex-start;
+}
+
+.benefit-icon {
+  font-size: 32rpx;
+  color: #4CAF50;
+  margin-right: 16rpx;
+}
+
+.benefit-text {
+  font-size: 30rpx;
+  color: #333333;
+  line-height: 1.6;
+}
+
+/* 注意事项区域 */
+.precautions-section {
+  margin: 20rpx;
+}
+
+.precaution-item {
+  margin-bottom: 20rpx;
+  align-items: flex-start;
+}
+
+.precaution-icon {
+  font-size: 28rpx;
+  margin-right: 16rpx;
+}
+
+.precaution-text {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.6;
+}
+
+/* 底部操作栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  padding: 20rpx 30rpx;
+  background: #FFFFFF;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.btn-audio {
+  width: 200rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  background: #F5F7FA;
+  color: #333333;
+  font-size: 28rpx;
+  border-radius: 45rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.audio-icon {
+  margin-right: 8rpx;
+}
+
+.btn-start {
+  flex: 1;
+  height: 90rpx;
+  line-height: 90rpx;
+  background: #4A90D9;
+  color: #FFFFFF;
+  font-size: 34rpx;
+  font-radius: 45rpx;
+}
+
+.btn-start.playing {
+  background: #FF9800;
+}

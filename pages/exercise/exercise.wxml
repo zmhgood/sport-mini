@@ -1,0 +1,109 @@
+<!--pages/exercise/exercise.wxml-->
+<view class="container" wx:if="{{exercise}}">
+  <!-- 顶部视频/图片区域 -->
+  <view class="media-section">
+    <image class="cover-image" src="{{exercise.image}}" mode="aspectFill" bindtap="playVideo"></image>
+    <view class="play-btn" bindtap="playVideo">
+      <text class="play-icon">▶</text>
+    </view>
+    
+    <!-- 计时器 -->
+    <view class="timer-box">
+      <text class="timer-text">{{timerText}}</text>
+      <text class="timer-label">/ {{exercise.duration}}分钟</text>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="info-section card">
+    <view class="exercise-header">
+      <text class="exercise-name">{{exercise.name}}</text>
+      <view class="difficulty-tag {{exercise.difficulty === '简单' ? 'easy' : 'medium'}}">
+        {{exercise.difficulty}}
+      </view>
+    </view>
+    
+    <view class="info-grid">
+      <view class="info-item">
+        <text class="info-value">{{exercise.targetMuscle}}</text>
+        <text class="info-label">目标肌肉</text>
+      </view>
+      <view class="info-item">
+        <text class="info-value">{{exercise.sets}}组</text>
+        <text class="info-label">建议组数</text>
+      </view>
+      <view class="info-item">
+        <text class="info-value">{{exercise.reps}}</text>
+        <text class="info-label">每组次数</text>
+      </view>
+      <view class="info-item">
+        <text class="info-value">{{exercise.calories}}卡</text>
+        <text class="info-label">消耗热量</text>
+      </view>
+    </view>
+
+    <view class="description">
+      <text>{{exercise.description}}</text>
+    </view>
+  </view>
+
+  <!-- 动作步骤 -->
+  <view class="steps-section card">
+    <text class="section-title">动作步骤</text>
+    
+    <view class="step-nav flex-row">
+      <view class="step-dot {{currentStep >= index ? 'active' : ''}}" 
+            wx:for="{{exercise.steps}}" wx:key="order">
+      </view>
+    </view>
+
+    <view class="step-content">
+      <view class="step-header flex-row">
+        <view class="step-number">{{exercise.steps[currentStep].order}}</view>
+        <text class="step-title">{{exercise.steps[currentStep].title}}</text>
+      </view>
+      
+      <image class="step-image" src="{{exercise.steps[currentStep].image}}" mode="aspectFit"></image>
+      
+      <text class="step-desc">{{exercise.steps[currentStep].desc}}</text>
+      
+      <view class="step-nav-btns flex-between">
+        <button class="nav-btn {{currentStep === 0 ? 'disabled' : ''}}" bindtap="prevStep">上一步</button>
+        <button class="nav-btn {{currentStep === exercise.steps.length - 1 ? 'disabled' : ''}}" bindtap="nextStep">下一步</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 动作益处 -->
+  <view class="benefits-section card">
+    <text class="section-title">动作益处</text>
+    <view class="benefits-list">
+      <view class="benefit-item flex-row" wx:for="{{exercise.benefits}}" wx:key="*this">
+        <text class="benefit-icon">✓</text>
+        <text class="benefit-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 注意事项 -->
+  <view class="precautions-section card">
+    <text class="section-title">注意事项</text>
+    <view class="precautions-list">
+      <view class="precaution-item flex-row" wx:for="{{exercise.precautions}}" wx:key="*this">
+        <text class="precaution-icon">⚠️</text>
+        <text class="precaution-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar safe-area-bottom">
+    <button class="btn-audio" bindtap="playAudio">
+      <text class="audio-icon">🔊</text>
+      <text>语音讲解</text>
+    </button>
+    <button class="btn-start {{isPlaying ? 'playing' : ''}}" bindtap="{{isPlaying ? 'pauseTimer' : 'startTimer'}}">
+      {{isPlaying ? '暂停' : completed ? '已完成' : '开始锻炼'}}
+    </button>
+  </view>
+</view>

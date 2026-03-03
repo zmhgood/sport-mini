@@ -1,0 +1,198 @@
+/* pages/index/index.wxss */
+
+.container {
+  padding-bottom: 120rpx;
+}
+
+/* 头部区域 */
+.header {
+  background: linear-gradient(135deg, #4A90D9 0%, #5BA0E9 100%);
+  padding: 40rpx 30rpx 60rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid #FFFFFF;
+  margin-right: 20rpx;
+}
+
+.username {
+  font-size: 40rpx;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+/* 今日进度卡片 */
+.today-progress {
+  margin-top: 20rpx;
+}
+
+.progress-header {
+  margin-bottom: 20rpx;
+}
+
+.progress-bar {
+  width: 100%;
+  margin: 20rpx 0;
+}
+
+/* 轮播图 */
+.banner {
+  height: 320rpx;
+  margin: 20rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.banner-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+}
+
+.banner-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30rpx;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  color: #FFFFFF;
+}
+
+.banner-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.banner-desc {
+  font-size: 28rpx;
+}
+
+/* 板块通用样式 */
+.section {
+  padding: 20rpx;
+}
+
+.section-header {
+  margin-bottom: 20rpx;
+}
+
+/* 肌肉部位 */
+.muscle-groups {
+  justify-content: space-between;
+}
+
+.muscle-item {
+  width: 31%;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 30rpx 20rpx;
+  text-align: center;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.muscle-icon {
+  width: 100rpx;
+  height: 100rpx;
+  margin-bottom: 10rpx;
+}
+
+.muscle-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 10rpx;
+}
+
+.muscle-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 10rpx;
+}
+
+.muscle-count {
+  display: block;
+  font-size: 24rpx;
+  color: #4A90D9;
+}
+
+/* 锻炼列表 */
+.exercise-list {
+  margin-top: 20rpx;
+}
+
+.exercise-item {
+  display: flex;
+  padding: 20rpx;
+}
+
+.exercise-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 16rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.exercise-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.exercise-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.exercise-target {
+  font-size: 28rpx;
+  color: #666666;
+  margin-top: 10rpx;
+}
+
+.exercise-meta {
+  margin-top: 20rpx;
+}
+
+.exercise-difficulty {
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.exercise-difficulty.easy {
+  background: #E8F5E9;
+  color: #4CAF50;
+}
+
+.exercise-difficulty.medium {
+  background: #FFF3E0;
+  color: #FF9800;
+}
+
+.exercise-duration {
+  font-size: 26rpx;
+  color: #999999;
+}
