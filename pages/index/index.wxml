@@ -2,24 +2,42 @@
 <view class="container">
   <!-- 顶部用户区域 -->
   <view class="header">
-    <view class="user-info" wx:if="{{isLoggedIn}}">
-      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
-      <text class="username">{{userInfo.nickName || '老年朋友'}}</text>
-    </view>
-    <view class="user-info" wx:else bindtap="handleLogin">
-      <image class="avatar" src="/images/default-avatar.png" mode="aspectFill"></image>
-      <text class="username">点击登录</text>
-    </view>
-    
-    <!-- 今日进度 -->
-    <view class="today-progress card">
-      <view class="progress-header flex-between">
-        <text class="title-medium">今日锻炼</text>
-        <text class="text-primary">{{todayProgress.completed}}/{{todayProgress.total}}</text>
+    <view class="header-content">
+      <view class="user-info" wx:if="{{isLoggedIn}}" bindtap="goToProfile">
+        <image class="avatar" src="{{userInfo.avatar_url || userInfo.avatarUrl || '/images/default-avatar.svg'}}" mode="aspectFill"></image>
+        <text class="username">{{userInfo.nick_name || userInfo.nickName || '老年朋友'}}</text>
       </view>
-      <progress class="progress-bar" percent="{{todayProgress.completed / todayProgress.total * 100}}" 
-                stroke-width="12" activeColor="#4A90D9" backgroundColor="#E5E5E5" />
-      <button class="btn-large mt-20" bindtap="startTodayExercise">开始锻炼</button>
+      <view class="user-info" wx:else bindtap="goToProfile">
+        <image class="avatar" src="/images/default-avatar.svg" mode="aspectFill"></image>
+        <text class="username">点击登录</text>
+      </view>
+      
+      <!-- 家庭切换 -->
+      <view class="family-switch" wx:if="{{isLoggedIn && families.length > 0}}" bindtap="switchFamily">
+        <text class="family-name">{{currentFamily.name || '选择家庭'}}</text>
+        <text class="family-arrow">▼</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 家庭选择弹窗 -->
+  <view class="family-popup" wx:if="{{showFamilyPopup}}" bindtap="closeFamilyPopup">
+    <view class="family-popup-content" catchtap="preventClose">
+      <view class="family-popup-header">
+        <text class="family-popup-title">选择家庭</text>
+        <text class="family-popup-close" bindtap="closeFamilyPopup">✕</text>
+      </view>
+      <view class="family-list">
+        <view class="family-item {{currentFamily.id === item.id ? 'active' : ''}}" 
+              wx:for="{{families}}" wx:key="id" 
+              bindtap="selectFamily" data-id="{{item.id}}">
+          <text class="family-item-name">{{item.name}}</text>
+          <text class="family-item-check" wx:if="{{currentFamily.id === item.id}}">✓</text>
+        </view>
+      </view>
+      <view class="family-popup-footer">
+        <button class="join-family-btn" bindtap="goToJoinFamily">+ 加入新家庭</button>
+      </view>
     </view>
   </view>
 
@@ -36,21 +54,25 @@
     </swiper-item>
   </swiper>
 
-  <!-- 肌肉部位分类 -->
+  <!-- 家庭待完成任务 -->
   <view class="section">
     <view class="section-header flex-between">
-      <text class="title-medium">肌肉部位</text>
-      <text class="text-hint" bindtap="goToMuscle">查看全部 ></text>
+      <text class="title-medium">{{familyName || '家庭任务'}}</text>
     </view>
-    <view class="muscle-groups flex-row flex-wrap">
-      <view class="muscle-item" wx:for="{{muscleGroups}}" wx:key="id" 
-            bindtap="goToMuscle" data-id="{{item.id}}">
-        <image class="muscle-icon" src="{{item.icon}}" mode="aspectFit"></image>
-        <text class="muscle-name">{{item.name}}</text>
-        <text class="muscle-desc">{{item.desc}}</text>
-        <text class="muscle-count">{{item.count}}个动作</text>
+    <view class="family-goals-list" wx:if="{{familyGoals.length > 0}}">
+      <view class="family-goal-item" wx:for="{{familyGoals}}" wx:key="id" 
+            bindtap="goToGoalDetail" data-id="{{item.id}}">
+        <view class="goal-info">
+          <text class="goal-name">{{item.name}}</text>
+          <text class="goal-desc">{{item.member_count}}人参与 · {{item.exercise_count}}个动作</text>
+        </view>
+        <view class="goal-progress">
+          <text class="progress-text">{{item.today_completed}}/{{item.total_exercises}}</text>
+          <text class="progress-label">今日完成</text>
+        </view>
       </view>
     </view>
+    <view class="empty-tip" wx:else>{{isLoggedIn ? '暂无家庭任务' : '请登录后查看家庭任务'}}</view>
   </view>
 
   <!-- 推荐锻炼 -->
@@ -58,10 +80,21 @@
     <view class="section-header flex-between">
       <text class="title-medium">推荐锻炼</text>
     </view>
+    <!-- 分类标签 -->
+    <view class="category-tabs">
+      <view class="category-tab {{currentCategory === 'all' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="all">全部</view>
+      <view class="category-tab {{currentCategory === 'upper' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="upper">上肢</view>
+      <view class="category-tab {{currentCategory === 'core' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="core">核心</view>
+      <view class="category-tab {{currentCategory === 'lower' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="lower">下肢</view>
+    </view>
     <view class="exercise-list">
-      <view class="exercise-item card" wx:for="{{recommendExercises}}" wx:key="id"
+      <view class="exercise-item card" wx:for="{{filteredExercises}}" wx:key="id"
             bindtap="goToExercise" data-id="{{item.id}}">
-        <image class="exercise-image" src="{{item.image}}" mode="aspectFill"></image>
+        <image class="exercise-image" src="{{item.image || '/images/default-exercise.png'}}" mode="aspectFill"></image>
         <view class="exercise-info">
           <text class="exercise-name">{{item.name}}</text>
           <text class="exercise-target">目标肌肉：{{item.targetMuscle}}</text>
@@ -74,5 +107,6 @@
         </view>
       </view>
     </view>
+    <view class="empty-tip" wx:if="{{filteredExercises.length === 0}}">暂无相关锻炼</view>
   </view>
 </view>

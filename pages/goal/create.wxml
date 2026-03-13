@@ -1,0 +1,100 @@
+<!--pages/goal/create.wxml-->
+<view class="container">
+  <!-- 目标名称 -->
+  <view class="section">
+    <view class="section-title">目标名称</view>
+    <input class="name-input" placeholder="例如：每日健身计划" value="{{name}}" bindinput="onNameInput" />
+  </view>
+
+  <!-- 选择成员 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">选择成员</text>
+      <text class="selected-count" wx:if="{{members.length > 0}}">已选 {{selectedMemberCount}} 人</text>
+    </view>
+    <view class="member-grid" wx:if="{{members.length > 0}}">
+      <view class="member-item {{item.selected ? 'selected' : ''}}" 
+            wx:for="{{members}}" wx:key="user_id" 
+            bindtap="toggleMember" data-id="{{item.user_id}}">
+        <image class="member-avatar" src="{{item.user.avatar_url || '/images/default-avatar.svg'}}"></image>
+        <text class="member-name">{{item.user.nick_name || '老年朋友'}}</text>
+        <view class="check-icon" wx:if="{{item.selected}}">✓</view>
+      </view>
+    </view>
+    <view class="empty-list" wx:else>
+      <text>暂无家庭成员，请先邀请成员加入家庭</text>
+    </view>
+  </view>
+
+  <!-- 选择动作 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">锻炼动作</text>
+      <text class="add-btn" bindtap="addExercise">+ 添加动作</text>
+    </view>
+    <view class="exercise-list">
+      <view class="exercise-item" wx:for="{{selectedExercises}}" wx:key="exercise_id">
+        <view class="exercise-info">
+          <text class="exercise-name">{{item.name}}</text>
+          <view class="exercise-config">
+            <text class="config-label">组数:</text>
+            <input class="config-input" type="number" value="{{item.sets}}" bindinput="onSetsInput" data-index="{{index}}" data-field="sets" />
+            <text class="config-label">每组次数:</text>
+            <input class="config-input" type="number" value="{{item.reps}}" bindinput="onRepsInput" data-index="{{index}}" data-field="reps" />
+          </view>
+        </view>
+        <text class="remove-btn" bindtap="removeExercise" data-index="{{index}}">×</text>
+      </view>
+    </view>
+    <view class="empty-list" wx:if="{{selectedExercises.length === 0}}">
+      <text>请添加锻炼动作</text>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-section">
+    <button class="btn-submit" bindtap="createGoal" loading="{{loading}}">创建目标</button>
+  </view>
+</view>
+
+<!-- 动作选择弹窗 -->
+<view class="modal" wx:if="{{showExerciseModal}}" bindtap="closeExerciseModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">选择动作 (可多选)</text>
+      <text class="modal-close" bindtap="closeExerciseModal">×</text>
+    </view>
+    <!-- 分类标签 -->
+    <view class="category-tabs">
+      <view class="category-tab {{currentCategory === 'all' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="all">全部</view>
+      <view class="category-tab {{currentCategory === 'upper' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="upper">上肢</view>
+      <view class="category-tab {{currentCategory === 'core' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="core">核心</view>
+      <view class="category-tab {{currentCategory === 'lower' ? 'active' : ''}}" 
+            bindtap="switchCategory" data-category="lower">下肢</view>
+    </view>
+    <view class="modal-body">
+      <view class="exercise-option {{item._selected ? 'selected' : ''}}" 
+            wx:for="{{filteredExerciseList}}" wx:key="id" 
+            bindtap="selectExercise" data-item="{{item}}">
+        <view class="option-left">
+          <text class="option-name">{{item.name}}</text>
+          <text class="option-target">{{item.target_muscle}}</text>
+        </view>
+        <view class="option-right">
+          <text class="option-category {{item._category}}">{{item._categoryName}}</text>
+          <view class="option-check" wx:if="{{item._selected}}">✓</view>
+        </view>
+      </view>
+      <view class="empty-list" wx:if="{{filteredExerciseList.length === 0}}">
+        <text>该分类暂无动作</text>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <text class="selected-count">已选择 {{selectedCount}} 个动作</text>
+      <button class="btn-confirm" bindtap="confirmExercises">确认选择</button>
+    </view>
+  </view>
+</view>

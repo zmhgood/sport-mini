@@ -1,0 +1,134 @@
+/* pages/history/history.wxss */
+
+.container {
+  padding: 24rpx;
+  padding-bottom: 60rpx;
+  background: linear-gradient(180deg, #FEF3C7 0%, #F8FAFC 30%);
+  min-height: 100vh;
+}
+
+.history-list {
+  margin-top: 16rpx;
+}
+
+.history-item {
+  margin-bottom: 16rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #F1F5F9;
+}
+
+.history-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.history-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-header {
+  margin-bottom: 16rpx;
+}
+
+.history-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-date {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.history-goal-name {
+  font-size: 26rpx;
+  color: #F59E0B;
+  margin-top: 4rpx;
+}
+
+.history-exercises {
+  gap: 12rpx;
+}
+
+.exercise-tag {
+  padding: 10rpx 20rpx;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: #92400E;
+  font-weight: 500;
+}
+
+/* 圆环进度图 */
+.progress-ring-wrap {
+  flex-shrink: 0;
+  margin-left: 20rpx;
+}
+
+.progress-svg {
+  width: 72rpx;
+  height: 72rpx;
+}
+
+/* 分页信息 */
+.page-info {
+  text-align: center;
+  padding: 20rpx 0;
+  margin-top: 16rpx;
+}
+
+.page-info text {
+  font-size: 24rpx;
+  color: #94A3B8;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.load-more text {
+  font-size: 28rpx;
+  color: #F59E0B;
+  font-weight: 500;
+}
+
+/* 没有更多 */
+.no-more {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.no-more text {
+  font-size: 28rpx;
+  color: #94A3B8;
+}
+
+/* 空状态 */
+.empty-tip {
+  text-align: center;
+  padding: 100rpx 0;
+}
+
+.empty-tip text {
+  font-size: 28rpx;
+  color: #94A3B8;
+}
+
+/* 加载中 */
+.loading {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.loading text {
+  font-size: 28rpx;
+  color: #94A3B8;
+}

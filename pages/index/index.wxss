@@ -1,38 +1,273 @@
 /* pages/index/index.wxss */
 
 .container {
-  padding-bottom: 120rpx;
+  padding-bottom: 140rpx;
+  background: linear-gradient(180deg, #EFF6FF 0%, #F8FAFC 30%);
+  min-height: 100vh;
 }
 
 /* 头部区域 */
 .header {
-  background: linear-gradient(135deg, #4A90D9 0%, #5BA0E9 100%);
-  padding: 40rpx 30rpx 60rpx;
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  padding: 20rpx 30rpx;
+  border-radius: 0 0 32rpx 32rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 200rpx;
+  height: 200rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo 和网站名称 */
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.site-logo {
+  width: 56rpx;
+  height: 56rpx;
+  margin-right: 16rpx;
+  border-radius: 12rpx;
+}
+
+.site-name {
+  font-size: 36rpx;
+  color: #FFFFFF;
+  font-weight: 700;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-info-compact {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12rpx 20rpx;
+  border-radius: 40rpx;
+}
+
+.avatar-small {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  margin-right: 12rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+}
+
+.username-small {
+  font-size: 26rpx;
+  color: #FFFFFF;
+  max-width: 150rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.login-btn {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 16rpx 32rpx;
+  border-radius: 40rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.login-text {
+  font-size: 28rpx;
+  color: #FFFFFF;
+  font-weight: 500;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  margin-bottom: 30rpx;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar {
-  width: 100rpx;
-  height: 100rpx;
+  width: 72rpx;
+  height: 72rpx;
   border-radius: 50%;
-  border: 4rpx solid #FFFFFF;
-  margin-right: 20rpx;
+  border: 3rpx solid rgba(255, 255, 255, 0.8);
+  margin-right: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
 }
 
 .username {
-  font-size: 40rpx;
+  font-size: 32rpx;
   color: #FFFFFF;
-  font-weight: bold;
+  font-weight: 600;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 家庭切换 */
+.family-switch {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12rpx 24rpx;
+  border-radius: 40rpx;
+  backdrop-filter: blur(10px);
+}
+
+.family-name {
+  font-size: 28rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+  max-width: 200rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.family-arrow {
+  font-size: 20rpx;
+  color: #FFFFFF;
+  margin-left: 8rpx;
+  opacity: 0.8;
+}
+
+/* 家庭选择弹窗 */
+.family-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.family-popup-content {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 32rpx;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.family-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.family-popup-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.family-popup-close {
+  font-size: 32rpx;
+  color: #94A3B8;
+  padding: 16rpx;
+}
+
+.family-list {
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+.family-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  background: #F8FAFC;
+}
+
+.family-item.active {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 2rpx solid #3B82F6;
+}
+
+.family-item-name {
+  font-size: 32rpx;
+  color: #1E293B;
+  font-weight: 500;
+}
+
+.family-item-check {
+  font-size: 32rpx;
+  color: #3B82F6;
+  font-weight: 600;
+}
+
+.family-popup-footer {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 2rpx solid #E2E8F0;
+}
+
+.join-family-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 48rpx;
+  border: none;
+}
+
+.join-family-btn::after {
+  border: none;
 }
 
 /* 今日进度卡片 */
 .today-progress {
-  margin-top: 20rpx;
+  margin-top: -40rpx;
+  position: relative;
+  z-index: 2;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(59, 130, 246, 0.15);
 }
 
 .progress-header {
@@ -41,15 +276,18 @@
 
 .progress-bar {
   width: 100%;
-  margin: 20rpx 0;
+  margin: 24rpx 0;
+  border-radius: 12rpx;
+  overflow: hidden;
 }
 
 /* 轮播图 */
 .banner {
   height: 320rpx;
-  margin: 20rpx;
-  border-radius: 20rpx;
+  margin: 32rpx 24rpx;
+  border-radius: 24rpx;
   overflow: hidden;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
 }
 
 .banner-item {
@@ -61,6 +299,7 @@
 .banner-image {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 .banner-text {
@@ -68,89 +307,280 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 30rpx;
-  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  padding: 40rpx 32rpx;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
   color: #FFFFFF;
 }
 
 .banner-title {
   display: block;
   font-size: 40rpx;
-  font-weight: bold;
-  margin-bottom: 10rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
 }
 
 .banner-desc {
   font-size: 28rpx;
+  opacity: 0.9;
 }
 
 /* 板块通用样式 */
 .section {
-  padding: 20rpx;
+  padding: 24rpx;
 }
 
 .section-header {
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
+  padding: 0 8rpx;
 }
 
-/* 肌肉部位 */
-.muscle-groups {
-  justify-content: space-between;
+/* ===== 人体图形布局 ===== */
+.body-map-container {
+  background: linear-gradient(135deg, #1E3A5F 0%, #2D5A7B 100%);
+  border-radius: 32rpx;
+  padding: 40rpx 24rpx;
+  box-shadow: 0 12rpx 40rpx rgba(30, 58, 95, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
-.muscle-item {
-  width: 31%;
+.body-map-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 60%);
+}
+
+.body-outline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* 人体轮廓装饰 */
+.body-silhouette {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.body-head {
+  width: 80rpx;
+  height: 80rpx;
+  background: #FFFFFF;
+  border-radius: 50%;
+  margin: 0 auto 16rpx;
+}
+
+.body-torso {
+  width: 100rpx;
+  height: 140rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx 20rpx 10rpx 10rpx;
+  margin: 0 auto;
+}
+
+.body-arm {
+  position: absolute;
+  width: 40rpx;
+  height: 120rpx;
   background: #FFFFFF;
   border-radius: 20rpx;
-  padding: 30rpx 20rpx;
-  text-align: center;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  top: 100rpx;
 }
 
-.muscle-icon {
-  width: 100rpx;
-  height: 100rpx;
-  margin-bottom: 10rpx;
+.left-arm {
+  left: 60rpx;
+  transform: rotate(20deg);
 }
 
-.muscle-name {
-  display: block;
+.right-arm {
+  right: 60rpx;
+  transform: rotate(-20deg);
+}
+
+.body-leg {
+  position: absolute;
+  width: 36rpx;
+  height: 150rpx;
+  background: #FFFFFF;
+  border-radius: 18rpx;
+  top: 240rpx;
+}
+
+.left-leg {
+  left: 100rpx;
+  transform: rotate(5deg);
+}
+
+.right-leg {
+  right: 100rpx;
+  transform: rotate(-5deg);
+}
+
+/* 区域卡片 */
+.body-zone {
+  width: 100%;
+  padding: 28rpx 32rpx;
+  margin-bottom: 16rpx;
+  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1rpx solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.body-zone:last-child {
+  margin-bottom: 0;
+}
+
+.zone-hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.02);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 不同区域的颜色主题 */
+.upper-zone {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.1) 100%);
+  border-left: 6rpx solid #EF4444;
+}
+
+.upper-zone:active {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(239, 68, 68, 0.25) 100%);
+}
+
+.core-zone {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+  border-left: 6rpx solid #3B82F6;
+}
+
+.core-zone:active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(59, 130, 246, 0.25) 100%);
+}
+
+.lower-zone {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.1) 100%);
+  border-left: 6rpx solid #22C55E;
+}
+
+.lower-zone:active {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.35) 0%, rgba(34, 197, 94, 0.25) 100%);
+}
+
+.zone-content {
+  display: flex;
+  align-items: center;
+}
+
+.zone-icon {
+  font-size: 56rpx;
+  margin-right: 24rpx;
+}
+
+.zone-title {
   font-size: 36rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 10rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-right: 16rpx;
 }
 
-.muscle-desc {
-  display: block;
+.zone-desc {
   font-size: 26rpx;
-  color: #666666;
-  margin-bottom: 10rpx;
+  color: rgba(255, 255, 255, 0.7);
+  flex: 1;
 }
 
-.muscle-count {
-  display: block;
-  font-size: 24rpx;
-  color: #4A90D9;
+.zone-count {
+  font-size: 26rpx;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
 }
 
-/* 锻炼列表 */
+/* ===== 分类标签 ===== */
+.category-tabs {
+  display: flex;
+  margin-bottom: 24rpx;
+  padding: 0 8rpx;
+  gap: 16rpx;
+}
+
+.category-tab {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #64748B;
+  background: #F1F5F9;
+  border-radius: 40rpx;
+  transition: all 0.3s ease;
+}
+
+.category-tab.active {
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  color: #FFFFFF;
+  font-weight: 500;
+  box-shadow: 0 4rpx 16rpx rgba(59, 130, 246, 0.3);
+}
+
+/* ===== 锻炼列表 ===== */
 .exercise-list {
-  margin-top: 20rpx;
+  margin-top: 16rpx;
 }
 
 .exercise-item {
   display: flex;
-  padding: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border-radius: 20rpx;
+  background: #FFFFFF;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #F1F5F9;
+  position: relative;
+  overflow: hidden;
+}
+
+.exercise-category-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 8rpx 20rpx;
+  font-size: 22rpx;
+  color: #FFFFFF;
+  border-radius: 0 20rpx 0 20rpx;
+}
+
+.exercise-category-badge.upper {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+}
+
+.exercise-category-badge.core {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+}
+
+.exercise-category-badge.lower {
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
 }
 
 .exercise-image {
-  width: 180rpx;
-  height: 180rpx;
+  width: 160rpx;
+  height: 160rpx;
   border-radius: 16rpx;
-  margin-right: 20rpx;
+  margin-right: 24rpx;
   flex-shrink: 0;
+  background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);
 }
 
 .exercise-info {
@@ -158,41 +588,109 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 8rpx 0;
 }
 
 .exercise-name {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333333;
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #1E293B;
 }
 
 .exercise-target {
-  font-size: 28rpx;
-  color: #666666;
-  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #64748B;
+  margin-top: 8rpx;
 }
 
 .exercise-meta {
-  margin-top: 20rpx;
+  margin-top: 16rpx;
 }
 
 .exercise-difficulty {
-  padding: 6rpx 16rpx;
+  padding: 8rpx 20rpx;
   border-radius: 20rpx;
   font-size: 24rpx;
+  font-weight: 500;
 }
 
 .exercise-difficulty.easy {
-  background: #E8F5E9;
-  color: #4CAF50;
+  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  color: #059669;
 }
 
 .exercise-difficulty.medium {
-  background: #FFF3E0;
-  color: #FF9800;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  color: #D97706;
 }
 
 .exercise-duration {
   font-size: 26rpx;
-  color: #999999;
+  color: #94A3B8;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #94A3B8;
+  font-size: 28rpx;
+}
+
+/* 家庭目标列表 */
+.family-goals-list {
+  margin-top: 16rpx;
+}
+
+.family-goal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  margin-bottom: 16rpx;
+  border-radius: 20rpx;
+  background: #FFFFFF;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #F1F5F9;
+}
+
+.goal-info {
+  flex: 1;
+}
+
+.goal-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1E293B;
+  display: block;
+}
+
+.goal-desc {
+  font-size: 26rpx;
+  color: #64748B;
+  margin-top: 8rpx;
+  display: block;
+}
+
+.goal-progress {
+  text-align: center;
+  padding-left: 20rpx;
+}
+
+.goal-progress .progress-text {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #3B82F6;
+  display: block;
+}
+
+.goal-progress .progress-label {
+  font-size: 24rpx;
+  color: #94A3B8;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.more-link {
+  font-size: 28rpx;
+  color: #3B82F6;
 }

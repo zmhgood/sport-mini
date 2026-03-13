@@ -11,7 +11,7 @@ App({
   globalData: {
     userInfo: null,
     isLoggedIn: false,
-    baseUrl: 'http://localhost:8080/api'
+    baseUrl: 'http://192.168.0.12:8080/api'
   },
 
   // 检查登录状态

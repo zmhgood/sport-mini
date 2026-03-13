@@ -1,7 +1,7 @@
 // utils/api.js - API请求封装
 const app = getApp()
 
-const BASE_URL = 'http://localhost:8080/api'
+const BASE_URL = 'https://mesa-obtaining-save-expenditure.trycloudflare.com/api'
 
 /**
  * 封装请求方法
@@ -102,6 +102,48 @@ function upload(filePath, formData = {}) {
   })
 }
 
+/**
+ * 认证相关API
+ */
+const auth = {
+  // 微信登录
+  wechatLogin: (code) => post('/auth/login', { code }),
+  
+  // 发送短信验证码
+  sendSMSCode: (phone, purpose = 'login') => post('/auth/send-code', { phone, purpose }),
+  
+  // 短信登录
+  smsLogin: (phone, code) => post('/auth/sms-login', { phone, code }),
+  
+  // 获取用户信息
+  getUserInfo: () => get('/user/info'),
+  
+  // 更新用户信息
+  updateUserInfo: (data) => put('/user/info', data)
+}
+
+/**
+ * 评论相关API
+ */
+const comment = {
+  // 获取评论列表
+  getList: (exerciseId, page = 1, pageSize = 10) => 
+    get('/comments', { exercise_id: exerciseId, page, page_size: pageSize }),
+  
+  // 发表评论
+  create: (data) => post('/comments', data),
+  
+  // 删除评论
+  delete: (id) => del(`/comments/${id}`),
+  
+  // 点赞/取消点赞
+  toggleLike: (id) => post(`/comments/${id}/like`),
+  
+  // 获取我的评论
+  getMyComments: (page = 1, pageSize = 10) => 
+    get('/user/comments', { page, page_size: pageSize })
+}
+
 module.exports = {
   request,
   get,
@@ -109,5 +151,37 @@ module.exports = {
   put,
   del,
   upload,
-  BASE_URL
+  auth,
+  comment,
+  BASE_URL,
+  
+  /**
+   * 检查是否登录
+   * @returns {boolean}
+   */
+  isLoggedIn() {
+    return !!wx.getStorageSync('token')
+  },
+  
+  /**
+   * 检查登录状态，未登录则跳转登录页
+   * @param {function} callback - 已登录时的回调
+   */
+  requireLogin(callback) {
+    if (this.isLoggedIn()) {
+      callback && callback()
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '该功能需要登录后使用，是否立即登录？',
+        confirmText: '去登录',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({ url: '/pages/login/login' })
+          }
+        }
+      })
+    }
+  }
 }

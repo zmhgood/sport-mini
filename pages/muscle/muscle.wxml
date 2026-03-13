@@ -12,7 +12,7 @@
   <!-- 当前部位介绍 -->
   <view class="muscle-intro card" wx:if="{{muscleGroups[currentTab]}}">
     <view class="intro-header flex-row">
-      <image class="intro-image" src="{{muscleGroups[currentTab].image}}" mode="aspectFit"></image>
+      <text class="intro-icon">{{muscleGroups[currentTab].icon}}</text>
       <view class="intro-text">
         <text class="intro-name">{{muscleGroups[currentTab].name}}</text>
         <text class="intro-desc">{{muscleGroups[currentTab].description}}</text>

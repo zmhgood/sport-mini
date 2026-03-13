@@ -3,12 +3,13 @@
   <!-- 用户信息区域 -->
   <view class="user-section">
     <view class="user-card" wx:if="{{isLoggedIn}}">
-      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
-      <text class="username">{{userInfo.nickName || '老年朋友'}}</text>
-      <text class="user-desc">坚持锻炼，健康长寿</text>
+      <image class="avatar" src="{{userInfo.avatar_url || '/images/default-avatar.svg'}}" mode="aspectFill"></image>
+      <text class="username">{{userInfo.nick_name || '老年朋友'}}</text>
+      <text class="user-desc" wx:if="{{userInfo.phone}}">{{userInfo.phone}}</text>
+      <text class="user-desc" wx:else>坚持锻炼，健康长寿</text>
     </view>
     <view class="user-card login-card" wx:else bindtap="handleLogin">
-      <image class="avatar" src="/images/default-avatar.png" mode="aspectFill"></image>
+      <image class="avatar" src="/images/default-avatar.svg" mode="aspectFill"></image>
       <text class="username">点击登录</text>
       <text class="user-desc">登录后同步锻炼记录</text>
     </view>
@@ -17,36 +18,48 @@
     <view class="stats-card card">
       <view class="stat-item">
         <text class="stat-value">{{statistics.totalDays}}</text>
-        <text class="stat-label">累计天数</text>
+        <text class="stat-label">累计锻炼天数</text>
       </view>
       <view class="stat-divider"></view>
       <view class="stat-item">
-        <text class="stat-value">{{statistics.totalExercises}}</text>
-        <text class="stat-label">完成动作</text>
-      </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-value">{{statistics.totalMinutes}}</text>
-        <text class="stat-label">锻炼分钟</text>
+        <text class="stat-value">{{statistics.totalSets}}</text>
+        <text class="stat-label">完成动作组数</text>
       </view>
     </view>
   </view>
 
   <!-- 历史记录 -->
-  <view class="history-section">
+  <view class="history-section" wx:if="{{isLoggedIn}}">
     <view class="section-header flex-between">
       <text class="section-title">锻炼记录</text>
-      <text class="more-btn">查看全部</text>
+      <text class="more-btn" bindtap="goToHistory">更多</text>
     </view>
-    
-    <view class="history-list">
-      <view class="history-item card" wx:for="{{historyList}}" wx:key="date" bindtap="viewHistory" data-date="{{item.date}}">
-        <view class="history-header flex-between">
-          <text class="history-date">{{item.date}}</text>
-          <text class="history-duration">{{item.duration}}分钟</text>
+
+    <!-- 柱状图 -->
+    <view class="chart-card card">
+      <!-- 周范围标题 -->
+      <view class="chart-header">
+        <view class="nav-btn {{canGoPrev ? '' : 'disabled'}}" bindtap="prevWeek">
+          <text class="nav-arrow">‹</text>
         </view>
-        <view class="history-exercises flex-row flex-wrap">
-          <text class="exercise-tag" wx:for="{{item.exercises}}" wx:key="*this" wx:for-item="exercise">{{exercise}}</text>
+        <text class="week-range">{{weekRange}}</text>
+        <view class="nav-btn {{canGoNext ? '' : 'disabled'}}" bindtap="nextWeek">
+          <text class="nav-arrow">›</text>
+        </view>
+      </view>
+
+      <!-- 柱状图主体 -->
+      <view class="chart-container">
+        <view class="chart-bar {{day.count > 0 ? 'has-data' : ''}}" wx:for="{{weekStats}}" wx:for-item="day" wx:key="date"
+              bindtap="goToGoalFromChart" data-id="{{day.goalId}}" data-count="{{day.count}}" data-goalids="{{day.goalIds}}" data-date="{{day.date}}">
+          <view class="bar-wrapper">
+            <view class="bar">
+              <view class="bar-fill" style="height: {{day.barPercent || 0}}%;"></view>
+            </view>
+          </view>
+          <text class="bar-value">{{day.count > 0 ? day.count : ''}}</text>
+          <text class="bar-label">{{day.weekday}}</text>
+          <text class="bar-date">{{day.dateStr}}</text>
         </view>
       </view>
     </view>
@@ -67,6 +80,11 @@
           <text class="arrow">></text>
         </view>
       </view>
+    </view>
+    
+    <!-- 退出登录 -->
+    <view class="logout-section" wx:if="{{isLoggedIn}}">
+      <button class="logout-btn" bindtap="handleLogout">退出登录</button>
     </view>
   </view>
 

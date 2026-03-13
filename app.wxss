@@ -2,20 +2,20 @@
 
 /* 适老化设计：大字体、高对比度 */
 page {
-  font-size: 36rpx;
+  font-size: 32rpx;
   line-height: 1.6;
   color: #333333;
-  background-color: #F5F5F5;
+  background-color: #F8FAFC;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
 }
 
-/* 主题色 */
+/* 主题色 - 更柔和的蓝色渐变 */
 .primary-color {
-  color: #4A90D9;
+  color: #3B82F6;
 }
 
 .primary-bg {
-  background-color: #4A90D9;
+  background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
 }
 
 /* 大按钮样式 - 方便老年人点击 */
@@ -23,51 +23,72 @@ page {
   width: 100%;
   height: 100rpx;
   line-height: 100rpx;
-  font-size: 36rpx;
-  border-radius: 50rpx;
-  background-color: #4A90D9;
+  font-size: 34rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
   color: #FFFFFF;
   text-align: center;
+  font-weight: 500;
+  box-shadow: 0 8rpx 24rpx rgba(59, 130, 246, 0.3);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
 
 .btn-large:active {
-  background-color: #3A7BC8;
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+  transform: scale(0.98);
 }
 
-/* 卡片样式 */
+.btn-large::after {
+  border: none;
+}
+
+/* 按钮文字居中 */
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* 卡片样式 - 更柔和的阴影 */
 .card {
   background-color: #FFFFFF;
-  border-radius: 20rpx;
-  padding: 30rpx;
+  border-radius: 24rpx;
+  padding: 32rpx;
   margin: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+  border: 1rpx solid rgba(0, 0, 0, 0.04);
 }
 
 /* 标题样式 */
 .title-large {
   font-size: 44rpx;
-  font-weight: bold;
-  color: #333333;
+  font-weight: 600;
+  color: #1E293B;
 }
 
 .title-medium {
-  font-size: 38rpx;
-  font-weight: bold;
-  color: #333333;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1E293B;
 }
 
 /* 文本样式 */
 .text-primary {
-  color: #4A90D9;
+  color: #3B82F6;
 }
 
 .text-secondary {
-  color: #666666;
+  color: #64748B;
 }
 
 .text-hint {
-  color: #999999;
-  font-size: 30rpx;
+  color: #94A3B8;
+  font-size: 28rpx;
 }
 
 /* 布局 */
@@ -115,12 +136,25 @@ page {
 /* 分割线 */
 .divider {
   height: 1rpx;
-  background-color: #EEEEEE;
-  margin: 20rpx 0;
+  background: linear-gradient(90deg, transparent, #E2E8F0, transparent);
+  margin: 24rpx 0;
 }
 
 /* 安全区域适配 */
 .safe-area-bottom {
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 渐变背景 */
+.gradient-primary {
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+}
+
+.gradient-green {
+  background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
 }

@@ -1,44 +1,64 @@
 /* pages/profile/profile.wxss */
 
 .container {
-  padding-bottom: 120rpx;
+  padding-bottom: 140rpx;
+  background: linear-gradient(180deg, #FEF3C7 0%, #F8FAFC 30%);
+  min-height: 100vh;
 }
 
 /* 用户区域 */
 .user-section {
-  background: linear-gradient(135deg, #4A90D9 0%, #5BA0E9 100%);
-  padding: 40rpx 30rpx 80rpx;
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  padding: 40rpx 30rpx 100rpx;
+  border-radius: 0 0 48rpx 48rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300rpx;
+  height: 300rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
 }
 
 .user-card {
   text-align: center;
-  margin-bottom: 30rpx;
+  margin-bottom: 40rpx;
+  position: relative;
+  z-index: 1;
 }
 
 .login-card {
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .avatar {
-  width: 140rpx;
-  height: 140rpx;
+  width: 150rpx;
+  height: 150rpx;
   border-radius: 50%;
-  border: 6rpx solid #FFFFFF;
+  border: 6rpx solid rgba(255, 255, 255, 0.8);
   margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
 }
 
 .username {
   display: block;
-  font-size: 40rpx;
-  font-weight: bold;
+  font-size: 44rpx;
+  font-weight: 600;
   color: #FFFFFF;
-  margin-bottom: 10rpx;
+  margin-bottom: 8rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .user-desc {
   display: block;
   font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* 统计卡片 */
@@ -46,8 +66,15 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-top: -50rpx;
-  padding: 30rpx 0;
+  margin-top: -60rpx;
+  padding: 36rpx 20rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(245, 158, 11, 0.15);
+  position: relative;
+  z-index: 2;
 }
 
 .stat-item {
@@ -57,91 +84,283 @@
 
 .stat-value {
   display: block;
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #4A90D9;
-  margin-bottom: 10rpx;
+  font-size: 52rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8rpx;
 }
 
 .stat-label {
   display: block;
   font-size: 26rpx;
-  color: #999999;
+  color: #64748B;
+  font-weight: 500;
 }
 
 .stat-divider {
   width: 1rpx;
   height: 60rpx;
-  background: #E5E5E5;
+  background: linear-gradient(180deg, transparent, #E2E8F0, transparent);
 }
 
 /* 历史记录 */
 .history-section {
-  padding: 20rpx;
+  padding: 24rpx;
 }
 
 .section-header {
   margin-bottom: 20rpx;
+  padding: 0 8rpx;
 }
 
 .section-title {
   font-size: 36rpx;
-  font-weight: bold;
-  color: #333333;
+  font-weight: 600;
+  color: #1E293B;
 }
 
 .more-btn {
   font-size: 28rpx;
-  color: #4A90D9;
+  color: #F59E0B;
+  font-weight: 500;
+}
+
+/* 柱状图卡片 */
+.chart-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx 16rpx;
+  margin-top: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #F1F5F9;
+  overflow: hidden;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16rpx 16rpx;
+  border-bottom: 1rpx solid #F1F5F9;
+  margin-bottom: 16rpx;
+}
+
+.week-range {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.nav-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F8FAFC;
+  border-radius: 50%;
+}
+
+.nav-btn.disabled {
+  opacity: 0.3;
+}
+
+.nav-arrow {
+  font-size: 36rpx;
+  color: #F59E0B;
+  font-weight: 300;
+}
+
+.chart-swiper {
+  height: 380rpx;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 8rpx;
+  height: 300rpx;
+}
+
+.chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: 8rpx 0;
+}
+
+.chart-bar.has-data {
+  cursor: pointer;
+}
+
+.bar-wrapper {
+  width: 44rpx;
+  height: 180rpx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #E2E8F0 0%, #F1F5F9 100%);
+  border-radius: 6rpx 6rpx 0 0;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.bar-fill {
+  width: 100%;
+  height: 0;
+  min-height: 0;
+  background: linear-gradient(180deg, #F59E0B 0%, #FBBF24 100%);
+  border-radius: 6rpx 6rpx 0 0;
+  transition: height 0.3s ease;
+}
+
+.chart-bar.has-data .bar-fill {
+  box-shadow: 0 4rpx 12rpx rgba(245, 158, 11, 0.3);
+}
+
+.bar-value {
+  font-size: 22rpx;
+  color: #F59E0B;
+  font-weight: 600;
+  margin-top: 8rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+}
+
+.bar-label {
+  font-size: 24rpx;
+  color: #64748B;
+  margin-top: 4rpx;
+}
+
+.bar-date {
+  font-size: 20rpx;
+  color: #94A3B8;
+  margin-top: 2rpx;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 16rpx 0;
+  border-top: 1rpx solid #F1F5F9;
+}
+
+.legend-item {
+  font-size: 24rpx;
+  color: #64748B;
+}
+
+.legend-total {
+  font-size: 26rpx;
+  color: #F59E0B;
+  font-weight: 600;
 }
 
 .history-list {
-  margin-top: 20rpx;
+  margin-top: 16rpx;
 }
 
 .history-item {
-  margin-bottom: 20rpx;
+  margin-bottom: 16rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #F1F5F9;
+}
+
+.history-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.history-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 圆环进度图 */
+.progress-ring-wrap {
+  flex-shrink: 0;
+  margin-left: 20rpx;
+}
+
+.progress-svg {
+  width: 72rpx;
+  height: 72rpx;
 }
 
 .history-header {
-  margin-bottom: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.history-left {
+  display: flex;
+  flex-direction: column;
 }
 
 .history-date {
   font-size: 32rpx;
-  font-weight: bold;
-  color: #333333;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.history-goal-name {
+  font-size: 26rpx;
+  color: #F59E0B;
+  margin-top: 4rpx;
 }
 
 .history-duration {
   font-size: 28rpx;
-  color: #4A90D9;
+  color: #F59E0B;
+  font-weight: 500;
 }
 
 .history-exercises {
-  gap: 16rpx;
+  gap: 12rpx;
 }
 
 .exercise-tag {
   padding: 10rpx 20rpx;
-  background: #F5F7FA;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
   border-radius: 20rpx;
   font-size: 26rpx;
-  color: #666666;
+  color: #92400E;
+  font-weight: 500;
 }
 
 /* 设置 */
 .settings-section {
-  padding: 20rpx;
+  padding: 24rpx;
 }
 
 .settings-list {
-  margin-top: 20rpx;
+  margin-top: 16rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 8rpx 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #F1F5F9;
 }
 
 .setting-item {
-  padding: 30rpx 0;
-  border-bottom: 1rpx solid #F0F0F0;
+  padding: 32rpx 0;
+  border-bottom: 1rpx solid #F1F5F9;
 }
 
 .setting-item:last-child {
@@ -153,13 +372,14 @@
 }
 
 .setting-icon {
-  font-size: 36rpx;
+  font-size: 40rpx;
   margin-right: 20rpx;
 }
 
 .setting-name {
   font-size: 32rpx;
-  color: #333333;
+  color: #1E293B;
+  font-weight: 500;
 }
 
 .setting-right {
@@ -168,24 +388,62 @@
 
 .setting-value {
   font-size: 28rpx;
-  color: #999999;
-  margin-right: 10rpx;
+  color: #94A3B8;
+  margin-right: 12rpx;
 }
 
 .arrow {
   font-size: 28rpx;
-  color: #CCCCCC;
+  color: #CBD5E1;
 }
 
 /* 底部 */
 .footer {
   text-align: center;
-  padding: 40rpx 0;
+  padding: 48rpx 0;
 }
 
 .footer-text {
   display: block;
   font-size: 24rpx;
-  color: #CCCCCC;
-  margin-bottom: 10rpx;
+  color: #94A3B8;
+  margin-bottom: 8rpx;
+}
+
+/* 空状态 */
+.empty-tip {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.empty-tip text {
+  font-size: 28rpx;
+  color: #94A3B8;
+}
+
+/* 退出登录 */
+.logout-section {
+  margin-top: 32rpx;
+  padding: 0 24rpx;
+}
+
+.logout-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  background: #FFFFFF;
+  color: #EF4444;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 24rpx;
+  border: 2rpx solid #FECACA;
+  box-shadow: 0 4rpx 16rpx rgba(239, 68, 68, 0.1);
+}
+
+.logout-btn::after {
+  border: none;
+}
+
+.logout-btn:active {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
 }

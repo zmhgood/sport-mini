@@ -96,6 +96,79 @@
     </view>
   </view>
 
+  <!-- 评论区 -->
+  <view class="comments-section card">
+    <view class="section-header flex-between">
+      <text class="section-title">用户讨论 ({{commentTotal}})</text>
+      <text class="comment-tip" bindtap="showCommentInput">写评论</text>
+    </view>
+    
+    <!-- 评论列表 -->
+    <view class="comments-list" wx:if="{{comments.length > 0}}">
+      <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+        <image class="comment-avatar" src="{{item.user.avatar_url || '/images/default-avatar.svg'}}" mode="aspectFill"></image>
+        <view class="comment-content">
+          <view class="comment-header flex-between">
+            <text class="comment-name">{{item.user.nick_name || '老年朋友'}}</text>
+            <text class="comment-time">{{item.created_at}}</text>
+          </view>
+          <text class="comment-text">{{item.content}}</text>
+          <view class="comment-actions flex-row">
+            <view class="action-item" bindtap="toggleLike" data-id="{{item.id}}">
+              <text class="action-icon">{{item.is_liked ? '❤️' : '🤍'}}</text>
+              <text>{{item.like_count || 0}}</text>
+            </view>
+            <view class="action-item" bindtap="showReplyInput" data-id="{{item.id}}" data-name="{{item.user.nick_name}}">
+              <text class="action-icon">💬</text>
+              <text>回复</text>
+            </view>
+          </view>
+          
+          <!-- 回复列表 -->
+          <view class="replies-list" wx:if="{{item.replies.length > 0}}">
+            <view class="reply-item" wx:for="{{item.replies}}" wx:for-item="reply" wx:key="id">
+              <text class="reply-name">{{reply.user.nick_name}}</text>
+              <text class="reply-text" wx:if="{{reply.reply_to_user_id > 0}}"> 回复 {{reply.reply_to_user_name}}：</text>
+              <text class="reply-text">{{reply.content}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-comments" wx:else>
+      <text class="empty-icon">💭</text>
+      <text class="empty-text">暂无评论，快来发表你的看法吧！</text>
+    </view>
+    
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{comments.length > 0 && hasMoreComments}}" bindtap="loadMoreComments">
+      <text>加载更多评论</text>
+    </view>
+  </view>
+
+  <!-- 评论输入弹窗 -->
+  <view class="comment-input-modal" wx:if="{{showCommentModal}}" bindtap="hideCommentInput">
+    <view class="comment-input-box" catchtap="stopPropagation">
+      <view class="input-header flex-between">
+        <text class="input-title">{{replyToName ? '回复 ' + replyToName : '发表评论'}}</text>
+        <text class="input-close" bindtap="hideCommentInput">✕</text>
+      </view>
+      <textarea class="comment-textarea" 
+                placeholder="说说你的感受..." 
+                maxlength="500"
+                value="{{commentContent}}"
+                bindinput="onCommentInput"
+                focus="{{showCommentModal}}">
+      </textarea>
+      <view class="input-footer flex-between">
+        <text class="char-count">{{commentContent.length}}/500</text>
+        <button class="submit-btn" bindtap="submitComment" disabled="{{!commentContent}}">发送</button>
+      </view>
+    </view>
+  </view>
+
   <!-- 底部操作栏 -->
   <view class="bottom-bar safe-area-bottom">
     <button class="btn-audio" bindtap="playAudio">

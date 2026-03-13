@@ -1,0 +1,89 @@
+<!--pages/goal/detail.wxml-->
+<view class="container">
+  <!-- 目标信息 -->
+  <view class="goal-header">
+    <text class="goal-name">{{goal.name}}</text>
+    <view class="goal-stats">
+      <text class="stat-item">{{goal.memberCount || 0}}人参与</text>
+      <text class="stat-divider">|</text>
+      <text class="stat-item">{{goal.exerciseCount || 0}}个动作</text>
+    </view>
+  </view>
+
+  <!-- 今日进度 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">今日进度</text>
+      <text class="section-action" bindtap="goProgress">查看详情</text>
+    </view>
+    <view class="progress-list">
+      <view class="progress-item" wx:for="{{progress.member_stats}}" wx:key="user_id">
+        <view class="member-row">
+          <image class="member-avatar" src="{{item.user_avatar || '/images/default-avatar.svg'}}"></image>
+          <view class="member-info">
+            <text class="member-name">{{item.user_name}}</text>
+            <!-- 分段进度条 -->
+            <view class="segmented-progress-wrap" wx:if="{{item.exercise_stats && item.exercise_stats.length > 0}}">
+              <view class="segmented-progress">
+                <view class="progress-segment" 
+                      wx:for="{{item.exercise_stats}}" wx:for-item="ex" wx:key="goal_exercise_id"
+                      style="width: {{ex.segment_width}}%;">
+                  <view class="segment-bg" style="background-color: {{ex.color}};"></view>
+                  <view class="segment-fill" style="width: {{ex.fill_width}}%; background-color: {{ex.color}};"></view>
+                </view>
+              </view>
+              <text class="progress-text">{{item.completed_sets}}/{{item.total_sets}}组</text>
+            </view>
+              <!-- 动作图例 -->
+              <view class="progress-legend" wx:if="{{item.exercise_stats && item.exercise_stats.length > 0}}">
+                <view class="legend-item" wx:for="{{item.exercise_stats}}" wx:for-item="ex" wx:key="goal_exercise_id">
+                  <view class="legend-color" style="background-color: {{ex.color}};"></view>
+                  <text class="legend-name">{{ex.exercise_name}}</text>
+                </view>
+              </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 动作列表 -->
+  <view class="section">
+    <view class="section-title">锻炼动作</view>
+    <view class="exercise-list">
+      <view class="exercise-item" wx:for="{{goal.exercises}}" wx:key="id">
+        <image class="exercise-image" src="{{item.exercise.image_url || ''}}"></image>
+        <view class="exercise-info">
+          <text class="exercise-name">{{item.exercise.name}}</text>
+          <text class="exercise-target">{{item.exercise.target_muscle}}</text>
+          <text class="exercise-sets">{{item.sets}}组 × {{item.reps}}次</text>
+        </view>
+        <button class="btn-start {{exerciseStatus[item.id].is_done ? 'btn-done' : ''}}" 
+                bindtap="startExercise" 
+                data-index="{{index}}" 
+                data-item="{{item}}">
+          {{exerciseStatus[item.id].is_done ? '已完成' : exerciseStatus[item.id].has_progress ? '继续锻炼' : '开始锻炼'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 参与成员 -->
+  <view class="section">
+    <view class="section-title">参与成员</view>
+    <view class="member-progress-list">
+      <view class="member-progress-item" wx:for="{{memberProgressList}}" wx:key="user_id">
+        <view class="member-header">
+          <image class="member-avatar-small" src="{{item.user_avatar || '/images/default-avatar.svg'}}"></image>
+          <text class="member-name-small">{{item.user_name}}</text>
+          <text class="member-progress-text">{{item.completed_sets}}/{{item.total_sets}}组</text>
+        </view>
+        <view class="mini-progress-bar">
+          <view class="mini-progress-fill" style="width: {{item.progress_percent}}%;"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+</view>

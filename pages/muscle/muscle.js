@@ -11,9 +11,16 @@ Page({
   },
 
   onLoad(options) {
-    const { groupId } = options
+    console.log('muscle页面加载，参数:', options)
+    // 从 URL 参数或 storage 获取 groupId
+    let groupId = options.groupId || wx.getStorageSync('muscleGroupId')
+    // 清除 storage 中的参数，避免影响下次
+    wx.removeStorageSync('muscleGroupId')
+    
     if (groupId) {
-      this.setData({ currentTab: parseInt(groupId) - 1 })
+      const tabIndex = parseInt(groupId) - 1
+      console.log('设置当前tab:', tabIndex)
+      this.setData({ currentTab: tabIndex >= 0 && tabIndex < 3 ? tabIndex : 0 })
     }
     this.loadData()
   },
@@ -39,21 +46,21 @@ Page({
           id: 1,
           name: '上肢',
           muscles: ['手臂', '肩部', '胸部'],
-          image: '/images/muscle/arm.png',
+          icon: '💪',
           description: '增强上肢力量，提高日常活动能力'
         },
         {
           id: 2,
           name: '核心',
           muscles: ['腹部', '背部', '腰部'],
-          image: '/images/muscle/core.png',
+          icon: '🧘',
           description: '稳定身体重心，改善平衡能力'
         },
         {
           id: 3,
           name: '下肢',
           muscles: ['大腿', '小腿', '臀部'],
-          image: '/images/muscle/leg.png',
+          icon: '🦵',
           description: '增强行走能力，预防跌倒'
         }
       ]
@@ -72,18 +79,18 @@ Page({
       // 模拟数据
       const mockData = {
         0: [
-          { id: 1, name: '手臂环绕', targetMuscle: '肩部', difficulty: '简单', duration: 5, sets: 3, image: '/images/exercise1.png' },
-          { id: 2, name: '坐姿推举', targetMuscle: '肩部、手臂', difficulty: '中等', duration: 8, sets: 3, image: '/images/exercise2.png' },
+          { id: 1, name: '手臂环绕', targetMuscle: '肩部', difficulty: '简单', duration: 5, sets: 3, image: '' },
+          { id: 2, name: '坐姿推举', targetMuscle: '肩部、手臂', difficulty: '中等', duration: 8, sets: 3, image: '' },
           { id: 3, name: '弹力带弯举', targetMuscle: '手臂前侧', difficulty: '简单', duration: 6, sets: 3, image: '/images/exercise3.png' }
         ],
         1: [
-          { id: 4, name: '坐姿扭转', targetMuscle: '腹部、腰部', difficulty: '简单', duration: 5, sets: 3, image: '/images/exercise4.png' },
-          { id: 5, name: '平板支撑', targetMuscle: '核心肌群', difficulty: '中等', duration: 3, sets: 3, image: '/images/exercise5.png' },
+          { id: 4, name: '坐姿扭转', targetMuscle: '腹部、腰部', difficulty: '简单', duration: 5, sets: 3, image: '' },
+          { id: 5, name: '平板支撑', targetMuscle: '核心肌群', difficulty: '中等', duration: 3, sets: 3, image: '' },
           { id: 6, name: '桥式运动', targetMuscle: '臀部、腰部', difficulty: '简单', duration: 6, sets: 3, image: '/images/exercise6.png' }
         ],
         2: [
-          { id: 7, name: '坐姿抬腿', targetMuscle: '大腿前侧', difficulty: '简单', duration: 8, sets: 3, image: '/images/exercise7.png' },
-          { id: 8, name: '靠墙静蹲', targetMuscle: '大腿、臀部', difficulty: '中等', duration: 5, sets: 3, image: '/images/exercise8.png' },
+          { id: 7, name: '坐姿抬腿', targetMuscle: '大腿前侧', difficulty: '简单', duration: 8, sets: 3, image: '' },
+          { id: 8, name: '靠墙静蹲', targetMuscle: '大腿、臀部', difficulty: '中等', duration: 5, sets: 3, image: '' },
           { id: 9, name: '提踵练习', targetMuscle: '小腿', difficulty: '简单', duration: 5, sets: 3, image: '/images/exercise9.png' }
         ]
       }
