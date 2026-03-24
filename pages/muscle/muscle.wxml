@@ -44,7 +44,7 @@
           </view>
         </view>
         
-        <image class="exercise-image" src="{{item.image}}" mode="aspectFill"></image>
+        <image class="exercise-image" src="{{item.image || '/images/default-exercise.png'}}" mode="aspectFill"></image>
         
         <view class="card-info">
           <view class="info-row flex-row">
@@ -61,10 +61,6 @@
           </view>
         </view>
 
-        <button class="btn-audio" catchtap="playAudio" data-name="{{item.name}}" data-target-muscle="{{item.targetMuscle}}">
-          <text class="audio-icon">🔊</text>
-          <text>语音讲解</text>
-        </button>
       </view>
     </view>
   </view>

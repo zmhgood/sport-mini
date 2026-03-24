@@ -605,28 +605,35 @@
 
 .exercise-meta {
   margin-top: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
 }
 
-.exercise-difficulty {
-  padding: 8rpx 20rpx;
-  border-radius: 20rpx;
-  font-size: 24rpx;
+.difficulty-tag {
+  font-size: 26rpx;
   font-weight: 500;
+  line-height: 1;
 }
 
-.exercise-difficulty.easy {
-  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+.difficulty-tag.easy {
   color: #059669;
+  background: #D1FAE5;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
 }
 
-.exercise-difficulty.medium {
-  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+.difficulty-tag.medium {
   color: #D97706;
+  background: #FEF3C7;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
 }
 
 .exercise-duration {
   font-size: 26rpx;
   color: #94A3B8;
+  line-height: 1;
 }
 
 .empty-tip {
@@ -636,7 +643,43 @@
   font-size: 28rpx;
 }
 
-/* 家庭目标列表 */
+/* 多家庭任务列表 */
+.families-tasks-list {
+  margin-top: 16rpx;
+}
+
+.family-tasks-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #F1F5F9;
+}
+
+.family-tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid #F1F5F9;
+}
+
+.family-tasks-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.family-tasks-count {
+  font-size: 26rpx;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
 .family-goals-list {
   margin-top: 16rpx;
 }
@@ -645,12 +688,36 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24rpx 28rpx;
-  margin-bottom: 16rpx;
-  border-radius: 20rpx;
-  background: #FFFFFF;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
-  border: 1rpx solid #F1F5F9;
+  padding: 20rpx 24rpx;
+  margin-bottom: 12rpx;
+  border-radius: 16rpx;
+  background: #F8FAFC;
+  border: 1rpx solid #E2E8F0;
+}
+
+.family-goal-item:last-child {
+  margin-bottom: 0;
+}
+
+.family-empty-tip {
+  text-align: center;
+  padding: 32rpx 0;
+  color: #94A3B8;
+  font-size: 28rpx;
+}
+
+.join-family-btn-small {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: #3B82F6;
+  background: #EFF6FF;
+  padding: 16rpx 32rpx;
+  border-radius: 32rpx;
+  border: none;
+}
+
+.join-family-btn-small::after {
+  border: none;
 }
 
 .goal-info {

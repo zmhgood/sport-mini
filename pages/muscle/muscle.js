@@ -69,13 +69,27 @@ Page({
 
   // 获取锻炼列表
   getExercises() {
-    const groupId = this.data.currentTab + 1
+    const muscleGroupId = this.data.currentTab + 1
+    console.log('[getExercises] 请求 muscle_group_id:', muscleGroupId)
     
-    api.request('/exercises', 'GET', { groupId }).then(res => {
+    api.request('/exercises', 'GET', { muscle_group_id: muscleGroupId }).then(res => {
+      console.log('[getExercises] 响应:', res)
       if (res.code === 0) {
-        this.setData({ exercises: res.data, loading: false })
+        // 后端返回 { list: [...], total: n } 格式
+        let exercises = res.data.list || res.data || []
+        console.log('[getExercises] 原始数据:', exercises)
+        // 字段名转换：后端 snake_case -> 前端 camelCase
+        exercises = exercises.map(item => ({
+          ...item,
+          targetMuscle: item.target_muscle || item.targetMuscle || '',
+          image: item.image_url || item.image || ''
+        }))
+        console.log('[getExercises] 转换后:', exercises)
+        this.setData({ exercises: exercises, loading: false })
       }
-    }).catch(() => {
+    }).catch((err) => {
+      console.error('[getExercises] 请求失败:', err)
+      wx.showToast({ title: '数据加载失败', icon: 'none' })
       // 模拟数据
       const mockData = {
         0: [
@@ -116,13 +130,4 @@ Page({
     })
   },
 
-  // 播放语音介绍
-  playAudio(e) {
-    const { name, targetMuscle } = e.currentTarget.dataset
-    wx.showToast({
-      title: '语音播放中',
-      icon: 'none'
-    })
-    // 实际项目中可以使用 wx.createInnerAudioContext() 播放音频
-  }
 })

@@ -4,11 +4,6 @@ const api = require('../../utils/api')
 Page({
   data: {
     exercise: null,
-    currentStep: 0,
-    isPlaying: false,
-    timer: 0,
-    timerText: '00:00',
-    completed: false,
     // 评论相关
     comments: [],
     commentTotal: 0,
@@ -17,28 +12,34 @@ Page({
     showCommentModal: false,
     commentContent: '',
     replyToId: 0,
-    replyToName: ''
+    replyToName: '',
+    // 当前用户信息
+    currentUserId: 0
   },
-
-  timer: null,
 
   onLoad(options) {
     const { id } = options
+    // 获取当前用户ID
+    const userId = wx.getStorageSync('userId')
+    if (userId) {
+      this.setData({ currentUserId: Number(userId) })
+    }
     if (id) {
       this.getExerciseDetail(id)
       this.loadComments(id)
     }
   },
 
-  onUnload() {
-    this.stopTimer()
-  },
-
   // 获取锻炼详情
   getExerciseDetail(id) {
     api.request(`/exercises/${id}`, 'GET').then(res => {
       if (res.code === 0) {
-        this.setData({ exercise: res.data })
+        // 字段名转换
+        const exercise = res.data
+        exercise.video = exercise.video_url || exercise.video || ''
+        exercise.image = exercise.image_url || exercise.image || '/images/default-exercise.png'
+        exercise.targetMuscle = exercise.target_muscle || exercise.targetMuscle || ''
+        this.setData({ exercise })
       }
     }).catch(() => {
       // 模拟数据
@@ -54,61 +55,7 @@ Page({
           calories: 30,
           image: '',
           video: '/videos/exercise1.mp4',
-          description: '坐姿抬腿是一个非常适合老年人的下肢锻炼动作，可以有效增强大腿前侧肌肉力量，提高行走能力和膝关节稳定性。',
-          benefits: [
-            '增强大腿肌肉力量',
-            '改善膝关节稳定性',
-            '提高行走能力',
-            '预防跌倒'
-          ],
-          steps: [
-            { 
-              order: 1, 
-              title: '准备姿势', 
-              desc: '坐在稳固的椅子上，背部挺直，双手扶住椅子两侧',
-              image: '/images/step1.png',
-              duration: 10
-            },
-            { 
-              order: 2, 
-              title: '抬起右腿', 
-              desc: '吸气，慢慢将右腿向前抬起，直到与地面平行',
-              image: '/images/step2.png',
-              duration: 5
-            },
-            { 
-              order: 3, 
-              title: '保持姿势', 
-              desc: '在最高点保持2-3秒，感受大腿肌肉收缩',
-              image: '/images/step3.png',
-              duration: 3
-            },
-            { 
-              order: 4, 
-              title: '缓慢放下', 
-              desc: '呼气，控制速度慢慢将腿放下，不要突然松劲',
-              image: '/images/step4.png',
-              duration: 5
-            },
-            { 
-              order: 5, 
-              title: '换腿重复', 
-              desc: '左腿重复相同动作，完成一组后休息30秒',
-              image: '/images/step5.png',
-              duration: 5
-            }
-          ],
-          precautions: [
-            '动作要缓慢，不要急躁',
-            '保持呼吸均匀，不要憋气',
-            '如果感到不适请立即停止',
-            '膝关节疼痛者应减少幅度'
-          ],
-          contraindications: [
-            '急性膝关节损伤',
-            '严重膝关节病变',
-            '近期有腿部手术'
-          ]
+          description: '坐姿抬腿是一个非常适合老年人的下肢锻炼动作，可以有效增强大腿前侧肌肉力量，提高行走能力和膝关节稳定性。'
         }
       })
     })
@@ -306,147 +253,41 @@ Page({
 
   // 播放视频
   playVideo() {
-    this.setData({ isPlaying: true })
-    // 实际项目中使用 video 组件
-    wx.showToast({
-      title: '视频播放中',
-      icon: 'none'
-    })
-  },
-
-  // 开始计时
-  startTimer() {
-    if (this.timer) return
-    
-    this.setData({ isPlaying: true })
-    this.timer = setInterval(() => {
-      const timer = this.data.timer + 1
-      const minutes = Math.floor(timer / 60)
-      const seconds = timer % 60
-      this.setData({
-        timer,
-        timerText: `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+    const { exercise } = this.data
+    if (exercise.video) {
+      // 有视频，跳转到视频播放页面
+      wx.navigateTo({
+        url: `/pages/video-player/video-player?src=${encodeURIComponent(exercise.video)}&title=${encodeURIComponent(exercise.name)}`
       })
-      
-      // 检查是否完成
-      if (timer >= this.data.exercise.duration * 60) {
-        this.completeExercise()
-      }
-    }, 1000)
-  },
-
-  // 暂停计时
-  pauseTimer() {
-    this.stopTimer()
-    this.setData({ isPlaying: false })
-  },
-
-  // 停止计时
-  stopTimer() {
-    if (this.timer) {
-      clearInterval(this.timer)
-      this.timer = null
+    } else {
+      wx.showToast({
+        title: '暂无视频',
+        icon: 'none'
+      })
     }
   },
 
-  // 完成锻炼
-  completeExercise() {
-    const that = this
+  // 删除评论
+  deleteComment(e) {
+    const { id } = e.currentTarget.dataset
+    const { exercise } = this.data
     
-    // 检查登录状态
-    api.requireLogin(() => {
-      that.stopTimer()
-      that.setData({ completed: true, isPlaying: false })
-      
-      // 记录锻炼
-      that.recordExercise()
-      
-      wx.showModal({
-        title: '太棒了！',
-        content: '您已完成本次锻炼，继续保持！',
-        showCancel: false,
-        confirmText: '好的'
-      })
-    })
-  },
-  
-  // 记录锻炼到服务器
-  recordExercise() {
-    const { exercise, timer } = this.data
-    if (!exercise) return
-    
-    // 先保存到本地缓存
-    this.saveToLocalHistory(exercise, timer)
-    
-    api.post('/exercises/record', {
-      exercise_id: exercise.id,
-      duration: timer,
-      sets: exercise.sets || 1
-    }).then(res => {
-      if (res.code === 0) {
-        console.log('锻炼记录成功')
-      }
-    }).catch(err => {
-      console.error('记录失败:', err)
-      // 失败也没关系，本地已经有缓存
-    })
-  },
-
-  // 保存到本地历史记录
-  saveToLocalHistory(exercise, duration) {
-    try {
-      const today = new Date()
-      const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-      
-      let history = wx.getStorageSync('exerciseHistory') || []
-      
-      // 查找今天的记录
-      let todayRecord = history.find(h => h.rawDate === dateStr)
-      if (todayRecord) {
-        todayRecord.duration += duration
-        if (!todayRecord.exercises.includes(exercise.name)) {
-          todayRecord.exercises.push(exercise.name)
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除这条评论吗？',
+      confirmColor: '#ff4d4f',
+      success: (res) => {
+        if (res.confirm) {
+          api.comment.delete(id).then(res => {
+            if (res.code === 0) {
+              wx.showToast({ title: '删除成功', icon: 'success' })
+              this.loadComments(exercise.id)
+            }
+          }).catch(err => {
+            wx.showToast({ title: err.message || '删除失败', icon: 'none' })
+          })
         }
-      } else {
-        const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-        history.unshift({
-          rawDate: dateStr,
-          date: `${today.getMonth() + 1}月${today.getDate()}日 ${weekDays[today.getDay()]}`,
-          duration: Math.round(duration / 60),
-          exercises: [exercise.name]
-        })
       }
-      
-      // 最多保留30条记录
-      if (history.length > 30) {
-        history = history.slice(0, 30)
-      }
-      
-      wx.setStorageSync('exerciseHistory', history)
-    } catch (e) {
-      console.error('保存本地记录失败:', e)
-    }
-  },
-
-  // 切换步骤
-  prevStep() {
-    if (this.data.currentStep > 0) {
-      this.setData({ currentStep: this.data.currentStep - 1 })
-    }
-  },
-
-  nextStep() {
-    const { currentStep, exercise } = this.data
-    if (currentStep < exercise.steps.length - 1) {
-      this.setData({ currentStep: currentStep + 1 })
-    }
-  },
-
-  // 播放语音
-  playAudio() {
-    wx.showToast({
-      title: '语音播放中',
-      icon: 'none'
     })
   },
 

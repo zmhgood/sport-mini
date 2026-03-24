@@ -1,0 +1,88 @@
+<!--pages/profile-edit/profile-edit.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">编辑个人信息</text>
+  </view>
+
+  <view class="form-card">
+    <!-- 昵称 -->
+    <view class="form-item">
+      <text class="label">昵称</text>
+      <input 
+        class="input" 
+        type="text" 
+        placeholder="请输入昵称"
+        value="{{userInfo.nick_name}}"
+        bindinput="onNickNameInput"
+      />
+    </view>
+
+    <!-- 性别 -->
+    <view class="form-item">
+      <text class="label">性别</text>
+      <picker mode="selector" range="{{genderOptions}}" range-key="label" bindchange="onGenderChange">
+        <view class="picker">
+          <text class="picker-text">{{genderOptions[userInfo.gender].label}}</text>
+          <text class="arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 年龄 -->
+    <view class="form-item">
+      <text class="label">年龄</text>
+      <input 
+        class="input" 
+        type="number" 
+        placeholder="请输入年龄"
+        value="{{userInfo.age}}"
+        bindinput="onAgeInput"
+      />
+      <text class="unit">岁</text>
+    </view>
+
+    <!-- 身高 -->
+    <view class="form-item">
+      <text class="label">身高</text>
+      <input 
+        class="input" 
+        type="digit" 
+        placeholder="请输入身高"
+        value="{{userInfo.height}}"
+        bindinput="onHeightInput"
+      />
+      <text class="unit">cm</text>
+    </view>
+
+    <!-- 体重 -->
+    <view class="form-item">
+      <text class="label">体重</text>
+      <input 
+        class="input" 
+        type="digit" 
+        placeholder="请输入体重"
+        value="{{userInfo.weight}}"
+        bindinput="onWeightInput"
+      />
+      <text class="unit">kg</text>
+    </view>
+
+    <!-- 健康状况 -->
+    <view class="form-item textarea-item">
+      <text class="label">健康状况备注</text>
+      <textarea 
+        class="textarea" 
+        placeholder="如有特殊健康状况请填写（选填）"
+        value="{{userInfo.health_status}}"
+        bindinput="onHealthStatusInput"
+        maxlength="200"
+      />
+    </view>
+  </view>
+
+  <!-- 按钮区域 -->
+  <view class="btn-area">
+    <button class="btn btn-cancel" bindtap="onCancel">取消</button>
+    <button class="btn btn-save" bindtap="onSave" loading="{{loading}}">保存</button>
+  </view>
+</view>

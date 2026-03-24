@@ -20,7 +20,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12rpx 0;
+  padding: 8rpx 0;
   transition: all 0.3s ease;
   position: relative;
 }
@@ -38,9 +38,18 @@
 }
 
 .tab-icon {
-  font-size: 48rpx;
-  margin-bottom: 6rpx;
+  font-size: 44rpx;
+  line-height: 44rpx;
   transition: transform 0.3s ease;
+}
+
+.tab-text {
+  font-size: 22rpx;
+  line-height: 22rpx;
+  margin-top: 2rpx;
+  color: #94A3B8;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .tab-bar-item.selected .tab-icon {

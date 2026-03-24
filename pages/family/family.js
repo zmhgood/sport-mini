@@ -23,19 +23,45 @@ Page({
   async loadFamilies() {
     try {
       const res = await api.request('/families', 'GET')
-      if (res.code === 0 && res.data && res.data.length > 0) {
-        const families = res.data
-        const currentUserId = wx.getStorageSync('userId')
+      console.log('[loadFamilies] res:', res)
+      if (res.code === 0) {
+        const families = res.data || []
+        const currentUserId = parseInt(wx.getStorageSync('userId')) || 0
+        
+        console.log('[loadFamilies] families:', families, 'currentUserId:', currentUserId)
+        
+        // 从缓存获取当前选择的家庭ID
+        const cachedFamilyId = wx.getStorageSync('currentFamilyId')
+        let currentFamilyIndex = 0
+        
+        // 如果有缓存的家庭ID，找到对应的索引
+        if (cachedFamilyId && families.length > 0) {
+          const index = families.findIndex(f => f.id === cachedFamilyId)
+          if (index !== -1) {
+            currentFamilyIndex = index
+          }
+        }
         
         this.setData({ 
           families, 
           currentUserId,
-          currentFamilyIndex: 0 
+          currentFamilyIndex 
         })
         
-        // 加载第一个家庭详情
-        this.loadFamilyDetail(families[0].id)
+        // 加载当前选中的家庭详情
+        if (families.length > 0) {
+          const familyId = families[currentFamilyIndex].id
+          console.log('[loadFamilies] 加载家庭详情:', familyId)
+          this.loadFamilyDetail(familyId)
+        } else {
+          this.setData({ 
+            family: null, 
+            members: [], 
+            goals: [] 
+          })
+        }
       } else {
+        wx.showToast({ title: res.message || '加载失败', icon: 'none' })
         this.setData({ 
           families: [], 
           family: null, 
@@ -45,18 +71,22 @@ Page({
       }
     } catch (err) {
       console.error('加载家庭列表失败:', err)
+      wx.showToast({ title: '网络错误', icon: 'none' })
     }
   },
 
   async loadFamilyDetail(familyId) {
     try {
       const res = await api.request(`/family/${familyId}`, 'GET')
+      console.log('[loadFamilyDetail] res:', res)
       if (res.code === 0 && res.data) {
         const family = res.data
+        console.log('[loadFamilyDetail] family:', family, 'members:', family.members)
         
-        // 检查当前用户是否是管理员
-        const currentMember = family.members && family.members.find(m => m.user_id === this.data.currentUserId)
+        // 检查当前用户是否是管理员（使用 == 而不是 ===，避免类型不匹配）
+        const currentMember = family.members && family.members.find(m => m.user_id == this.data.currentUserId)
         const isAdmin = currentMember && currentMember.role === 'admin'
+        console.log('[loadFamilyDetail] currentMember:', currentMember, 'isAdmin:', isAdmin)
 
         this.setData({
           family,
@@ -76,6 +106,8 @@ Page({
     const index = parseInt(e.detail.value)
     const family = this.data.families[index]
     this.setData({ currentFamilyIndex: index })
+    // 保存到缓存，保持与首页一致
+    wx.setStorageSync('currentFamilyId', family.id)
     this.loadFamilyDetail(family.id)
   },
 
@@ -175,9 +207,10 @@ Page({
   },
 
   async leaveFamily() {
+    const familyName = this.data.family ? this.data.family.name : '当前家庭'
     wx.showModal({
       title: '退出家庭',
-      content: '确定要退出当前家庭吗？',
+      content: `确定要退出"${familyName}"家庭吗？`,
       success: async (res) => {
         if (res.confirm) {
           try {
@@ -186,6 +219,8 @@ Page({
             })
             if (res.code === 0) {
               wx.showToast({ title: '已退出', icon: 'success' })
+              // 清除缓存的家庭ID
+              wx.removeStorageSync('currentFamilyId')
               // 重新加载家庭列表
               this.loadFamilies()
             }

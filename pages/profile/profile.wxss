@@ -26,6 +26,24 @@
   border-radius: 50%;
 }
 
+/* 右上角当前家庭 */
+.header-family {
+  position: absolute;
+  top: 20rpx;
+  right: 30rpx;
+  z-index: 10;
+  padding: 8rpx 20rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 30rpx;
+  backdrop-filter: blur(10px);
+}
+
+.header-family-text {
+  font-size: 24rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
 .user-card {
   text-align: center;
   margin-bottom: 40rpx;
@@ -59,6 +77,30 @@
   display: block;
   font-size: 28rpx;
   color: rgba(255, 255, 255, 0.85);
+}
+
+/* 当前家庭 */
+.current-family {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16rpx;
+  padding: 8rpx 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 40rpx;
+  backdrop-filter: blur(10px);
+}
+
+.current-family .family-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 8rpx;
+}
+
+.current-family .family-name {
+  font-size: 26rpx;
+  color: #FFFFFF;
+  font-weight: 500;
 }
 
 /* 统计卡片 */
@@ -98,6 +140,80 @@
   font-size: 26rpx;
   color: #64748B;
   font-weight: 500;
+}
+
+/* 家庭统计卡片 */
+.family-stats-card {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.family-stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid #F1F5F9;
+}
+
+.family-stats-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.family-stats-toggle {
+  font-size: 24rpx;
+  color: #94A3B8;
+}
+
+.family-stats-list {
+  margin-top: 20rpx;
+}
+
+.family-stat-item {
+  margin-bottom: 20rpx;
+}
+
+.family-stat-item:last-child {
+  margin-bottom: 0;
+}
+
+.family-stat-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.family-stat-name {
+  font-size: 28rpx;
+  color: #1E293B;
+  font-weight: 500;
+}
+
+.family-stat-detail {
+  font-size: 24rpx;
+  color: #64748B;
+}
+
+.family-stat-bar {
+  height: 8rpx;
+  background: #F1F5F9;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.family-stat-progress {
+  height: 100%;
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
 }
 
 .stat-divider {

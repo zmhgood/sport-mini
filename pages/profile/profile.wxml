@@ -2,6 +2,11 @@
 <view class="container">
   <!-- 用户信息区域 -->
   <view class="user-section">
+    <!-- 右上角当前家庭 -->
+    <view class="header-family" wx:if="{{isLoggedIn && currentFamily.id}}" bindtap="goToSetting" data-id="family">
+      <text class="header-family-text">{{currentFamily.name}}</text>
+    </view>
+    
     <view class="user-card" wx:if="{{isLoggedIn}}">
       <image class="avatar" src="{{userInfo.avatar_url || '/images/default-avatar.svg'}}" mode="aspectFill"></image>
       <text class="username">{{userInfo.nick_name || '老年朋友'}}</text>
@@ -24,6 +29,25 @@
       <view class="stat-item">
         <text class="stat-value">{{statistics.totalSets}}</text>
         <text class="stat-label">完成动作组数</text>
+      </view>
+    </view>
+
+    <!-- 按家庭统计（可展开） -->
+    <view class="family-stats-card card" wx:if="{{familyStats.length > 0}}">
+      <view class="family-stats-header" bindtap="toggleFamilyStats">
+        <text class="family-stats-title">各家庭贡献</text>
+        <text class="family-stats-toggle">{{showFamilyStats ? '▲' : '▼'}}</text>
+      </view>
+      <view class="family-stats-list" wx:if="{{showFamilyStats}}">
+        <view class="family-stat-item" wx:for="{{familyStats}}" wx:key="family_id">
+          <view class="family-stat-info">
+            <text class="family-stat-name">{{item.family_name}}</text>
+            <text class="family-stat-detail">{{item.total_days}}天 · {{item.total_sets}}组</text>
+          </view>
+          <view class="family-stat-bar">
+            <view class="family-stat-progress" style="width: {{item.total_sets / statistics.totalSets * 100}}%;"></view>
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -70,7 +94,7 @@
     <text class="section-title">设置</text>
     
     <view class="settings-list card">
-      <view class="setting-item flex-between" wx:for="{{settings}}" wx:key="id" bindtap="goToSetting" data-id="{{item.id}}">
+      <view class="setting-item flex-between" wx:for="{{settings}}" wx:key="id" wx:if="{{!item.hidden || currentFamily.id}}" bindtap="goToSetting" data-id="{{item.id}}">
         <view class="setting-left flex-row">
           <text class="setting-icon">{{item.icon}}</text>
           <text class="setting-name">{{item.name}}</text>

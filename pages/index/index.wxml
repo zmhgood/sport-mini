@@ -54,25 +54,45 @@
     </swiper-item>
   </swiper>
 
-  <!-- 家庭待完成任务 -->
-  <view class="section">
+  <!-- 多家庭待完成任务 -->
+  <view class="section" wx:if="{{isLoggedIn}}">
     <view class="section-header flex-between">
-      <text class="title-medium">{{familyName || '家庭任务'}}</text>
+      <text class="title-medium">今日任务</text>
+      <text class="text-primary" wx:if="{{totalPendingGoals > 0}}">待完成 {{totalPendingGoals}} 项</text>
     </view>
-    <view class="family-goals-list" wx:if="{{familyGoals.length > 0}}">
-      <view class="family-goal-item" wx:for="{{familyGoals}}" wx:key="id" 
-            bindtap="goToGoalDetail" data-id="{{item.id}}">
-        <view class="goal-info">
-          <text class="goal-name">{{item.name}}</text>
-          <text class="goal-desc">{{item.member_count}}人参与 · {{item.exercise_count}}个动作</text>
+    
+    <!-- 按家庭分组展示任务 -->
+    <view class="families-tasks-list" wx:if="{{familiesWithGoals.length > 0}}">
+      <view class="family-tasks-card" wx:for="{{familiesWithGoals}}" wx:key="family_id" wx:for-item="family">
+        <!-- 家庭标题 -->
+        <view class="family-tasks-header">
+          <text class="family-tasks-name">{{family.family_name}}</text>
+          <text class="family-tasks-count" wx:if="{{family.goals.length > 0}}">{{family.goals.length}}个目标</text>
         </view>
-        <view class="goal-progress">
-          <text class="progress-text">{{item.today_completed}}/{{item.total_exercises}}</text>
-          <text class="progress-label">今日完成</text>
+        
+        <!-- 该家庭的目标列表 -->
+        <view class="family-goals-list" wx:if="{{family.goals.length > 0}}">
+          <view class="family-goal-item" wx:for="{{family.goals}}" wx:key="id" 
+                bindtap="goToGoalDetail" data-id="{{item.id}}">
+            <view class="goal-info">
+              <text class="goal-name">{{item.name}}</text>
+              <text class="goal-desc">{{item.member_count}}人参与 · {{item.exercise_count}}个动作</text>
+            </view>
+            <view class="goal-progress">
+              <text class="progress-text">{{item.today_completed}}/{{item.total_exercises}}</text>
+              <text class="progress-label">今日完成</text>
+            </view>
+          </view>
         </view>
+        <view class="family-empty-tip" wx:else>该家庭暂无活跃目标</view>
       </view>
     </view>
-    <view class="empty-tip" wx:else>{{isLoggedIn ? '暂无家庭任务' : '请登录后查看家庭任务'}}</view>
+    
+    <view class="empty-tip" wx:elif="{{isLoggedIn}}">
+      <text>暂无家庭任务</text>
+      <button class="join-family-btn-small" bindtap="goToJoinFamily">+加入家庭</button>
+    </view>
+    <view class="empty-tip" wx:else>请登录后查看家庭任务</view>
   </view>
 
   <!-- 推荐锻炼 -->
@@ -98,11 +118,11 @@
         <view class="exercise-info">
           <text class="exercise-name">{{item.name}}</text>
           <text class="exercise-target">目标肌肉：{{item.targetMuscle}}</text>
-          <view class="exercise-meta flex-row">
-            <text class="exercise-difficulty {{item.difficulty === '简单' ? 'easy' : 'medium'}}">
+          <view class="exercise-meta">
+            <view class="difficulty-tag {{item.difficulty === '简单' ? 'easy' : 'medium'}}">
               {{item.difficulty}}
-            </text>
-            <text class="exercise-duration ml-20">{{item.duration}}分钟</text>
+            </view>
+            <text class="exercise-duration">{{item.duration}}分钟</text>
           </view>
         </view>
       </view>

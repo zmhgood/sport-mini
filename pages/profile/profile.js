@@ -5,12 +5,16 @@ Page({
   data: {
     isLoggedIn: false,
     userInfo: null,
+    currentFamily: {},      // 当前选择的家庭
     statistics: {
       totalDays: 0,
       totalExercises: 0,
       totalMinutes: 0,
       totalSets: 0
     },
+    // 多家庭统计
+    familyStats: [],        // 按家庭分组的统计
+    showFamilyStats: false, // 是否展开家庭统计
     currentWeekOffset: 0,   // 当前周偏移量（0=本周，-1=上周，1=下周）
     weekStats: [],          // 当前周的统计数据
     maxCount: 1,            // 最大值用于柱状图高度
@@ -20,6 +24,7 @@ Page({
     settings: [
       { id: 'family', name: '我的家庭', value: '管理', icon: '👨‍👩‍👧‍👦' },
       { id: 'goals', name: '锻炼目标', value: '查看', icon: '🎯' },
+      { id: 'profile', name: '个人信息', value: '编辑', icon: '👤' },
       { id: 'fontSize', name: '字体大小', value: '标准', icon: '📝' },
       { id: 'voice', name: '语音播报', value: '开启', icon: '🔊' },
       { id: 'reminder', name: '锻炼提醒', value: '每日 8:00', icon: '⏰' },
@@ -39,7 +44,39 @@ Page({
     this.checkLogin()
     if (api.isLoggedIn()) {
       this.loadStatistics()
+      this.loadFamilyStatistics()
       this.loadWeekStats(0)
+      this.loadCurrentFamily()
+    }
+  },
+
+  // 加载当前选择的家庭
+  async loadCurrentFamily() {
+    const cachedFamilyId = wx.getStorageSync('currentFamilyId')
+    if (!cachedFamilyId) return
+
+    try {
+      // 先尝试从 /families 接口获取家庭列表
+      const res = await api.request('/families', 'GET')
+      if (res.code === 0 && res.data) {
+        const families = res.data
+        const family = families.find(f => String(f.id) === String(cachedFamilyId))
+        if (family) {
+          this.setData({
+            currentFamily: { id: cachedFamilyId, name: family.name }
+          })
+          return
+        }
+      }
+      // 如果没找到，显示默认名称
+      this.setData({
+        currentFamily: { id: cachedFamilyId, name: '当前家庭' }
+      })
+    } catch (err) {
+      console.error('加载当前家庭失败:', err)
+      this.setData({
+        currentFamily: { id: cachedFamilyId, name: '当前家庭' }
+      })
     }
   },
 
@@ -74,6 +111,25 @@ Page({
         totalSets: 0
       }
       this.setData({ statistics: stats })
+    })
+  },
+
+  // 加载按家庭分组的统计
+  loadFamilyStatistics() {
+    return api.request('/user/statistics/by-family', 'GET').then(res => {
+      if (res.code === 0 && res.data) {
+        this.setData({ familyStats: res.data || [] })
+      }
+    }).catch((err) => {
+      console.error('加载家庭统计失败:', err)
+      this.setData({ familyStats: [] })
+    })
+  },
+
+  // 切换家庭统计显示
+  toggleFamilyStats() {
+    this.setData({
+      showFamilyStats: !this.data.showFamilyStats
     })
   },
 
@@ -266,6 +322,9 @@ Page({
         break
       case 'goals':
         wx.navigateTo({ url: '/pages/goal/list' })
+        break
+      case 'profile':
+        wx.navigateTo({ url: '/pages/profile-edit/profile-edit' })
         break
       default:
         wx.showToast({

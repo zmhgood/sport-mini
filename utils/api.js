@@ -1,7 +1,10 @@
 // utils/api.js - API请求封装
 const app = getApp()
 
-const BASE_URL = 'https://mesa-obtaining-save-expenditure.trycloudflare.com/api'
+// 本地开发环境
+const BASE_URL = 'http://localhost:8080/api'
+// 生产环境
+// const BASE_URL = 'https://mesa-obtaining-save-expenditure.trycloudflare.com/api'
 
 /**
  * 封装请求方法
@@ -25,11 +28,21 @@ function request(url, method = 'GET', data = {}) {
         if (res.statusCode === 200) {
           resolve(res.data)
         } else if (res.statusCode === 401) {
-          // Token过期，清除登录状态
+          // Token过期，清除登录状态并跳转登录页
           wx.removeStorageSync('token')
           wx.removeStorageSync('userInfo')
           app.globalData.isLoggedIn = false
           app.globalData.userInfo = null
+          // 获取当前页面路径
+          const pages = getCurrentPages()
+          const currentPage = pages[pages.length - 1]
+          const currentRoute = currentPage ? currentPage.route : ''
+          // 如果当前不在登录页，则跳转
+          if (currentRoute && !currentRoute.includes('login')) {
+            wx.navigateTo({
+              url: '/pages/login/login'
+            })
+          }
           reject(new Error('登录已过期，请重新登录'))
         } else {
           reject(new Error(res.data.message || '请求失败'))
