@@ -1,10 +1,10 @@
 // utils/api.js - API请求封装
 const app = getApp()
+const { getConfig } = require('../config/config')
 
-// 本地开发环境
-const BASE_URL = 'http://localhost:8080/api'
-// 生产环境
-// const BASE_URL = 'https://mesa-obtaining-save-expenditure.trycloudflare.com/api'
+// 获取环境配置
+const config = getConfig()
+const BASE_URL = config.baseURL
 
 /**
  * 封装请求方法

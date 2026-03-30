@@ -1,8 +1,14 @@
 // app.js
+const { getConfig } = require('./config/config')
+
 App({
   onLaunch() {
-    // 初始化
-    console.log('小程序启动')
+    // 加载环境配置
+    const config = getConfig()
+    this.globalData.baseUrl = config.baseURL
+    this.globalData.config = config
+    
+    console.log('小程序启动 - 环境:', config.env)
     
     // 检查登录状态
     this.checkLoginStatus()
@@ -11,7 +17,8 @@ App({
   globalData: {
     userInfo: null,
     isLoggedIn: false,
-    baseUrl: 'http://192.168.0.12:8080/api'
+    baseUrl: '',
+    config: null
   },
 
   // 检查登录状态
