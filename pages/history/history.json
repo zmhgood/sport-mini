@@ -1,6 +1,5 @@
 {
   "navigationBarTitleText": "锻炼记录",
   "enablePullDownRefresh": true,
-  "onReachBottomDistance": 100,
-  "usingComponents": {}
+  "onReachBottomDistance": 100
 }
