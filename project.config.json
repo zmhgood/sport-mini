@@ -1,5 +1,6 @@
 {
   "description": "银龄健身 - 老年人肌肉锻炼助手",
+  "miniprogramRoot": "miniprogram/",
   "packOptions": {
     "ignore": [],
     "include": []

@@ -1,0 +1,21 @@
+# 后端编译文件
+backend/main
+backend/main.log
+backend/config/config.local.yaml
+backend/config/secrets.env
+
+# 前端依赖
+admin/node_modules/
+admin/dist/
+admin/.vite/
+
+# 日志
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db
