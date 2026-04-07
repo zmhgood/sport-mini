@@ -1,0 +1,50 @@
+<!--pages/history/history.wxml-->
+<view class="container">
+  <view class="history-list" wx:if="{{historyList.length > 0}}">
+    <view class="history-item card" wx:for="{{historyList}}" wx:key="date"
+          bindtap="goToGoalDetail" data-id="{{item.goalId}}">
+      <view class="history-content">
+        <view class="history-info">
+          <view class="history-header">
+            <view class="history-left">
+              <text class="history-date">{{item.date}}</text>
+              <text class="history-goal-name">{{item.goalName}}</text>
+            </view>
+          </view>
+          <view class="history-exercises flex-row flex-wrap">
+            <text class="exercise-tag" wx:for="{{item.exercises}}" wx:key="id" wx:for-item="exercise">{{exercise.name}}</text>
+          </view>
+        </view>
+        <!-- 圆环进度图 -->
+        <view class="progress-ring-wrap">
+          <image class="progress-svg" src="data:image/svg+xml,{{item.progressSvg}}" mode="aspectFit"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分页信息 -->
+  <view class="page-info" wx:if="{{historyList.length > 0}}">
+    <text>已加载 {{historyList.length}} / {{total}} 条记录</text>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore && !loading}}">
+    <text bindtap="loadMore">上拉加载更多</text>
+  </view>
+
+  <!-- 没有更多 -->
+  <view class="no-more" wx:if="{{!hasMore && historyList.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-tip" wx:if="{{historyList.length === 0 && !loading}}">
+    <text>暂无锻炼记录，开始锻炼吧！</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

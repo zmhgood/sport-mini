@@ -1,0 +1,121 @@
+<!--pages/goal/progress.wxml-->
+<view class="container">
+  <!-- 单个动作锻炼模式 -->
+  <view class="exercise-mode" wx:if="{{exercise}}">
+    <!-- 动作信息 -->
+    <view class="exercise-header">
+      <image class="exercise-image" src="{{exercise.image_url || ''}}" mode="aspectFill"></image>
+      <view class="exercise-info">
+        <text class="exercise-name">{{exercise.name}}</text>
+        <text class="exercise-desc">每组 {{exercise.reps}} 次</text>
+      </view>
+    </view>
+
+    <!-- 进度条 -->
+    <view class="progress-section">
+      <view class="progress-header">
+        <text class="progress-label">完成进度</text>
+        <text class="progress-percent">{{completedPercent}}%</text>
+      </view>
+      <progress class="progress-bar" percent="{{completedPercent}}" stroke-width="12" activeColor="#22C55E" backgroundColor="#E5E7EB" />
+    </view>
+
+    <!-- 组数选择 -->
+    <view class="sets-section">
+      <text class="section-title">选择已完成的组</text>
+      <view class="sets-list">
+        <view class="set-item {{item.checked ? 'checked' : ''}}" 
+              wx:for="{{setsList}}" wx:key="index"
+              bindtap="toggleSet" data-index="{{index}}">
+          <view class="set-checkbox">
+            <view class="checkbox-inner" wx:if="{{item.checked}}">✓</view>
+          </view>
+          <text class="set-label">第 {{item.setNum}} 组</text>
+          <text class="set-reps">{{exercise.reps}} 次</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-section">
+      <button class="btn-submit" bindtap="submitProgress" loading="{{loading}}">
+        提交进度 ({{completedSets}}/{{exercise.sets}})
+      </button>
+    </view>
+  </view>
+
+  <!-- 进度查看模式 -->
+  <view class="progress-mode" wx:else>
+    <!-- 今日进度汇总 -->
+    <view class="section" wx:if="{{myProgress}}">
+      <view class="section-header">
+        <text class="section-title">今日锻炼进度</text>
+        <text class="progress-summary">{{myProgress.completed_sets}}/{{myProgress.total_sets}} 组完成</text>
+      </view>
+      <!-- 分段进度条 -->
+      <view class="overall-progress">
+        <view class="segmented-progress">
+          <view class="progress-segment" 
+                wx:for="{{myProgress.exercise_stats}}" wx:for-item="ex" wx:key="goal_exercise_id"
+                style="width: {{ex.segment_width}}%; background-color: {{ex.color}};">
+            <view class="segment-fill" style="width: {{ex.fill_width}}%;"></view>
+          </view>
+        </view>
+        <text class="progress-percent">{{myProgress.progress || 0}}%</text>
+      </view>
+      <!-- 动作图例 -->
+      <view class="progress-legend">
+        <view class="legend-item" wx:for="{{myProgress.exercise_stats}}" wx:for-item="ex" wx:key="goal_exercise_id">
+          <view class="legend-color" style="background-color: {{ex.color}};"></view>
+          <text class="legend-name">{{ex.exercise_name}} ({{ex.completed_sets}}/{{ex.target_sets}}组)</text>
+        </view>
+      </view>
+      
+      <view class="exercise-list">
+        <view class="exercise-card" wx:for="{{myProgress.exercise_stats}}" wx:key="goal_exercise_id">
+          <view class="exercise-header">
+            <text class="exercise-name">{{item.exercise_name}}</text>
+            <text class="exercise-status {{item.status}}">{{item.status === 'done' ? '已完成' : item.completed_sets > 0 ? '进行中' : '未开始'}}</text>
+          </view>
+          <view class="exercise-progress">
+            <text class="progress-label">完成组数</text>
+            <view class="progress-control">
+              <text class="control-btn minus" bindtap="decreaseSets" data-id="{{item.goal_exercise_id}}">-</text>
+              <text class="progress-value">{{item.completed_sets}} / {{item.target_sets}}</text>
+              <text class="control-btn plus" bindtap="increaseSets" data-id="{{item.goal_exercise_id}}">+</text>
+            </view>
+          </view>
+          <view class="exercise-info">
+            <text>每组 {{item.reps}} 次</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 家庭成员进度 -->
+    <view class="section" wx:if="{{otherProgress.length > 0}}">
+      <view class="section-title">家庭成员进度</view>
+      <view class="member-progress-list">
+        <view class="member-progress-item" wx:for="{{otherProgress}}" wx:key="user_id">
+          <view class="member-header">
+            <image class="member-avatar" src="{{item.user_avatar || '/images/default-avatar.svg'}}"></image>
+            <view class="member-info">
+              <text class="member-name">{{item.user_name}}</text>
+              <!-- 分段进度条 -->
+              <view class="segmented-progress-wrap">
+                <view class="segmented-progress small">
+                  <view class="progress-segment" 
+                        wx:for="{{item.exercise_stats}}" wx:for-item="ex" wx:key="goal_exercise_id"
+                        style="width: {{ex.segment_width}}%; background-color: {{ex.color}};">
+                    <view class="segment-fill" style="width: {{ex.fill_width}}%;"></view>
+                  </view>
+                </view>
+                <text class="progress-text">{{item.completed_sets}}/{{item.total_sets}}组</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

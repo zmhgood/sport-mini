@@ -1,0 +1,49 @@
+{
+  "lazyCodeLoading": "requiredComponents",
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/muscle/muscle",
+    "pages/exercise/exercise",
+    "pages/video-player/video-player",
+    "pages/profile/profile",
+    "pages/profile-edit/profile-edit",
+    "pages/family/family",
+    "pages/family/join",
+    "pages/goal/goal",
+    "pages/goal/create",
+    "pages/goal/detail",
+    "pages/goal/progress",
+    "pages/history/history"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4A90D9",
+    "navigationBarTitleText": "银龄健身",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F5F5F5"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#4A90D9",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/muscle/muscle",
+        "text": "锻炼"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

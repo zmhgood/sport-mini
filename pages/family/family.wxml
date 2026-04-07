@@ -1,0 +1,89 @@
+<!--pages/family/family.wxml-->
+<view class="container">
+  <!-- 未加入任何家庭 -->
+  <view class="no-family" wx:if="{{families.length === 0}}">
+    <view class="empty-icon">👨‍👩‍👧‍👦</view>
+    <text class="empty-title">您还未加入家庭</text>
+    <text class="empty-desc">创建或加入一个家庭，与家人一起锻炼</text>
+    <view class="btn-group">
+      <button class="btn-primary" bindtap="goCreate">创建家庭</button>
+      <button class="btn-secondary" bindtap="goJoin">加入家庭</button>
+    </view>
+  </view>
+
+  <!-- 已加入家庭 -->
+  <view class="family-info" wx:if="{{families.length > 0}}">
+    <!-- 家庭选择器 -->
+    <view class="family-selector" wx:if="{{families.length > 1}}">
+      <picker mode="selector" range="{{families}}" range-key="name" value="{{currentFamilyIndex}}" bindchange="onFamilyChange">
+        <view class="selector-value">
+          <text>{{family.name}}</text>
+          <text class="selector-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 家庭信息卡片 -->
+    <view class="family-card">
+      <view class="family-header">
+        <text class="family-name">{{family.name}}</text>
+        <text class="member-count">{{members.length}}人</text>
+      </view>
+      <view class="invite-section" wx:if="{{isAdmin}}">
+        <text class="invite-label">邀请码</text>
+        <view class="invite-code-box">
+          <text class="invite-code">{{family.invite_code}}</text>
+          <text class="copy-btn" bindtap="copyInviteCode">复制</text>
+        </view>
+        <text class="refresh-btn" bindtap="refreshInviteCode">刷新邀请码</text>
+      </view>
+    </view>
+
+    <!-- 家庭成员列表 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">家庭成员</text>
+        <text class="section-action" wx:if="{{isAdmin}}" bindtap="goJoin">邀请新成员</text>
+      </view>
+      <view class="member-list">
+        <view class="member-item" wx:for="{{members}}" wx:key="id">
+          <image class="member-avatar" src="{{item.user.avatar_url || '/images/default-avatar.svg'}}"></image>
+          <view class="member-info">
+            <text class="member-name">{{item.user.nick_name || '老年朋友'}}</text>
+            <text class="member-role {{item.role}}">{{item.role === 'admin' ? '管理员' : '成员'}}</text>
+          </view>
+          <view class="member-actions" wx:if="{{isAdmin && item.user_id !== currentUserId}}">
+            <text class="action-btn" bindtap="removeMember" data-id="{{item.user_id}}">移除</text>
+            <text class="action-btn primary" bindtap="transferAdmin" data-id="{{item.user_id}}" wx:if="{{item.role !== 'admin'}}">设为管理员</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 家庭目标 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">家庭目标</text>
+        <text class="section-action" bindtap="goCreateGoal">创建目标</text>
+      </view>
+      <view class="goal-list" wx:if="{{goals.length > 0}}">
+        <view class="goal-item" wx:for="{{goals}}" wx:key="id" bindtap="goGoalDetail" data-id="{{item.id}}">
+          <view class="goal-info">
+            <text class="goal-name">{{item.name}}</text>
+            <text class="goal-members">{{item.memberCount || 0}}人参与 · {{item.exerciseCount || 0}}个动作</text>
+          </view>
+          <text class="goal-arrow">›</text>
+        </view>
+      </view>
+      <view class="empty-list" wx:else>
+        <text>暂无家庭目标</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="btn-secondary" bindtap="goJoin">加入其他家庭</button>
+      <button class="btn-danger" bindtap="leaveFamily">退出当前家庭</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,22 @@
+<!--pages/family/join.wxml-->
+<view class="container">
+  <!-- 创建家庭表单 -->
+  <view class="form-section" wx:if="{{type === 'create'}}">
+    <view class="form-title">创建家庭</view>
+    <view class="form-item">
+      <text class="form-label">家庭名称</text>
+      <input class="form-input" placeholder="请输入家庭名称" value="{{name}}" bindinput="onNameInput" />
+    </view>
+    <button class="btn-submit" bindtap="createFamily" loading="{{loading}}">创建</button>
+  </view>
+
+  <!-- 加入家庭表单 -->
+  <view class="form-section" wx:if="{{type === 'join'}}">
+    <view class="form-title">加入家庭</view>
+    <view class="form-item">
+      <text class="form-label">邀请码</text>
+      <input class="form-input" placeholder="请输入6位邀请码" maxlength="6" value="{{inviteCode}}" bindinput="onCodeInput" />
+    </view>
+    <button class="btn-submit" bindtap="joinFamily" loading="{{loading}}">加入</button>
+  </view>
+</view>

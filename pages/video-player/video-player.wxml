@@ -1,0 +1,27 @@
+<!--pages/video-player/video-player.wxml-->
+<view class="container">
+  <video
+    id="videoPlayer"
+    class="video-player"
+    src="{{src}}"
+    title="{{title}}"
+    controls
+    autoplay
+    enable-play-gesture
+    enable-progress-gesture
+    show-center-play-btn
+    show-loading
+    object-fit="contain"
+    bindplay="onPlay"
+    bindpause="onPause"
+    bindended="onEnded"
+    bindtimeupdate="onTimeUpdate"
+    bindloadedmetadata="onLoadedMetadata"
+    binderror="onError"
+  ></video>
+
+  <!-- 提示信息 -->
+  <view class="tips">
+    <text class="tip-text">💡 提示：点击视频可显示/隐藏控制栏，双击可快进/快退</text>
+  </view>
+</view>
