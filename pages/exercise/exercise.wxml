@@ -1,14 +1,14 @@
 <!--pages/exercise/exercise.wxml-->
 <view class="container" wx:if="{{exercise}}">
-  <!-- 顶部视频/图片区域 -->
+  <!-- 顶部图片/GIF区域 -->
   <view class="media-section">
     <image class="cover-image" src="{{exercise.image}}" mode="aspectFill"></image>
-    <view class="play-btn" wx:if="{{exercise.video}}" bindtap="playVideo">
-      <text class="play-icon">▶</text>
-      <text class="play-text">观看视频</text>
+    <view class="play-btn" wx:if="{{exercise.gif_url}}" bindtap="viewGif">
+      <text class="play-icon">🎬</text>
+      <text class="play-text">查看动图</text>
     </view>
     <view class="no-video-tip" wx:else>
-      <text>暂无视频</text>
+      <text>暂无动图</text>
     </view>
     
   </view>

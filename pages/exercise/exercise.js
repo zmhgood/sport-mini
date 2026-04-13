@@ -36,7 +36,7 @@ Page({
       if (res.code === 0) {
         // 字段名转换
         const exercise = res.data
-        exercise.video = exercise.video_url || exercise.video || ''
+        exercise.gif_url = exercise.gif_url || exercise.video_url || exercise.video || ''
         exercise.image = exercise.image_url || exercise.image || '/images/default-exercise.png'
         exercise.targetMuscle = exercise.target_muscle || exercise.targetMuscle || ''
         this.setData({ exercise })
@@ -54,7 +54,7 @@ Page({
           reps: '10-15次/组',
           calories: 30,
           image: '',
-          video: '/videos/exercise1.mp4',
+          gif_url: '',
           description: '坐姿抬腿是一个非常适合老年人的下肢锻炼动作，可以有效增强大腿前侧肌肉力量，提高行走能力和膝关节稳定性。'
         }
       })
@@ -251,17 +251,17 @@ Page({
     })
   },
 
-  // 播放视频
-  playVideo() {
+  // 查看动图
+  viewGif() {
     const { exercise } = this.data
-    if (exercise.video) {
-      // 有视频，跳转到视频播放页面
+    if (exercise.gif_url) {
+      // 有动图，跳转到动图展示页面
       wx.navigateTo({
-        url: `/pages/video-player/video-player?src=${encodeURIComponent(exercise.video)}&title=${encodeURIComponent(exercise.name)}`
+        url: `/pages/video-player/video-player?src=${encodeURIComponent(exercise.gif_url)}&title=${encodeURIComponent(exercise.name)}`
       })
     } else {
       wx.showToast({
-        title: '暂无视频',
+        title: '暂无动图',
         icon: 'none'
       })
     }
