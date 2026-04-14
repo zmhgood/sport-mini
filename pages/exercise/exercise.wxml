@@ -7,7 +7,7 @@
       <text class="play-icon">🎬</text>
       <text class="play-text">查看动图</text>
     </view>
-    <view class="no-video-tip" wx:else>
+    <view class="no-gif-tip" wx:else>
       <text>暂无动图</text>
     </view>
     

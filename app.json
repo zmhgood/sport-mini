@@ -5,7 +5,7 @@
     "pages/login/login",
     "pages/muscle/muscle",
     "pages/exercise/exercise",
-    "pages/video-player/video-player",
+    "pages/gif-viewer/gif-viewer",
     "pages/profile/profile",
     "pages/profile-edit/profile-edit",
     "pages/family/family",

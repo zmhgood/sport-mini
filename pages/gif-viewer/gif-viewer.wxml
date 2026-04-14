@@ -1,10 +1,11 @@
-<!--pages/video-player/video-player.wxml-->
+<!--pages/gif-viewer/gif-viewer.wxml-->
 <view class="container">
   <image
     class="gif-image"
     src="{{src}}"
     mode="aspectFit"
     show-menu-by-longpress
+    binderror="onImageError"
   ></image>
 
   <!-- 提示信息 -->

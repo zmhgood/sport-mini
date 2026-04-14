@@ -1,4 +1,4 @@
-// pages/video-player/video-player.js
+// pages/gif-viewer/gif-viewer.js
 Page({
   data: {
     src: '',

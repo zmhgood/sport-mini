@@ -1,4 +1,4 @@
-/* pages/video-player/video-player.wxss */
+/* pages/gif-viewer/gif-viewer.wxss */
 .container {
   width: 100vw;
   height: 100vh;

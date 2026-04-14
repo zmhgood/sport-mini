@@ -257,7 +257,7 @@ Page({
     if (exercise.gif_url) {
       // 有动图，跳转到动图展示页面
       wx.navigateTo({
-        url: `/pages/video-player/video-player?src=${encodeURIComponent(exercise.gif_url)}&title=${encodeURIComponent(exercise.name)}`
+        url: `/pages/gif-viewer/gif-viewer?src=${encodeURIComponent(exercise.gif_url)}&title=${encodeURIComponent(exercise.name)}`
       })
     } else {
       wx.showToast({
