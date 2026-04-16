@@ -55,8 +55,16 @@
     </view>
   </view>
 
-  <!-- 提示 -->
-  <view class="tips">
-    <text>登录即表示同意《用户协议》和《隐私政策》</text>
+  <!-- 隐私政策勾选 -->
+  <view class="privacy-section">
+    <checkbox-group bindchange="onPrivacyChange">
+      <label class="privacy-label">
+        <checkbox class="privacy-checkbox" value="1" checked="{{agreePrivacy}}" />
+        <text class="privacy-text">我已阅读并同意</text>
+        <text class="privacy-link" bindtap="openUserAgreement">《用户协议》</text>
+        <text class="privacy-text">和</text>
+        <text class="privacy-link" bindtap="openPrivacyPolicy">《隐私政策》</text>
+      </label>
+    </checkbox-group>
   </view>
 </view>

@@ -13,6 +13,7 @@ Page({
     showWechatForm: false, // 是否显示微信头像昵称表单
     wechatAvatarUrl: '',   // 微信头像
     wechatNickName: '',    // 微信昵称
+    agreePrivacy: false,   // 是否同意隐私政策
     systemConfig: {
       logo_url: '',
       site_name: '银龄健身'
@@ -95,11 +96,43 @@ Page({
     }
   },
 
+  // 隐私政策勾选变化
+  onPrivacyChange(e) {
+    const checked = e.detail.value.includes('1')
+    this.setData({ agreePrivacy: checked })
+  },
+
+  // 打开用户协议
+  openUserAgreement() {
+    wx.navigateTo({
+      url: '/pages/webview/webview?title=用户协议&url=' + encodeURIComponent('https://www.dosport.online/agreement')
+    })
+  },
+
+  // 打开隐私政策
+  openPrivacyPolicy() {
+    wx.navigateTo({
+      url: '/pages/webview/webview?title=隐私政策&url=' + encodeURIComponent('https://www.dosport.online/privacy')
+    })
+  },
+
+  // 检查隐私政策
+  checkPrivacyAgreement() {
+    if (!this.data.agreePrivacy) {
+      wx.showToast({ title: '请先同意用户协议和隐私政策', icon: 'none' })
+      return false
+    }
+    return true
+  },
+
   // 短信登录
   async smsLogin() {
     const { phone, code, loading } = this.data
     
     if (loading) return
+
+    // 检查隐私政策
+    if (!this.checkPrivacyAgreement()) return
     
     // 验证输入
     if (!phone || phone.length !== 11) {
@@ -166,6 +199,9 @@ Page({
 
   // 确认微信登录
   confirmWechatLogin() {
+    // 检查隐私政策
+    if (!this.checkPrivacyAgreement()) return
+
     const { wechatAvatarUrl, wechatNickName } = this.data
     
     // 构建用户信息对象

@@ -316,15 +316,34 @@
   transform: scale(0.98);
 }
 
-/* 提示 */
-.tips {
-  text-align: center;
+/* 隐私政策勾选 */
+.privacy-section {
   margin-top: 40rpx;
+  padding: 0 40rpx;
   position: relative;
   z-index: 1;
 }
 
-.tips text {
+.privacy-label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.privacy-checkbox {
+  transform: scale(0.8);
+  margin-right: 8rpx;
+}
+
+.privacy-text {
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.privacy-link {
+  font-size: 26rpx;
+  color: #FFFFFF;
+  text-decoration: underline;
+  font-weight: 500;
 }
