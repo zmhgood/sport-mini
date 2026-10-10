@@ -96,7 +96,7 @@
     <view class="settings-list card">
       <view class="setting-item flex-between" wx:for="{{settings}}" wx:key="id" wx:if="{{!item.hidden || currentFamily.id}}" bindtap="goToSetting" data-id="{{item.id}}">
         <view class="setting-left flex-row">
-          <text class="setting-icon">{{item.icon}}</text>
+          <image class="setting-icon" src="{{item.icon}}" mode="aspectFit"></image>
           <text class="setting-name">{{item.name}}</text>
         </view>
         <view class="setting-right flex-row">

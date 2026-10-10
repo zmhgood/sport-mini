@@ -4,12 +4,7 @@ const api = require('../../utils/api')
 
 Page({
   data: {
-    loginType: 'wechat', // 默认微信登录
-    phone: '',
-    code: '',
-    countdown: 0,
     loading: false,
-    canSendCode: true,
     showWechatForm: false, // 是否显示微信头像昵称表单
     wechatAvatarUrl: '',   // 微信头像
     wechatNickName: '',    // 微信昵称
@@ -40,62 +35,6 @@ Page({
     })
   },
 
-  // 切换登录方式
-  switchLoginType(e) {
-    const type = e.currentTarget.dataset.type
-    this.setData({ loginType: type })
-  },
-
-  // 输入手机号
-  onPhoneInput(e) {
-    this.setData({ phone: e.detail.value })
-  },
-
-  // 输入验证码
-  onCodeInput(e) {
-    this.setData({ code: e.detail.value })
-  },
-
-  // 发送验证码
-  async sendCode() {
-    const { phone, canSendCode, countdown } = this.data
-    
-    if (!canSendCode || countdown > 0) return
-    
-    // 验证手机号
-    if (!phone || phone.length !== 11) {
-      wx.showToast({ title: '请输入正确的手机号', icon: 'none' })
-      return
-    }
-
-    try {
-      wx.showLoading({ title: '发送中...' })
-      const res = await api.auth.sendSMSCode(phone, 'login')
-      wx.hideLoading()
-      
-      if (res.code !== 0) {
-        throw new Error(res.message)
-      }
-      
-      wx.showToast({ title: '验证码已发送', icon: 'success' })
-      
-      // 开始倒计时
-      this.setData({ countdown: 60, canSendCode: false })
-      this.timer = setInterval(() => {
-        const newCountdown = this.data.countdown - 1
-        if (newCountdown <= 0) {
-          clearInterval(this.timer)
-          this.setData({ countdown: 0, canSendCode: true })
-        } else {
-          this.setData({ countdown: newCountdown })
-        }
-      }, 1000)
-    } catch (err) {
-      wx.hideLoading()
-      wx.showToast({ title: err.message || '发送失败', icon: 'none' })
-    }
-  },
-
   // 隐私政策勾选变化
   onPrivacyChange(e) {
     const checked = e.detail.value.includes('1')
@@ -105,14 +44,14 @@ Page({
   // 打开用户协议
   openUserAgreement() {
     wx.navigateTo({
-      url: '/pages/webview/webview?title=用户协议&url=' + encodeURIComponent('https://www.dosport.online/agreement')
+      url: '/pages/agreement/agreement'
     })
   },
 
   // 打开隐私政策
   openPrivacyPolicy() {
     wx.navigateTo({
-      url: '/pages/webview/webview?title=隐私政策&url=' + encodeURIComponent('https://www.dosport.online/privacy')
+      url: '/pages/privacy/privacy'
     })
   },
 
@@ -123,57 +62,6 @@ Page({
       return false
     }
     return true
-  },
-
-  // 短信登录
-  async smsLogin() {
-    const { phone, code, loading } = this.data
-    
-    if (loading) return
-
-    // 检查隐私政策
-    if (!this.checkPrivacyAgreement()) return
-    
-    // 验证输入
-    if (!phone || phone.length !== 11) {
-      wx.showToast({ title: '请输入正确的手机号', icon: 'none' })
-      return
-    }
-    if (!code || code.length !== 6) {
-      wx.showToast({ title: '请输入6位验证码', icon: 'none' })
-      return
-    }
-
-    try {
-      this.setData({ loading: true })
-      wx.showLoading({ title: '登录中...' })
-      
-      const res = await api.auth.smsLogin(phone, code)
-      wx.hideLoading()
-      
-      if (res.code !== 0) {
-        throw new Error(res.message)
-      }
-      
-      // 保存token
-      wx.setStorageSync('token', res.data.token)
-      wx.setStorageSync('userInfo', res.data.userInfo)
-      wx.setStorageSync('userId', res.data.userInfo.id)
-      app.globalData.isLoggedIn = true
-      app.globalData.userInfo = res.data.userInfo
-      
-      const message = res.data.is_new ? '注册成功' : '登录成功'
-      wx.showToast({ title: message, icon: 'success' })
-      
-      // 跳转到首页
-      setTimeout(() => {
-        wx.switchTab({ url: '/pages/index/index' })
-      }, 1500)
-    } catch (err) {
-      wx.hideLoading()
-      this.setData({ loading: false })
-      wx.showToast({ title: err.message || '登录失败', icon: 'none' })
-    }
   },
 
   // 微信登录按钮点击 - 显示头像昵称表单
@@ -199,6 +87,7 @@ Page({
 
   // 确认微信登录
   confirmWechatLogin() {
+    if (this.data.loading) return
     // 检查隐私政策
     if (!this.checkPrivacyAgreement()) return
 
@@ -250,7 +139,12 @@ Page({
 
       // 若已拿到用户信息，回写到服务端
       if (profileUserInfo) {
-        const { nickName, avatarUrl } = profileUserInfo
+        const { nickName } = profileUserInfo
+        let { avatarUrl } = profileUserInfo
+        if (avatarUrl) {
+          const uploadRes = await api.upload(avatarUrl)
+          avatarUrl = uploadRes.data.url
+        }
         if (nickName || avatarUrl) {
           await api.auth.updateUserInfo({
             nick_name: nickName || '',
@@ -287,13 +181,12 @@ Page({
     } catch (err) {
       wx.hideLoading()
       this.setData({ loading: false })
+      wx.removeStorageSync('token')
+      wx.removeStorageSync('userInfo')
+      wx.removeStorageSync('userId')
+      app.globalData.isLoggedIn = false
+      app.globalData.userInfo = null
       wx.showToast({ title: err.message || '登录失败', icon: 'none' })
-    }
-  },
-
-  onUnload() {
-    if (this.timer) {
-      clearInterval(this.timer)
     }
   }
 })

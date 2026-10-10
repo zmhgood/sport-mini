@@ -20,7 +20,7 @@ Page({
         // 字段名转换
         const exercise = res.data
         exercise.gif_url = exercise.gif_url || exercise.video_url || exercise.video || ''
-        exercise.image = exercise.image_url || exercise.image || '/images/default-exercise.png'
+        exercise.image = exercise.image_url || exercise.image || '/images/exercise/default-exercise.jpg'
         exercise.targetMuscle = exercise.target_muscle || exercise.targetMuscle || ''
         this.setData({ exercise })
       }

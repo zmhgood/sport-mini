@@ -96,7 +96,7 @@ function upload(filePath, formData = {}) {
     const token = wx.getStorageSync('token')
     
     wx.uploadFile({
-      url: `${BASE_URL}/upload`,
+      url: `${BASE_URL}/upload/image`,
       filePath,
       name: 'file',
       formData,
@@ -105,7 +105,16 @@ function upload(filePath, formData = {}) {
       },
       success: (res) => {
         if (res.statusCode === 200) {
-          resolve(JSON.parse(res.data))
+          try {
+            const result = JSON.parse(res.data)
+            if (result.code !== 0) {
+              reject(new Error(result.message || '上传失败'))
+              return
+            }
+            resolve(result)
+          } catch (err) {
+            reject(new Error('上传响应无效'))
+          }
         } else {
           reject(new Error('上传失败'))
         }
@@ -121,12 +130,6 @@ function upload(filePath, formData = {}) {
 const auth = {
   // 微信登录
   wechatLogin: (code) => post('/auth/login', { code }),
-  
-  // 发送短信验证码
-  sendSMSCode: (phone, purpose = 'login') => post('/auth/send-code', { phone, purpose }),
-  
-  // 短信登录
-  smsLogin: (phone, code) => post('/auth/sms-login', { phone, code }),
   
   // 获取用户信息
   getUserInfo: () => get('/user/info'),

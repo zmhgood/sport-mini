@@ -1,6 +1,14 @@
 <!--pages/gif-viewer/gif-viewer.wxml-->
 <view class="container">
+  <video
+    wx:if="{{isVideo}}"
+    class="gif-image"
+    src="{{src}}"
+    controls
+    binderror="onImageError"
+  ></video>
   <image
+    wx:else
     class="gif-image"
     src="{{src}}"
     mode="aspectFit"
@@ -9,7 +17,7 @@
   ></image>
 
   <!-- 提示信息 -->
-  <view class="tips">
+  <view class="tips" wx:if="{{!isVideo}}">
     <text class="tip-text">💡 提示：长按图片可保存到相册</text>
   </view>
 </view>

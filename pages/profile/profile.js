@@ -22,13 +22,13 @@ Page({
     canGoPrev: true,        // 是否可以向左滑动
     canGoNext: true,        // 是否可以向右滑动
     settings: [
-      { id: 'family', name: '我的家庭', value: '管理', icon: '👨‍👩‍👧‍👦' },
-      { id: 'goals', name: '锻炼目标', value: '查看', icon: '🎯' },
-      { id: 'profile', name: '个人信息', value: '编辑', icon: '👤' },
-      { id: 'fontSize', name: '字体大小', value: '标准', icon: '📝' },
-      { id: 'voice', name: '语音播报', value: '开启', icon: '🔊' },
-      { id: 'reminder', name: '锻炼提醒', value: '每日 8:00', icon: '⏰' },
-      { id: 'emergency', name: '紧急联系', value: '设置', icon: '📞' }
+      { id: 'family', name: '我的家庭', value: '管理', icon: '/images/icons/family.svg' },
+      { id: 'goals', name: '锻炼目标', value: '查看', icon: '/images/icons/goal.svg' },
+      { id: 'profile', name: '个人信息', value: '编辑', icon: '/images/icons/profile-active.svg' },
+      { id: 'fontSize', name: '字体大小', value: '标准', icon: '/images/icons/text-size.svg' },
+      { id: 'voice', name: '语音播报', value: '开启', icon: '/images/icons/volume.svg' },
+      { id: 'reminder', name: '锻炼提醒', value: '每日 8:00', icon: '/images/icons/bell.svg' },
+      { id: 'emergency', name: '紧急联系', value: '设置', icon: '/images/icons/phone.svg' }
     ]
   },
 
@@ -321,7 +321,7 @@ Page({
         wx.navigateTo({ url: '/pages/family/family' })
         break
       case 'goals':
-        wx.navigateTo({ url: '/pages/goal/list' })
+        wx.navigateTo({ url: '/pages/goal/goal' })
         break
       case 'profile':
         wx.navigateTo({ url: '/pages/profile-edit/profile-edit' })

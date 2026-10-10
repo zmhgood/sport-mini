@@ -13,14 +13,10 @@ const ENV = {
 }
 
 // 获取当前环境配置
-// 小程序可通过 __wxConfig 判断环境，或手动切换
 function getConfig() {
-  // 方式1: 通过开发者工具环境判断
-  // const accountInfo = wx.getAccountInfoSync()
-  // const env = accountInfo.miniProgram.envVersion // develop: 开发版, trial: 体验版, release: 正式版
-  
-  // 方式2: 手动指定（推荐，更清晰）
-  const currentEnv = 'development' // 发布前改为 'production'
+  const { envVersion } = wx.getAccountInfoSync().miniProgram
+  // 开发版连接本地服务；体验版和正式版连接生产服务。
+  const currentEnv = envVersion === 'develop' ? 'development' : 'production'
   
   return {
     ...ENV[currentEnv],

@@ -34,6 +34,7 @@ Page({
       this.getTabBar().setData({ selected: 0 })
     }
     this.checkLogin()
+    this.getRecommendExercises()
     this.updateProgress()
     this.loadFamilyGoals()
   },
@@ -41,7 +42,6 @@ Page({
   // 初始化数据
   initData() {
     this.getBannerList()
-    this.getRecommendExercises()
     this.getMuscleGroups()
     this.loadFamilyGoals()
   },
@@ -73,7 +73,8 @@ Page({
 
   // 获取推荐锻炼
   getRecommendExercises() {
-    api.request('/exercises/recommend', 'GET').then(res => {
+    const path = api.isLoggedIn() ? '/exercises/recommend' : '/exercises'
+    api.request(path, 'GET').then(res => {
       if (res.code === 0) {
         // 后端返回 { list: [...], total: n } 格式
         let exercises = res.data.list || res.data || []
@@ -104,10 +105,10 @@ Page({
     }).catch(() => {
       // 使用模拟数据
       const exercises = [
-        { id: 1, name: '坐姿抬腿', targetMuscle: '大腿前侧', difficulty: '简单', duration: 10, image: '/images/exercise1.png', category: 'lower', muscle_group_id: 3 },
-        { id: 2, name: '靠墙静蹲', targetMuscle: '大腿、臀部', difficulty: '中等', duration: 15, image: '/images/exercise2.png', category: 'lower', muscle_group_id: 3 },
-        { id: 3, name: '手臂环绕', targetMuscle: '肩部', difficulty: '简单', duration: 5, image: '/images/exercise3.png', category: 'upper', muscle_group_id: 1 },
-        { id: 4, name: '平板支撑', targetMuscle: '核心', difficulty: '中等', duration: 10, image: '/images/exercise4.png', category: 'core', muscle_group_id: 2 }
+        { id: 1, name: '坐姿抬腿', targetMuscle: '大腿前侧', difficulty: '简单', duration: 10, image: '/images/exercise/default-exercise.jpg', category: 'lower', muscle_group_id: 3 },
+        { id: 2, name: '靠墙静蹲', targetMuscle: '大腿、臀部', difficulty: '中等', duration: 15, image: '/images/exercise/default-exercise.jpg', category: 'lower', muscle_group_id: 3 },
+        { id: 3, name: '手臂环绕', targetMuscle: '肩部', difficulty: '简单', duration: 5, image: '/images/exercise/default-exercise.jpg', category: 'upper', muscle_group_id: 1 },
+        { id: 4, name: '平板支撑', targetMuscle: '核心', difficulty: '中等', duration: 10, image: '/images/exercise/default-exercise.jpg', category: 'core', muscle_group_id: 2 }
       ]
       this.setData({ 
         recommendExercises: exercises,
@@ -235,9 +236,9 @@ Page({
   getMuscleGroups() {
     this.setData({
       muscleGroups: [
-        { id: 1, name: '上肢', icon: '/images/muscle/arm.png', desc: '手臂、肩部', count: 12 },
-        { id: 2, name: '核心', icon: '/images/muscle/core.png', desc: '腹部、背部', count: 8 },
-        { id: 3, name: '下肢', icon: '/images/muscle/leg.png', desc: '大腿、小腿', count: 15 }
+        { id: 1, name: '上肢', icon: '/images/muscle/arm.jpg', desc: '手臂、肩部', count: 12 },
+        { id: 2, name: '核心', icon: '/images/muscle/core.jpg', desc: '腹部、背部', count: 8 },
+        { id: 3, name: '下肢', icon: '/images/muscle/leg.jpg', desc: '大腿、小腿', count: 15 }
       ]
     })
   },

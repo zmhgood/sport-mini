@@ -1,97 +1,97 @@
-/* app.wxss - 全局样式 */
-
-/* 适老化设计：大字体、高对比度 */
 page {
+  box-sizing: border-box;
+  min-height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
   font-size: 32rpx;
-  line-height: 1.6;
-  color: #333333;
-  background-color: #F8FAFC;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  line-height: 1.55;
+  color: #243235;
+  background: #F4F7F7;
 }
 
-/* 主题色 - 更柔和的蓝色渐变 */
-.primary-color {
-  color: #3B82F6;
+view,
+text,
+image,
+button,
+input,
+textarea,
+scroll-view {
+  box-sizing: border-box;
 }
 
-.primary-bg {
-  background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
-}
-
-/* 大按钮样式 - 方便老年人点击 */
-.btn-large {
-  width: 100%;
-  height: 100rpx;
-  line-height: 100rpx;
-  font-size: 34rpx;
-  border-radius: 24rpx;
-  background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
-  color: #FFFFFF;
-  text-align: center;
-  font-weight: 500;
-  box-shadow: 0 8rpx 24rpx rgba(59, 130, 246, 0.3);
-  border: none;
+button {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 0;
+  justify-content: center;
+  font-family: inherit;
+  text-align: center;
+}
+
+button::after {
+  border: 0;
+}
+
+.primary-color,
+.text-primary {
+  color: #176B73;
+}
+
+.primary-bg,
+.gradient-primary {
+  background: linear-gradient(135deg, #176B73, #24958F);
+}
+
+.btn-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100rpx;
+  padding: 0 32rpx;
+  font-size: 34rpx;
+  font-weight: 650;
+  line-height: 1.2;
+  color: #FFFFFF;
+  background: #176B73;
+  border: 0;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 20rpx rgba(23, 107, 115, 0.18);
 }
 
 .btn-large:active {
-  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
-  transform: scale(0.98);
+  background: #105B62;
+  transform: scale(0.985);
 }
 
-.btn-large::after {
-  border: none;
-}
-
-/* 按钮文字居中 */
-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-/* 卡片样式 - 更柔和的阴影 */
 .card {
-  background-color: #FFFFFF;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  margin: 20rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
-  border: 1rpx solid rgba(0, 0, 0, 0.04);
+  background: #FFFFFF;
+  border: 1rpx solid #E3EAEA;
+  border-radius: 22rpx;
+  box-shadow: 0 6rpx 20rpx rgba(18, 55, 59, 0.05);
 }
 
-/* 标题样式 */
 .title-large {
   font-size: 44rpx;
-  font-weight: 600;
-  color: #1E293B;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #172629;
 }
 
 .title-medium {
   font-size: 36rpx;
-  font-weight: 600;
-  color: #1E293B;
-}
-
-/* 文本样式 */
-.text-primary {
-  color: #3B82F6;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #172629;
 }
 
 .text-secondary {
-  color: #64748B;
+  color: #5F6F73;
 }
 
 .text-hint {
-  color: #94A3B8;
-  font-size: 28rpx;
+  font-size: 27rpx;
+  color: #7A898D;
 }
 
-/* 布局 */
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -105,21 +105,20 @@ button {
 
 .flex-center {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .flex-between {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .flex-wrap {
   flex-wrap: wrap;
 }
 
-/* 间距 */
 .mt-10 { margin-top: 10rpx; }
 .mt-20 { margin-top: 20rpx; }
 .mt-30 { margin-top: 30rpx; }
@@ -133,28 +132,21 @@ button {
 .p-20 { padding: 20rpx; }
 .p-30 { padding: 30rpx; }
 
-/* 分割线 */
 .divider {
   height: 1rpx;
-  background: linear-gradient(90deg, transparent, #E2E8F0, transparent);
   margin: 24rpx 0;
+  background: #E3EAEA;
 }
 
-/* 安全区域适配 */
 .safe-area-bottom {
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* 渐变背景 */
-.gradient-primary {
-  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-}
-
 .gradient-warm {
-  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  background: linear-gradient(135deg, #E69A32, #F0B252);
 }
 
 .gradient-green {
-  background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  background: linear-gradient(135deg, #176B73, #42B8A5);
 }

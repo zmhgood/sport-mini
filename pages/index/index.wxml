@@ -45,7 +45,7 @@
   <swiper class="banner" indicator-dots autoplay circular interval="5000">
     <swiper-item wx:for="{{bannerList}}" wx:key="id">
       <view class="banner-item">
-        <image class="banner-image" src="{{item.image}}" mode="aspectFill"></image>
+        <image class="banner-image" src="{{item.image || '/images/exercise/default-exercise.jpg'}}" mode="aspectFill"></image>
         <view class="banner-text">
           <text class="banner-title">{{item.title}}</text>
           <text class="banner-desc">{{item.desc}}</text>
@@ -114,7 +114,7 @@
     <view class="exercise-list">
       <view class="exercise-item card" wx:for="{{filteredExercises}}" wx:key="id"
             bindtap="goToExercise" data-id="{{item.id}}">
-        <image class="exercise-image" src="{{item.image || '/images/default-exercise.png'}}" mode="aspectFill"></image>
+        <image class="exercise-image" src="{{item.image || '/images/exercise/default-exercise.jpg'}}" mode="aspectFill"></image>
         <view class="exercise-info">
           <text class="exercise-name">{{item.name}}</text>
           <text class="exercise-target">目标肌肉：{{item.targetMuscle}}</text>
