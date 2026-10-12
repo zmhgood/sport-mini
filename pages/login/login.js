@@ -95,7 +95,7 @@ Page({
     
     // 构建用户信息对象
     const profileUserInfo = {
-      nickName: wechatNickName || '微信用户',
+      nickName: wechatNickName.trim(),
       avatarUrl: wechatAvatarUrl
     }
     
@@ -139,7 +139,7 @@ Page({
 
       // 若已拿到用户信息，回写到服务端
       if (profileUserInfo) {
-        const { nickName } = profileUserInfo
+        const nickName = profileUserInfo.nickName || (res.data.userInfo.nick_name ? '' : '微信用户')
         let { avatarUrl } = profileUserInfo
         if (avatarUrl) {
           const uploadRes = await api.upload(avatarUrl)
