@@ -4,7 +4,7 @@
   <view class="logo-section">
     <image wx:if="{{systemConfig.logo_url}}" class="logo-img" src="{{systemConfig.logo_url}}" mode="aspectFit"></image>
     <view wx:else class="logo">💪</view>
-    <text class="app-name">{{systemConfig.site_name || '银龄健身'}}</text>
+    <text class="app-name">{{systemConfig.site_name || '爸妈动起来'}}</text>
     <text class="slogan">科学锻炼，健康生活</text>
   </view>
 

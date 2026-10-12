@@ -114,7 +114,7 @@
 
   <!-- 底部信息 -->
   <view class="footer">
-    <text class="footer-text">银龄健身 v1.0.0</text>
+    <text class="footer-text">爸妈动起来 v1.0.0</text>
     <text class="footer-text">专为老年人设计的肌肉锻炼助手</text>
   </view>
 </view>

@@ -11,7 +11,7 @@ Page({
     agreePrivacy: false,   // 是否同意隐私政策
     systemConfig: {
       logo_url: '',
-      site_name: '银龄健身'
+      site_name: '爸妈动起来'
     }
   },
 
@@ -26,7 +26,7 @@ Page({
         this.setData({
           systemConfig: {
             logo_url: res.data.logo_url || '',
-            site_name: res.data.site_name || '银龄健身'
+            site_name: res.data.site_name || '爸妈动起来'
           }
         })
       }

@@ -337,7 +337,7 @@ Page({
   // 分享
   onShareAppMessage() {
     return {
-      title: '银龄健身 - 陪我一起锻炼吧',
+      title: '爸妈动起来 - 陪我一起锻炼吧',
       path: '/pages/index/index'
     }
   }

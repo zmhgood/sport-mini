@@ -297,7 +297,7 @@ Page({
   // 分享
   onShareAppMessage() {
     return {
-      title: '银龄健身 - 专为老年人设计的肌肉锻炼助手',
+      title: '爸妈动起来 - 专为老年人设计的肌肉锻炼助手',
       path: '/pages/index/index'
     }
   }
