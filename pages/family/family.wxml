@@ -1,5 +1,13 @@
 <!--pages/family/family.wxml-->
 <view class="container">
+  <view class="load-state" wx:if="{{loading}}">
+    <text>正在加载，请稍候…</text>
+  </view>
+  <view class="load-state" wx:elif="{{loadError}}">
+    <text>{{loadError}}</text>
+    <button class="retry-btn" bindtap="loadFamilies">重试</button>
+  </view>
+  <block wx:else>
   <!-- 未加入任何家庭 -->
   <view class="no-family" wx:if="{{families.length === 0}}">
     <view class="empty-icon">👨‍👩‍👧‍👦</view>
@@ -86,4 +94,5 @@
       <button class="btn-danger" bindtap="leaveFamily">退出当前家庭</button>
     </view>
   </view>
+  </block>
 </view>

@@ -1,5 +1,13 @@
 <!--pages/goal/detail.wxml-->
 <view class="container">
+  <view class="load-state" wx:if="{{loading}}">
+    <text>正在加载，请稍候…</text>
+  </view>
+  <view class="load-state" wx:elif="{{loadError}}">
+    <text>{{loadError}}</text>
+    <button class="retry-btn" bindtap="loadDetails">重试</button>
+  </view>
+  <block wx:else>
   <!-- 目标信息 -->
   <view class="goal-header">
     <text class="goal-name">{{goal.name}}</text>
@@ -86,4 +94,5 @@
   </view>
 
   <!-- 操作按钮 -->
+  </block>
 </view>

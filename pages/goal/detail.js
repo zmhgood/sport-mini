@@ -3,6 +3,8 @@ const api = require('../../utils/api')
 
 Page({
   data: {
+    loading: true,
+    loadError: '',
     goalId: null,
     goal: null,
     progress: null,
@@ -29,89 +31,96 @@ Page({
       currentUserId,
       selectedDate
     })
-    this.loadGoal()
-    this.loadProgress(selectedDate)
   },
 
   onShow() {
-    this.loadProgress(this.data.selectedDate)
+    this.loadDetails()
+  },
+
+  async loadDetails() {
+    if (this._loadInProgress) return
+    this._loadInProgress = true
+    this.setData({ loading: true, loadError: '' })
+    try {
+      const [goal, progressData] = await Promise.all([
+        this.loadGoal(),
+        this.loadProgress(this.data.selectedDate)
+      ])
+      this.setData({ goal, ...progressData })
+    } catch (err) {
+      this.setData({ loadError: '目标信息加载失败，请重试' })
+    } finally {
+      this._loadInProgress = false
+      this.setData({ loading: false })
+    }
   },
 
   async loadGoal() {
-    try {
-      const res = await api.request(`/goals/${this.data.goalId}`, 'GET')
-      if (res.code === 0) {
-        const goal = res.data || {}
-        goal.memberCount = (goal.members && goal.members.length) || 0
-        goal.exerciseCount = (goal.exercises && goal.exercises.length) || 0
-        this.setData({ goal })
-      }
-    } catch (err) {
-      console.error('加载目标失败:', err)
-    }
+    const res = await api.request(`/goals/${this.data.goalId}`, 'GET')
+    if (res.code !== 0 || !res.data) throw new Error('目标详情加载失败')
+    const goal = res.data
+    goal.memberCount = (goal.members && goal.members.length) || 0
+    goal.exerciseCount = (goal.exercises && goal.exercises.length) || 0
+    return goal
   },
 
   async loadProgress(date) {
-    try {
-      const queryDate = date || ''
-      const dateParam = queryDate ? `?date=${queryDate}` : ''
-      const res = await api.request(`/goals/${this.data.goalId}/progress${dateParam}`, 'GET')
-      if (res.code === 0) {
-        const progress = res.data
-        // 为每个动作添加颜色和计算进度
-        const colors = this.data.segmentColors
-        const exerciseStatus = {}
-        
-        if (progress && progress.member_stats) {
-          progress.member_stats.forEach(member => {
-            if (member.exercise_stats) {
-              member.exercise_stats.forEach((ex, index) => {
-                ex.color = colors[index % colors.length]
-                // 计算段的宽度百分比
-                ex.segment_width = member.total_sets > 0 
-                  ? Math.round(ex.target_sets / member.total_sets * 100) 
-                  : 0
-                // 计算段内填充百分比
-                ex.fill_width = ex.target_sets > 0 
-                  ? Math.round(ex.completed_sets / ex.target_sets * 100) 
-                  : 0
-                
-                // 记录当前用户每个动作的完成状态
-                if (member.user_id == this.data.currentUserId) {
-                  exerciseStatus[ex.goal_exercise_id] = {
-                    completed_sets: ex.completed_sets,
-                    target_sets: ex.target_sets,
-                    status: ex.status,
-                    is_done: ex.completed_sets >= ex.target_sets,
-                    has_progress: ex.completed_sets > 0 && ex.completed_sets < ex.target_sets
-                  }
-                }
-              })
+    const queryDate = date || ''
+    const dateParam = queryDate ? `?date=${queryDate}` : ''
+    const res = await api.request(`/goals/${this.data.goalId}/progress${dateParam}`, 'GET')
+    if (res.code !== 0 || !res.data) throw new Error('目标进度加载失败')
+    const progress = res.data
+    // 为每个动作添加颜色和计算进度
+    const colors = this.data.segmentColors
+    const exerciseStatus = {}
+
+    if (progress && progress.member_stats) {
+      progress.member_stats.forEach(member => {
+        if (member.exercise_stats) {
+          member.exercise_stats.forEach((ex, index) => {
+            ex.color = colors[index % colors.length]
+            // 计算段的宽度百分比
+            ex.segment_width = member.total_sets > 0
+              ? Math.round(ex.target_sets / member.total_sets * 100)
+              : 0
+            // 计算段内填充百分比
+            ex.fill_width = ex.target_sets > 0
+              ? Math.round(ex.completed_sets / ex.target_sets * 100)
+              : 0
+
+            // 记录当前用户每个动作的完成状态
+            if (member.user_id == this.data.currentUserId) {
+              exerciseStatus[ex.goal_exercise_id] = {
+                completed_sets: ex.completed_sets,
+                target_sets: ex.target_sets,
+                status: ex.status,
+                is_done: ex.completed_sets >= ex.target_sets,
+                has_progress: ex.completed_sets > 0 && ex.completed_sets < ex.target_sets
+              }
             }
           })
         }
-        // 构建参与成员进度列表
-        const memberProgressList = []
-        if (progress && progress.member_stats) {
-          progress.member_stats.forEach(member => {
-            memberProgressList.push({
-              user_id: member.user_id,
-              user_name: member.user_name,
-              user_avatar: member.user_avatar,
-              completed_sets: member.completed_sets || 0,
-              total_sets: member.total_sets || 0,
-              progress_percent: member.total_sets > 0 
-                ? Math.round(member.completed_sets / member.total_sets * 100) 
-                : 0
-            })
-          })
-        }
-        this.setData({ progress, exerciseStatus, memberProgressList })
-      }
-    } catch (err) {
-      console.error('加载进度失败:', err)
+      })
     }
+    // 构建参与成员进度列表
+    const memberProgressList = []
+    if (progress && progress.member_stats) {
+      progress.member_stats.forEach(member => {
+        memberProgressList.push({
+          user_id: member.user_id,
+          user_name: member.user_name,
+          user_avatar: member.user_avatar,
+          completed_sets: member.completed_sets || 0,
+          total_sets: member.total_sets || 0,
+          progress_percent: member.total_sets > 0
+            ? Math.round(member.completed_sets / member.total_sets * 100)
+            : 0
+        })
+      })
+    }
+    return { progress, exerciseStatus, memberProgressList }
   },
+
 
   goProgress() {
     wx.navigateTo({ url: `/pages/goal/progress?id=${this.data.goalId}` })

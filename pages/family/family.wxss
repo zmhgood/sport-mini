@@ -317,3 +317,18 @@
   font-size: 30rpx;
   padding: 24rpx 0;
 }
+
+.load-state {
+  padding: 120rpx 40rpx;
+  text-align: center;
+  color: #64748B;
+  font-size: 30rpx;
+}
+
+.retry-btn {
+  margin-top: 32rpx;
+  width: 240rpx;
+  color: #3B82F6;
+  background: #FFFFFF;
+  font-size: 28rpx;
+}

@@ -3,6 +3,8 @@ const api = require('../../utils/api')
 
 Page({
   data: {
+    loading: true,
+    loadError: '',
     families: [],        // 用户所有家庭
     family: null,        // 当前选中的家庭
     currentFamilyIndex: 0,
@@ -12,119 +14,69 @@ Page({
     currentUserId: null
   },
 
-  onLoad() {
-    this.loadFamilies()
-  },
-
   onShow() {
     this.loadFamilies()
   },
 
   async loadFamilies() {
+    if (this._loadInProgress) return
+    this._loadInProgress = true
+    this.setData({ loading: true, loadError: '' })
     try {
       const res = await api.request('/families', 'GET')
-      console.log('[loadFamilies] res:', res)
-      if (res.code === 0) {
-        const families = res.data || []
-        const currentUserId = parseInt(wx.getStorageSync('userId')) || 0
-        
-        console.log('[loadFamilies] families:', families, 'currentUserId:', currentUserId)
-        
-        // 从缓存获取当前选择的家庭ID
-        const cachedFamilyId = wx.getStorageSync('currentFamilyId')
-        let currentFamilyIndex = 0
-        
-        // 如果有缓存的家庭ID，找到对应的索引
-        if (cachedFamilyId && families.length > 0) {
-          const index = families.findIndex(f => f.id === cachedFamilyId)
-          if (index !== -1) {
-            currentFamilyIndex = index
-          }
-        }
-        
-        this.setData({ 
-          families, 
-          currentUserId,
-          currentFamilyIndex 
-        })
-        
-        // 加载当前选中的家庭详情
-        if (families.length > 0) {
-          const familyId = families[currentFamilyIndex].id
-          console.log('[loadFamilies] 加载家庭详情:', familyId)
-          this.loadFamilyDetail(familyId)
-        } else {
-          this.setData({ 
-            family: null, 
-            members: [], 
-            goals: [] 
-          })
-        }
-      } else {
-        wx.showToast({ title: res.message || '加载失败', icon: 'none' })
-        this.setData({ 
-          families: [], 
-          family: null, 
-          members: [], 
-          goals: [] 
-        })
+      if (res.code !== 0) throw new Error('家庭列表加载失败')
+      const families = res.data || []
+      const currentUserId = parseInt(wx.getStorageSync('userId')) || 0
+      const cachedFamilyId = wx.getStorageSync('currentFamilyId')
+      const cachedIndex = families.findIndex(f => f.id === cachedFamilyId)
+      const currentFamilyIndex = cachedIndex >= 0 ? cachedIndex : 0
+      let detail = { family: null, members: [], isAdmin: false }
+      let goals = []
+      if (families.length > 0) {
+        const familyId = families[currentFamilyIndex].id
+        const [familyDetail, familyGoals] = await Promise.all([
+          this.loadFamilyDetail(familyId, currentUserId),
+          this.loadGoals(familyId)
+        ])
+        detail = familyDetail
+        goals = familyGoals
       }
+      this.setData({ families, currentUserId, currentFamilyIndex, ...detail, goals })
     } catch (err) {
-      console.error('加载家庭列表失败:', err)
-      wx.showToast({ title: '网络错误', icon: 'none' })
+      this.setData({ loadError: '家庭信息加载失败，请重试' })
+    } finally {
+      this._loadInProgress = false
+      this.setData({ loading: false })
     }
   },
 
-  async loadFamilyDetail(familyId) {
-    try {
-      const res = await api.request(`/family/${familyId}`, 'GET')
-      console.log('[loadFamilyDetail] res:', res)
-      if (res.code === 0 && res.data) {
-        const family = res.data
-        console.log('[loadFamilyDetail] family:', family, 'members:', family.members)
-        
-        // 检查当前用户是否是管理员（使用 == 而不是 ===，避免类型不匹配）
-        const currentMember = family.members && family.members.find(m => m.user_id == this.data.currentUserId)
-        const isAdmin = currentMember && currentMember.role === 'admin'
-        console.log('[loadFamilyDetail] currentMember:', currentMember, 'isAdmin:', isAdmin)
-
-        this.setData({
-          family,
-          members: (family.members || []).map(m => ({ ...m, user: m.user || {} })),
-          isAdmin
-        })
-
-        // 获取家庭目标
-        this.loadGoals(familyId)
-      }
-    } catch (err) {
-      console.error('加载家庭详情失败:', err)
+  async loadFamilyDetail(familyId, currentUserId) {
+    const res = await api.request(`/family/${familyId}`, 'GET')
+    if (res.code !== 0 || !res.data) throw new Error('家庭详情加载失败')
+    const family = res.data
+    const currentMember = family.members && family.members.find(m => m.user_id == currentUserId)
+    return {
+      family,
+      members: (family.members || []).map(m => ({ ...m, user: m.user || {} })),
+      isAdmin: !!(currentMember && currentMember.role === 'admin')
     }
   },
 
   onFamilyChange(e) {
     const index = parseInt(e.detail.value)
     const family = this.data.families[index]
-    this.setData({ currentFamilyIndex: index })
-    // 保存到缓存，保持与首页一致
     wx.setStorageSync('currentFamilyId', family.id)
-    this.loadFamilyDetail(family.id)
+    this.loadFamilies()
   },
 
   async loadGoals(familyId) {
-    try {
-      const res = await api.request(`/goals/family?family_id=${familyId}`, 'GET')
-      if (res.code === 0) {
-        const goals = (res.data || []).map(g => ({
-          ...g,
-          memberCount: (g.members && g.members.length) || 0,
-          exerciseCount: (g.exercises && g.exercises.length) || 0
-        }))
-        this.setData({ goals })
-      }
-    } catch (err) {
-      console.error('加载目标失败:', err)
-    }
+    const res = await api.request(`/goals/family?family_id=${familyId}`, 'GET')
+    if (res.code !== 0) throw new Error('家庭目标加载失败')
+    return (res.data || []).map(g => ({
+      ...g,
+      memberCount: (g.members && g.members.length) || 0,
+      exerciseCount: (g.exercises && g.exercises.length) || 0
+    }))
   },
 
   goCreate() {
@@ -172,7 +124,7 @@ Page({
             })
             if (res.code === 0) {
               wx.showToast({ title: '已移除', icon: 'success' })
-              this.loadFamilyDetail(this.data.family.id)
+              this.loadFamilies()
             }
           } catch (err) {
             wx.showToast({ title: '操作失败', icon: 'none' })
@@ -196,7 +148,7 @@ Page({
             })
             if (res.code === 0) {
               wx.showToast({ title: '已转移', icon: 'success' })
-              this.loadFamilyDetail(this.data.family.id)
+              this.loadFamilies()
             }
           } catch (err) {
             wx.showToast({ title: '操作失败', icon: 'none' })
