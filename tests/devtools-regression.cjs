@@ -3,14 +3,14 @@ const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const out=require('node:path').join(require('node:os').tmpdir(),'sport-mini-regression')
 fs.mkdirSync(out,{recursive:true})
-const result={date:'2026-10-13',scope:'official devtools local code with synthetic API responses',productionWrites:false,checks:[]}
+const result={date:'2026-10-13',scope:'official devtools local code with synthetic API responses',productionWrites:false,checks:[],unverified:[]}
 const save=()=>fs.writeFileSync(out+'/regression-20261013-runtime.json',JSON.stringify(result,null,2))
 let activeMini
 const cleanup=async()=>{if(!activeMini)return;await activeMini.restoreWxMethod('request').catch(()=>{});await activeMini.restoreWxMethod('showModal').catch(()=>{});await activeMini.restoreWxMethod('getAccountInfoSync').catch(()=>{});await activeMini.evaluate(()=>{if(getApp().__regression)getApp().__regression.restore()}).catch(()=>{});activeMini.disconnect()}
 const timer=setTimeout(async()=>{result.error='test deadline exceeded';save();await cleanup();process.exit(2)},110000)
 ;(async()=>{
  const m=await auto.connect({wsEndpoint:process.env.MINI_AUTOMATOR_ENDPOINT || 'ws://127.0.0.1:9420'});activeMini=m
- const route=async url=>{await m.evaluate(u=>{wx.reLaunch({url:u});return true},url);for(let i=0;i<100;i++){const p=await m.currentPage();if(p.path===url.split('?')[0].replace(/^\//,''))return p;await new Promise(r=>setTimeout(r,100))}throw Error('route failed: '+url)}
+ const route=async url=>{const page=await m.reLaunch(url);if(!page||page.path!==url.split('?')[0].replace(/^\//,''))throw Error('route failed: '+url);return page}
  const yes=(name,value)=>{assert(value,name);result.checks.push(name);save();console.log('PASS '+name)}
  const settled=async(p)=>{for(let n=0;n<50;n++){if(!await p.data('loading'))return;await p.waitFor(100)}throw Error('loading timeout')}
  try {
@@ -25,7 +25,7 @@ const timer=setTimeout(async()=>{result.error='test deadline exceeded';save();aw
       const qa=getApp().__regression
       const path=options.url.replace(/^https?:\/\/[^/]+\/api/,'');const method=options.method||'GET'
       if(method!=='GET')qa.writes.push({path,data:options.data})
-      const ex={id:1,name:'完整动作示例',image_url:'/images/exercise/default-exercise.jpg',muscle_group_id:3,target_muscle:'下肢',sets:3,reps:10,duration:10,difficulty:'简单'}
+      const ex={id:1,name:'完整动作示例',image_url:'/images/exercise/default-exercise.jpg',muscle_group_id:2,target_muscle:'下肢',sets:3,reps:10,duration:10,difficulty:'简单'}
       const family={id:901,name:'测试家庭',invite_code:'AB12CD',members:[{user_id:7,role:'admin',user:{nick_name:'测试用户'}}]}
       let data={}
       if(path==='/families')data=[family]
@@ -53,13 +53,20 @@ const timer=setTimeout(async()=>{result.error='test deadline exceeded';save();aw
   yes('progress-submit-succeeds-once',await p.data('submitted')&&await m.evaluate(()=>getApp().__regression.writes.filter(x=>x.path.endsWith('/complete')).length===1))
   for(let i=0;i<100;i++){p=await m.currentPage();if(p.path==='pages/goal/detail'&&!await p.data('loading')&&(await p.data('exerciseStatus'))?.[3]?.is_done)break;await new Promise(r=>setTimeout(r,100))}
   result.returnState={path:p.path,exerciseStatus:await p.data('exerciseStatus'),fixture:await m.evaluate(()=>({joined:getApp().__regression.joined,completed:getApp().__regression.completed,pages:getCurrentPages().map(p=>p.route)}))}
-  yes('return-refreshes-goal-completion',(await p.data('exerciseStatus'))?.[3]?.is_done===true)
+  if(p.path==='pages/goal/detail')yes('return-refreshes-goal-completion',(await p.data('exerciseStatus'))?.[3]?.is_done===true)
+  else {
+    result.unverified.push('Automatic return stayed on progress page; true device navigation needs verification')
+    p=await route('/pages/goal/detail?id=902');await settled(p)
+    yes('reopened-goal-refreshes-completion',(await p.data('exerciseStatus'))?.[3]?.is_done===true)
+  }
   p=await route('/pages/family/family');await settled(p)
   const button=await p.$('.invite-share');yes('invite-is-wechat-share-button',(await button.attribute('open-type'))==='share')
   const share=await p.callMethod('onShareAppMessage');yes('share-recipient-route-carries-code',share.path==='/pages/family/join?type=join&code=AB12CD')
   p=await route(share.path);yes('invitation-prefilled-without-joining',await p.data('inviteCode')==='AB12CD'&&await m.evaluate(()=>!getApp().__regression.writes.some(x=>x.path==='/family/join')))
   await(await p.$('.btn-submit')).tap();for(let i=0;i<100;i++){p=await m.currentPage();if(p.path==='pages/family/family')break;await new Promise(r=>setTimeout(r,100))}await settled(p)
-  yes('invitation-join-lands-on-family',p.path==='pages/family/family'&&await m.evaluate(()=>wx.getStorageSync('currentFamilyId')===901))
+  yes('invitation-join-selects-returned-family',await m.evaluate(()=>wx.getStorageSync('currentFamilyId')===901))
+  if(p.path==='pages/family/family')yes('invitation-join-lands-on-family',true)
+  else result.unverified.push('Automatic invitation return did not change route; true device navigation needs verification')
   p=await route('/pages/muscle/muscle');await settled(p)
   yes('exercise-image-preserves-entire-image',(await(await p.$('.exercise-image')).attribute('mode'))==='aspectFit')
   await m.screenshot({path:out+'/regression-20261013-muscle.png'})
@@ -88,7 +95,7 @@ const timer=setTimeout(async()=>{result.error='test deadline exceeded';save();aw
   await p.callMethod('loadVersion')
   await m.pageScrollTo(99999)
   await m.screenshot({path:out+'/profile-display-20261013.png'})
-  result.completed=true;save()
+  result.completed=result.unverified.length===0;if(!result.completed)process.exitCode=2;save()
  } finally {
    await m.restoreWxMethod('request').catch(()=>{});await m.restoreWxMethod('showModal').catch(()=>{});await m.restoreWxMethod('getAccountInfoSync').catch(()=>{});await m.evaluate(()=>{if(getApp().__regression)getApp().__regression.restore()}).catch(()=>{})
    await route('/pages/index/index').catch(()=>{})

@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-13",
+  "scope": "Actual page/Vue functions with synthetic dependencies; not real DB or phone verification",
+  "results": [
+    {
+      "id": "CAT-01",
+      "source": "pages/index/index.js:86",
+      "status": "FAIL",
+      "message": "Expected values to be strictly equal:\n\n'core' !== 'upper'\n"
+    },
+    {
+      "id": "CAT-02",
+      "source": "pages/muscle/muscle.js:75",
+      "status": "FAIL",
+      "message": "Upper limb tab must query the actual upper limb group\n\n1 !== 2\n"
+    },
+    {
+      "id": "GOAL-05",
+      "source": "pages/goal/create.js:187",
+      "status": "FAIL",
+      "message": "Two concurrent handlers must produce one create request\n\n2 !== 1\n"
+    },
+    {
+      "id": "PROF-03",
+      "source": "pages/profile-edit/profile-edit.js:88",
+      "status": "FAIL",
+      "message": "Save must guard duplicate invocation\n\n2 !== 1\n"
+    },
+    {
+      "id": "AUTH-06",
+      "source": "pages/profile/profile.js:304",
+      "status": "FAIL",
+      "message": "Logout must clear account-specific identity\n\n701 !== undefined\n"
+    },
+    {
+      "id": "STAT-14",
+      "source": "pages/profile/profile.js:146",
+      "status": "FAIL",
+      "message": "Late old response must not replace the latest selected week\n\n-1 !== 0\n"
+    },
+    {
+      "id": "LOAD-07",
+      "source": "pages/goal/progress.js:40",
+      "status": "FAIL",
+      "message": "Got unwanted exception: Invalid or outdated route data must show an error rather than crash\nActual message: \"URI malformed\""
+    },
+    {
+      "id": "ADM-04",
+      "source": "admin/src/views/users/index.vue:158",
+      "status": "FAIL",
+      "message": "A failed real request must never introduce invented users\n\n2 !== 0\n"
+    },
+    {
+      "id": "ADM-05",
+      "source": "admin/src/views/families/index.vue:131",
+      "status": "FAIL",
+      "message": "Family search must send the entered keyword\n+ actual - expected\n\n+ undefined\n- 'Synthetic family'\n"
+    },
+    {
+      "id": "ADM-06",
+      "source": "admin/src/views/families/index.vue:125",
+      "status": "FAIL",
+      "message": "Creator and current administrator are distinct roles\n+ actual - expected\n\n+ 'New admin'\n- 'Creator'\n"
+    },
+    {
+      "id": "ADM-07",
+      "source": "admin/src/views/comments/index.vue:143",
+      "status": "FAIL",
+      "message": "Failed moderation must not show success\n\n1 !== 0\n"
+    },
+    {
+      "id": "ADM-08",
+      "source": "admin/src/views/exercises/index.vue:277",
+      "status": "FAIL",
+      "message": "Editing a name must preserve the existing video\n+ actual - expected\n\n+ undefined\n- 'https://example.invalid/qa.mp4'\n"
+    },
+    {
+      "id": "WORK-04",
+      "source": "pages/goal/progress.js:129",
+      "status": "PASS"
+    }
+  ]
+}

@@ -51,8 +51,11 @@
 
   <!-- 进度查看模式 -->
   <view class="progress-mode" wx:else>
+    <view wx:if="{{progressLoading}}">正在读取今日进度…</view>
+    <view wx:elif="{{progressError}}"><text>{{progressError}}</text><button bindtap="loadProgress">重试</button></view>
+    <view wx:elif="{{!myProgress && otherProgress.length === 0}}">暂无锻炼进度</view>
     <!-- 今日进度汇总 -->
-    <view class="section" wx:if="{{myProgress}}">
+    <view class="section" wx:if="{{!progressLoading && !progressError && myProgress}}">
       <view class="section-header">
         <text class="section-title">今日锻炼进度</text>
         <text class="progress-summary">{{myProgress.completed_sets}}/{{myProgress.total_sets}} 组完成</text>
@@ -98,14 +101,14 @@
     </view>
 
     <!-- 家庭成员进度 -->
-    <view class="section" wx:if="{{otherProgress.length > 0}}">
+    <view class="section" wx:if="{{!progressLoading && !progressError && otherProgress.length > 0}}">
       <view class="section-title">家庭成员进度</view>
       <view class="member-progress-list">
         <view class="member-progress-item" wx:for="{{otherProgress}}" wx:key="user_id">
           <view class="member-header">
             <image class="member-avatar" src="{{item.user_avatar || '/images/default-avatar.svg'}}"></image>
             <view class="member-info">
-              <text class="member-name">{{item.user_name}}</text>
+              <text class="member-name">{{item.user_name}}{{item.is_current_member === false ? '（已离开）' : ''}}</text>
               <!-- 分段进度条 -->
               <view class="segmented-progress-wrap">
                 <view class="segmented-progress small">

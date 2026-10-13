@@ -1,5 +1,6 @@
 // pages/muscle/muscle.js
 const api = require('../../utils/api')
+const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-category')
 
 Page({
   data: {
@@ -19,7 +20,7 @@ Page({
     wx.removeStorageSync('muscleGroupId')
     
     if (groupId) {
-      const tabIndex = parseInt(groupId) - 1
+      const tabIndex = ['upper', 'core', 'lower'].indexOf(categoryForExercise({ muscle_group_id: Number(groupId) }))
       console.log('设置当前tab:', tabIndex)
       this.setData({ currentTab: tabIndex >= 0 && tabIndex < 3 ? tabIndex : 0 })
     }
@@ -44,14 +45,14 @@ Page({
     this.setData({
       muscleGroups: [
         {
-          id: 1,
+          id: 2,
           name: '上肢',
           muscles: ['手臂', '肩部', '胸部'],
           icon: '/images/muscle/arm.jpg',
           description: '增强上肢力量，提高日常活动能力'
         },
         {
-          id: 2,
+          id: 4,
           name: '核心',
           muscles: ['腹部', '背部', '腰部'],
           icon: '/images/muscle/core.jpg',
@@ -72,13 +73,12 @@ Page({
   async getExercises() {
     const requestId = (this._requestId || 0) + 1
     this._requestId = requestId
-    const muscleGroupId = this.data.currentTab + 1
+    const category = ['upper', 'core', 'lower'][this.data.currentTab]
     this.setData({ loading: true, loadError: '', exercises: [] })
     try {
-      const res = await api.request('/exercises', 'GET', { muscle_group_id: muscleGroupId })
+      const items = await loadAllExercises(api)
       if (requestId !== this._requestId) return
-      if (res.code !== 0) throw new Error(res.message || '动作加载失败')
-      const exercises = (res.data.list || res.data || []).map(item => ({
+      const exercises = items.filter(item => categoryForExercise(item) === category).map(item => ({
         ...item,
         targetMuscle: item.target_muscle || item.targetMuscle || '',
         image: item.image_url || item.image || ''

@@ -1,12 +1,7 @@
 // pages/goal/create.js
 const api = require('../../utils/api')
 
-// 分类映射
-const GROUP_ID_TO_CATEGORY = {
-  1: { category: 'upper', name: '上肢' },
-  2: { category: 'core', name: '核心' },
-  3: { category: 'lower', name: '下肢' }
-}
+const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-category')
 
 Page({
   data: {
@@ -52,11 +47,12 @@ Page({
 
   async loadExercises() {
     try {
-      const res = await api.request('/exercises?page=1&page_size=100', 'GET')
-      if (res.code === 0) {
+      const items = await loadAllExercises(api)
+      {
         // 为每个动作添加分类信息和选中状态
-        const exerciseList = (res.data.list || []).map(e => {
-          const groupInfo = GROUP_ID_TO_CATEGORY[e.muscle_group_id] || { category: 'other', name: '其他' }
+        const exerciseList = items.map(e => {
+          const category = categoryForExercise(e)
+          const groupInfo = { category: category === 'all' ? 'other' : category, name: ({ upper: '上肢', core: '核心', lower: '下肢' })[category] || '其他' }
           return {
             ...e,
             _selected: false,
@@ -185,6 +181,7 @@ Page({
   },
 
   async createGoal() {
+    if (this.data.loading || this._completed) return
     if (!this.data.name.trim()) {
       wx.showToast({ title: '请输入目标名称', icon: 'none' })
       return
@@ -213,8 +210,15 @@ Page({
         }))
       }
 
+      const signature = JSON.stringify(data)
+      if (signature !== this._createSignature) {
+        this._createSignature = signature
+        this._requestKey = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2)
+      }
+      data.request_id = this._requestKey
       const res = await api.request(`/goals?family_id=${this.data.familyId}`, 'POST', data)
       if (res.code === 0) {
+        this._completed = true
         wx.showToast({ title: '创建成功', icon: 'success' })
         setTimeout(() => {
           wx.navigateBack()

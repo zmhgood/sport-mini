@@ -14,7 +14,10 @@ function loadPage(relativePath, request, storage = {}, options = {}) {
   const calls = []
   const sandbox = {
     Page(value) { definition = value },
-    require() { return { request(url, method, data) { calls.push(url); return request(url, method, data) } } },
+    require(modulePath) {
+      if (!modulePath.endsWith('/api')) return require(path.resolve(path.dirname(filename), modulePath))
+      return { request(url, method, data) { calls.push(url); return request(url, method, data) } }
+    },
     getApp: () => ({ globalData: {} }),
     getCurrentPages: () => options.pages || [{}],
     setTimeout: options.setTimeout || (() => {}),

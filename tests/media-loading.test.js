@@ -17,15 +17,17 @@ test('exercise count appears only after a successful response, including a genui
 })
 test('rapid category changes never let an old response overwrite the selected category', async () => {
   const first = deferred(), second = deferred()
-  const { page } = loadPage('pages/muscle/muscle.js', (url, method, data) => data.muscle_group_id === 1 ? first.promise : second.promise)
+  let requestCount = 0
+  const { page } = loadPage('pages/muscle/muscle.js', () => ++requestCount === 1 ? first.promise : second.promise)
   const old = page.getExercises(); page.setData({ currentTab: 2 }); const latest = page.getExercises()
-  second.resolve(ok({ list: [{ id: 3, name: '下肢动作' }] })); await latest
-  first.resolve(ok({ list: [{ id: 1, name: '上肢动作' }] })); await old
+  second.resolve(ok({ list: [{ id: 3, muscle_group_id: 3, name: '下肢动作' }] })); await latest
+  first.resolve(ok({ list: [{ id: 1, muscle_group_id: 2, name: '上肢动作' }] })); await old
   assert.equal(page.data.exercises[0].id, 3); assert.equal(page.data.loading, false)
 })
 test('stale category failures cannot replace a newer success', async () => {
   const old = deferred()
-  const { page } = loadPage('pages/muscle/muscle.js', (url, method, data) => data.muscle_group_id === 1 ? old.promise : Promise.resolve(ok({ list: [{ id: 3 }] })))
+  let requestCount = 0
+  const { page } = loadPage('pages/muscle/muscle.js', () => ++requestCount === 1 ? old.promise : Promise.resolve(ok({ list: [{ id: 3, muscle_group_id: 3 }] })))
   const work = page.getExercises(); page.setData({ currentTab: 2 }); await page.getExercises()
   old.reject(Error('old request failed')); await work
   assert.equal(page.data.loadError, ''); assert.equal(page.data.exercises[0].id, 3)

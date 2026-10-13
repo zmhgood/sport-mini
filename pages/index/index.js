@@ -1,6 +1,7 @@
 // pages/index/index.js
 const app = getApp()
 const api = require('../../utils/api')
+const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-category')
 
 Page({
   data: {
@@ -79,11 +80,10 @@ Page({
     this._recommendLoading = true
     this.setData({ recommendLoading: true, recommendError: '' })
     try {
-      const res = await api.request('/exercises', 'GET')
-      if (res.code !== 0) throw new Error(res.message || '动作加载失败')
-      const exercises = (res.data.list || res.data || []).map(item => ({
+      const items = await loadAllExercises(api)
+      const exercises = items.map(item => ({
         ...item,
-        category: ({ 1: 'upper', 2: 'core', 3: 'lower' })[item.muscle_group_id] || 'all',
+        category: categoryForExercise(item),
         image: item.image_url || item.image || '',
         targetMuscle: item.target_muscle || item.targetMuscle || ''
       }))

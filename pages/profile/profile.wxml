@@ -21,18 +21,21 @@
 
     <!-- 统计数据 -->
     <view class="stats-card card">
+      <text wx:if="{{statisticsLoading}}">正在加载统计…</text>
+      <view wx:elif="{{statisticsError}}"><text>{{statisticsError}}</text><button bindtap="loadStatistics">重试</button></view>
       <view class="stat-item">
-        <text class="stat-value">{{statistics.totalDays}}</text>
+        <text class="stat-value">{{statisticsLoading || statisticsError ? '—' : statistics.totalDays}}</text>
         <text class="stat-label">累计锻炼天数</text>
       </view>
       <view class="stat-divider"></view>
       <view class="stat-item">
-        <text class="stat-value">{{statistics.totalSets}}</text>
+        <text class="stat-value">{{statisticsLoading || statisticsError ? '—' : statistics.totalSets}}</text>
         <text class="stat-label">完成动作组数</text>
       </view>
     </view>
 
     <!-- 按家庭统计（可展开） -->
+    <view wx:if="{{familyStatsError}}"><text>{{familyStatsError}}</text><button bindtap="loadFamilyStatistics">重试</button></view>
     <view class="family-stats-card card" wx:if="{{familyStats.length > 0}}">
       <view class="family-stats-header" bindtap="toggleFamilyStats">
         <text class="family-stats-title">各家庭贡献</text>
@@ -41,11 +44,11 @@
       <view class="family-stats-list" wx:if="{{showFamilyStats}}">
         <view class="family-stat-item" wx:for="{{familyStats}}" wx:key="family_id">
           <view class="family-stat-info">
-            <text class="family-stat-name">{{item.family_name}}</text>
+            <text class="family-stat-name">{{item.family_name}}{{item.is_current_member === false ? '（已离开）' : ''}}</text>
             <text class="family-stat-detail">{{item.total_days}}天 · {{item.total_sets}}组</text>
           </view>
           <view class="family-stat-bar">
-            <view class="family-stat-progress" style="width: {{item.total_sets / statistics.totalSets * 100}}%;"></view>
+            <view class="family-stat-progress" style="width: {{statistics.totalSets > 0 && !statisticsLoading && !statisticsError ? (item.total_sets >= statistics.totalSets ? 100 : item.total_sets / statistics.totalSets * 100) : 0}}%;"></view>
           </view>
         </view>
       </view>
@@ -61,6 +64,8 @@
 
     <!-- 柱状图 -->
     <view class="chart-card card">
+      <text wx:if="{{weekStatsLoading}}">正在加载周统计…</text>
+      <view wx:elif="{{weekStatsError}}"><text>{{weekStatsError}}</text><button bindtap="retryWeekStats">重试</button></view>
       <!-- 周范围标题 -->
       <view class="chart-header">
         <view class="nav-btn {{canGoPrev ? '' : 'disabled'}}" bindtap="prevWeek">
@@ -73,7 +78,7 @@
       </view>
 
       <!-- 柱状图主体 -->
-      <view class="chart-container">
+      <view class="chart-container" wx:if="{{!weekStatsLoading && !weekStatsError}}">
         <view class="chart-bar {{day.count > 0 ? 'has-data' : ''}}" wx:for="{{weekStats}}" wx:for-item="day" wx:key="date"
               bindtap="goToGoalFromChart" data-id="{{day.goalId}}" data-count="{{day.count}}" data-goalids="{{day.goalIds}}" data-date="{{day.date}}">
           <view class="bar-wrapper">

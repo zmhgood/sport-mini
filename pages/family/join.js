@@ -41,7 +41,11 @@ Page({
 
     this.setData({ loading: true })
     try {
-      const res = await api.request('/family', 'POST', { name: this.data.name })
+      if (this._createName !== this.data.name) {
+        this._createName = this.data.name
+        this._requestKey = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2)
+      }
+      const res = await api.request('/family', 'POST', { name: this.data.name, request_id: this._requestKey })
       if (res.code === 0) {
         this._completed = true
         if (res.data && res.data.id) wx.setStorageSync('currentFamilyId', res.data.id)

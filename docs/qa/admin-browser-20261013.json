@@ -1,0 +1,16 @@
+{
+  "url": "http://127.0.0.1:3107",
+  "automation": "Playwright with synthetic API responses",
+  "data": "synthetic responses only",
+  "checks": [
+    "users meaningful content and page identity",
+    "user failure explicit, no invented rows",
+    "creator distinct from current administrator",
+    "family search sends keyword",
+    "moderation failure preserves real status",
+    "comment loading failure has no synthetic fallback",
+    "narrow layout collapses sidebar; logo loads with correct image type",
+    "no runtime error or framework overlay; desktop and narrow viewport screenshots"
+  ],
+  "errors": []
+}

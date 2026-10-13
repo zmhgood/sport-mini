@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-13",
+  "scope": "Actual page/Vue functions with synthetic dependencies; not real DB or phone verification",
+  "results": [
+    {
+      "id": "CAT-01",
+      "source": "pages/index/index.js:86",
+      "status": "PASS"
+    },
+    {
+      "id": "CAT-02",
+      "source": "pages/muscle/muscle.js:75",
+      "status": "PASS"
+    },
+    {
+      "id": "GOAL-05",
+      "source": "pages/goal/create.js:187",
+      "status": "PASS"
+    },
+    {
+      "id": "PROF-03",
+      "source": "pages/profile-edit/profile-edit.js:88",
+      "status": "PASS"
+    },
+    {
+      "id": "AUTH-06",
+      "source": "pages/profile/profile.js:304",
+      "status": "PASS"
+    },
+    {
+      "id": "STAT-14",
+      "source": "pages/profile/profile.js:146",
+      "status": "PASS"
+    },
+    {
+      "id": "LOAD-07",
+      "source": "pages/goal/progress.js:40",
+      "status": "PASS"
+    },
+    {
+      "id": "ADM-04",
+      "source": "admin/src/views/users/index.vue:158",
+      "status": "PASS"
+    },
+    {
+      "id": "ADM-05",
+      "source": "admin/src/views/families/index.vue:131",
+      "status": "PASS"
+    },
+    {
+      "id": "ADM-06",
+      "source": "admin/src/views/families/index.vue:125",
+      "status": "PASS"
+    },
+    {
+      "id": "ADM-07",
+      "source": "admin/src/views/comments/index.vue:143",
+      "status": "PASS"
+    },
+    {
+      "id": "ADM-08",
+      "source": "admin/src/views/exercises/index.vue:277",
+      "status": "PASS"
+    },
+    {
+      "id": "WORK-04",
+      "source": "pages/goal/progress.js:129",
+      "status": "PASS"
+    }
+  ]
+}

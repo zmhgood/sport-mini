@@ -7,6 +7,11 @@ Page({
     userInfo: null,
     versionText: '',
     currentFamily: {},      // 当前选择的家庭
+    statisticsLoading: false,
+    statisticsError: '',
+    familyStatsError: '',
+    weekStatsLoading: false,
+    weekStatsError: '',
     statistics: {
       totalDays: 0,
       totalExercises: 0,
@@ -61,12 +66,14 @@ Page({
 
   // 加载当前选择的家庭
   async loadCurrentFamily() {
+    const token = wx.getStorageSync('token')
     const cachedFamilyId = wx.getStorageSync('currentFamilyId')
     if (!cachedFamilyId) return
 
     try {
       // 先尝试从 /families 接口获取家庭列表
       const res = await api.request('/families', 'GET')
+      if (token !== wx.getStorageSync('token')) return
       if (res.code === 0 && res.data) {
         const families = res.data
         const family = families.find(f => String(f.id) === String(cachedFamilyId))
@@ -82,6 +89,7 @@ Page({
         currentFamily: { id: cachedFamilyId, name: '当前家庭' }
       })
     } catch (err) {
+      if (token !== wx.getStorageSync('token')) return
       console.error('加载当前家庭失败:', err)
       this.setData({
         currentFamily: { id: cachedFamilyId, name: '当前家庭' }
@@ -101,7 +109,11 @@ Page({
 
   // 加载统计数据
   loadStatistics() {
-    api.request('/user/statistics', 'GET').then(res => {
+    const token = wx.getStorageSync('token')
+    this.setData({ statisticsLoading: true, statisticsError: '' })
+    return api.request('/user/statistics', 'GET').then(res => {
+      if (token !== wx.getStorageSync('token')) return
+      if (res.code !== 0 || !res.data) throw new Error(res.message || '统计加载失败')
       if (res.code === 0 && res.data) {
         this.setData({
           statistics: {
@@ -113,25 +125,27 @@ Page({
         })
       }
     }).catch(() => {
-      const stats = wx.getStorageSync('userStatistics') || {
-        totalDays: 0,
-        totalExercises: 0,
-        totalMinutes: 0,
-        totalSets: 0
-      }
-      this.setData({ statistics: stats })
+      if (token !== wx.getStorageSync('token')) return
+      this.setData({ statisticsError: '统计加载失败，请重试' })
+    }).finally(() => {
+      if (token === wx.getStorageSync('token')) this.setData({ statisticsLoading: false })
     })
   },
 
   // 加载按家庭分组的统计
   loadFamilyStatistics() {
+    const token = wx.getStorageSync('token')
+    this.setData({ familyStatsError: '' })
     return api.request('/user/statistics/by-family', 'GET').then(res => {
+      if (token !== wx.getStorageSync('token')) return
+      if (res.code !== 0 || !Array.isArray(res.data)) throw new Error(res.message || '家庭统计加载失败')
       if (res.code === 0 && res.data) {
-        this.setData({ familyStats: res.data || [] })
+        this.setData({ familyStats: res.data })
       }
     }).catch((err) => {
+      if (token !== wx.getStorageSync('token')) return
       console.error('加载家庭统计失败:', err)
-      this.setData({ familyStats: [] })
+      this.setData({ familyStatsError: '家庭统计加载失败，请重试' })
     })
   },
 
@@ -144,10 +158,14 @@ Page({
 
   // 加载一周统计数据
   loadWeekStats(weekOffset) {
+    const requestId = (this._weekRequestId || 0) + 1
+    this._weekRequestId = requestId
+    const token = wx.getStorageSync('token')
+    this.setData({ weekStatsLoading: true, weekStatsError: '' })
     console.log('[loadWeekStats] 请求 week_offset:', weekOffset)
-    api.request(`/user/week-stats?week_offset=${weekOffset}`, 'GET').then(res => {
-      console.log('[loadWeekStats] 响应:', res)
-      console.log('[loadWeekStats] raw:', JSON.stringify(res))
+    return api.request(`/user/week-stats?week_offset=${weekOffset}`, 'GET').then(res => {
+      if (requestId !== this._weekRequestId || token !== wx.getStorageSync('token')) return
+      if (res.code !== 0 || !res.data) throw new Error(res.message || '周统计加载失败')
       if (res.code === 0 && res.data) {
         const stats = (res.data.stats || []).map(item => {
           const totalSets = Number(item.totalSets || 0)
@@ -171,8 +189,16 @@ Page({
         })
       }
     }).catch((err) => {
+      if (requestId !== this._weekRequestId || token !== wx.getStorageSync('token')) return
       console.error('加载周统计失败:', err)
+      this.setData({ weekStatsError: '周统计加载失败，请重试' })
+    }).finally(() => {
+      if (requestId === this._weekRequestId && token === wx.getStorageSync('token')) this.setData({ weekStatsLoading: false })
     })
+  },
+
+  retryWeekStats() {
+    return this.loadWeekStats(this.data.currentWeekOffset)
   },
 
   // 上一周（向左滑动）
@@ -309,11 +335,20 @@ Page({
         if (res.confirm) {
           wx.removeStorageSync('token')
           wx.removeStorageSync('userInfo')
+          wx.removeStorageSync('userId')
+          wx.removeStorageSync('currentFamilyId')
+          wx.removeStorageSync('userStatistics')
+          this._weekRequestId = (this._weekRequestId || 0) + 1
+          const app = getApp()
+          app.globalData.isLoggedIn = false
+          app.globalData.userInfo = null
           this.setData({
             isLoggedIn: false,
             userInfo: null,
+            statisticsLoading: false, statisticsError: '', familyStatsError: '',
+            weekStatsLoading: false, weekStatsError: '',
             statistics: { totalDays: 0, totalExercises: 0, totalMinutes: 0, totalSets: 0 },
-            historyList: []
+            historyList: [], familyStats: [], currentFamily: {}, weekStats: [], weekRange: ''
           })
           wx.showToast({ title: '已退出登录', icon: 'success' })
         }

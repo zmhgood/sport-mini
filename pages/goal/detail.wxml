@@ -29,7 +29,7 @@
         <view class="member-row">
           <image class="member-avatar" src="{{item.user_avatar || '/images/default-avatar.svg'}}"></image>
           <view class="member-info">
-            <text class="member-name">{{item.user_name}}</text>
+            <text class="member-name">{{item.user_name}}{{item.is_current_member === false ? '（已离开）' : ''}}</text>
             <!-- 分段进度条 -->
             <view class="segmented-progress-wrap" wx:if="{{item.exercise_stats && item.exercise_stats.length > 0}}">
               <view class="segmented-progress">
@@ -83,7 +83,7 @@
       <view class="member-progress-item" wx:for="{{memberProgressList}}" wx:key="user_id">
         <view class="member-header">
           <image class="member-avatar-small" src="{{item.user_avatar || '/images/default-avatar.svg'}}"></image>
-          <text class="member-name-small">{{item.user_name}}</text>
+          <text class="member-name-small">{{item.user_name}}{{item.is_current_member === false ? '（已离开）' : ''}}</text>
           <text class="member-progress-text">{{item.completed_sets}}/{{item.total_sets}}组</text>
         </view>
         <view class="mini-progress-bar">

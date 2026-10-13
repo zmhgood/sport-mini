@@ -86,6 +86,7 @@ Page({
 
   // 保存
   async onSave() {
+    if (this.data.loading || this._completed) return
     const { userInfo } = this.data
 
     // 验证
@@ -108,18 +109,21 @@ Page({
       const res = await api.request('/user/info', 'PUT', {
         nick_name: userInfo.nick_name,
         gender: userInfo.gender,
-        age: userInfo.age,
-        height: userInfo.height,
-        weight: userInfo.weight,
+        age: userInfo.age || 0,
+        height: userInfo.height || 0,
+        weight: userInfo.weight || 0,
         health_status: userInfo.health_status
       })
 
       if (res.code === 0) {
+        const latest = await api.request('/user/info', 'GET')
+        if (latest.code !== 0 || !latest.data) throw new Error('资料读回失败，请重试')
+        this._completed = true
         // 更新本地存储
         const localUserInfo = wx.getStorageSync('userInfo') || {}
         const updatedInfo = {
           ...localUserInfo,
-          ...userInfo
+          ...latest.data
         }
         wx.setStorageSync('userInfo', updatedInfo)
 
@@ -131,7 +135,7 @@ Page({
         wx.showToast({ title: res.message || '保存失败', icon: 'none' })
       }
     } catch (err) {
-      wx.showToast({ title: '网络错误', icon: 'none' })
+      wx.showToast({ title: err.message || '网络错误', icon: 'none' })
     } finally {
       this.setData({ loading: false })
     }

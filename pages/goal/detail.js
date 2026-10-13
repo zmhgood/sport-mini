@@ -47,6 +47,7 @@ Page({
         this.loadGoal(),
         this.loadProgress(this.data.selectedDate)
       ])
+      goal.memberCount = (progressData.progress.member_stats || []).filter(member => member.is_current_member !== false).length
       this.setData({ goal, ...progressData })
     } catch (err) {
       this.setData({ loadError: '目标信息加载失败，请重试' })
@@ -111,6 +112,7 @@ Page({
           user_id: member.user_id,
           user_name: member.user_name,
           user_avatar: member.user_avatar,
+          is_current_member: member.is_current_member,
           completed_sets: member.completed_sets || 0,
           total_sets: member.total_sets || 0,
           progress_percent: member.total_sets > 0

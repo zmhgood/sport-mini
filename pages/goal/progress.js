@@ -37,7 +37,11 @@ Page({
     // 判断是锻炼模式还是进度查看模式
     if (options.exercise) {
       // 锻炼模式：单个动作锻炼
-      const exercise = JSON.parse(decodeURIComponent(options.exercise))
+      let exercise
+      try { exercise = JSON.parse(decodeURIComponent(options.exercise)) } catch (err) {
+        this.setData({ progressError: '动作参数无效，请返回目标页重新打开' })
+        return
+      }
       this.setData({ 
         goalId: options.goal_id,
         exercise
@@ -83,7 +87,7 @@ Page({
     this.setData({ progressLoading: true, progressError: '' })
     try {
       const res = await api.request(`/goals/${goalId}/progress`, 'GET')
-      if (res.code !== 0) throw new Error(res.message || '进度加载失败')
+      if (res.code !== 0 || !res.data) throw new Error(res.message || '进度加载失败')
       if (res.code === 0 && res.data) {
         // 找到当前用户的进度
         const myProgress = res.data.member_stats?.find(m => m.user_id == this.data.currentUserId)
@@ -165,8 +169,10 @@ Page({
 
   // 进度查看模式的方法
   async loadProgress() {
+    this.setData({ progressLoading: true, progressError: '' })
     try {
       const res = await api.request(`/goals/${this.data.goalId}/progress`, 'GET')
+      if (res.code !== 0 || !res.data) throw new Error(res.message || '进度加载失败')
       if (res.code === 0 && res.data) {
         const progress = res.data
         const colors = this.data.segmentColors
@@ -207,7 +213,9 @@ Page({
         })
       }
     } catch (err) {
-      console.error('加载进度失败:', err)
+      this.setData({ progressError: err.message || '进度加载失败' })
+    } finally {
+      this.setData({ progressLoading: false })
     }
   },
 

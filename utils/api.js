@@ -28,9 +28,13 @@ function request(url, method = 'GET', data = {}) {
         if (res.statusCode === 200) {
           resolve(res.data)
         } else if (res.statusCode === 401) {
+          if (token !== wx.getStorageSync('token')) { reject(new Error('登录状态已改变')); return }
           // Token过期，清除登录状态并跳转登录页
           wx.removeStorageSync('token')
           wx.removeStorageSync('userInfo')
+          wx.removeStorageSync('userId')
+          wx.removeStorageSync('currentFamilyId')
+          wx.removeStorageSync('userStatistics')
           app.globalData.isLoggedIn = false
           app.globalData.userInfo = null
           // 获取当前页面路径
