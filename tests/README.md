@@ -3,9 +3,11 @@
 用 Node.js 18+ 运行，不需要安装依赖或真实登录：
 
 ```bash
-node --test tests/loading-pages.test.js
+node --test tests/*.test.js
 ```
 
 测试加载真实 Page 脚本，模拟 API 延迟、错误和返回数据；同时读取实际 WXML，检查可见文本。覆盖家庭列表/详情/目标以及目标详情/进度各依赖的失败、真实空数据、请求去重、重试、页面重进、家庭选择、进度计算和旧请求迟到。
 
 `page-harness.js` 只评估模板条件、循环和文本，不替代官方 WXML/WXSS 编译器、布局或真机测试。模拟响应均为合成数据，不访问线上、不使用凭据、不写入真实家庭或锻炼记录。
+
+`devtools-regression.cjs` 使用官方 `miniprogram-automator` 连接原项目的本机自动化端口，验证提交、邀请、图片、异常重试、版本页脚和设置状态。通过 `MINI_AUTOMATOR_PATH` 指定已安装的模块、`MINI_AUTOMATOR_ENDPOINT` 指定连接地址（默认 `ws://127.0.0.1:9420`）。仅允许模拟器运行，API 返回值和用户资料使用合成数据；结束时恢复请求方法、版本方法和本地存储。截图与结果保存到系统临时目录，不写入项目源码目录。

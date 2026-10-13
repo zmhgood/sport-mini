@@ -15,8 +15,9 @@ const ENV = {
 // 获取当前环境配置
 function getConfig() {
   const { envVersion } = wx.getAccountInfoSync().miniProgram
-  // 开发版连接本地服务；体验版和正式版连接生产服务。
-  const currentEnv = envVersion === 'develop' ? 'development' : 'production'
+  // 仅开发工具连接本地服务；手机预览、体验版和正式版连接生产服务。
+  const { platform } = wx.getDeviceInfo()
+  const currentEnv = envVersion === 'develop' && platform === 'devtools' ? 'development' : 'production'
   
   return {
     ...ENV[currentEnv],

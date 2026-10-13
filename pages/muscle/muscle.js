@@ -7,6 +7,7 @@ Page({
     tabs: ['上肢', '核心', '下肢'],
     muscleGroups: [],
     exercises: [],
+    loadError: '',
     loading: true
   },
 
@@ -68,51 +69,26 @@ Page({
   },
 
   // 获取锻炼列表
-  getExercises() {
+  async getExercises() {
+    const requestId = (this._requestId || 0) + 1
+    this._requestId = requestId
     const muscleGroupId = this.data.currentTab + 1
-    console.log('[getExercises] 请求 muscle_group_id:', muscleGroupId)
-    
-    api.request('/exercises', 'GET', { muscle_group_id: muscleGroupId }).then(res => {
-      console.log('[getExercises] 响应:', res)
-      if (res.code === 0) {
-        // 后端返回 { list: [...], total: n } 格式
-        let exercises = res.data.list || res.data || []
-        console.log('[getExercises] 原始数据:', exercises)
-        // 字段名转换：后端 snake_case -> 前端 camelCase
-        exercises = exercises.map(item => ({
-          ...item,
-          targetMuscle: item.target_muscle || item.targetMuscle || '',
-          image: item.image_url || item.image || ''
-        }))
-        console.log('[getExercises] 转换后:', exercises)
-        this.setData({ exercises: exercises, loading: false })
-      }
-    }).catch((err) => {
-      console.error('[getExercises] 请求失败:', err)
-      wx.showToast({ title: '数据加载失败', icon: 'none' })
-      // 模拟数据
-      const mockData = {
-        0: [
-          { id: 1, name: '手臂环绕', targetMuscle: '肩部', difficulty: '简单', duration: 5, sets: 3, image: '' },
-          { id: 2, name: '坐姿推举', targetMuscle: '肩部、手臂', difficulty: '中等', duration: 8, sets: 3, image: '' },
-          { id: 3, name: '弹力带弯举', targetMuscle: '手臂前侧', difficulty: '简单', duration: 6, sets: 3, image: '/images/exercise/default-exercise.jpg' }
-        ],
-        1: [
-          { id: 4, name: '坐姿扭转', targetMuscle: '腹部、腰部', difficulty: '简单', duration: 5, sets: 3, image: '' },
-          { id: 5, name: '平板支撑', targetMuscle: '核心肌群', difficulty: '中等', duration: 3, sets: 3, image: '' },
-          { id: 6, name: '桥式运动', targetMuscle: '臀部、腰部', difficulty: '简单', duration: 6, sets: 3, image: '/images/exercise/default-exercise.jpg' }
-        ],
-        2: [
-          { id: 7, name: '坐姿抬腿', targetMuscle: '大腿前侧', difficulty: '简单', duration: 8, sets: 3, image: '' },
-          { id: 8, name: '靠墙静蹲', targetMuscle: '大腿、臀部', difficulty: '中等', duration: 5, sets: 3, image: '' },
-          { id: 9, name: '提踵练习', targetMuscle: '小腿', difficulty: '简单', duration: 5, sets: 3, image: '/images/exercise/default-exercise.jpg' }
-        ]
-      }
-      this.setData({ 
-        exercises: mockData[this.data.currentTab] || [], 
-        loading: false 
-      })
-    })
+    this.setData({ loading: true, loadError: '', exercises: [] })
+    try {
+      const res = await api.request('/exercises', 'GET', { muscle_group_id: muscleGroupId })
+      if (requestId !== this._requestId) return
+      if (res.code !== 0) throw new Error(res.message || '动作加载失败')
+      const exercises = (res.data.list || res.data || []).map(item => ({
+        ...item,
+        targetMuscle: item.target_muscle || item.targetMuscle || '',
+        image: item.image_url || item.image || ''
+      }))
+      this.setData({ exercises })
+    } catch (err) {
+      if (requestId === this._requestId) this.setData({ loadError: err.message || '动作加载失败，请重试' })
+    } finally {
+      if (requestId === this._requestId) this.setData({ loading: false })
+    }
   },
 
   // 切换标签

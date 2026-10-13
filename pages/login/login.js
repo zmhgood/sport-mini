@@ -176,7 +176,11 @@ Page({
       
       // 跳转到首页
       setTimeout(() => {
-        wx.switchTab({ url: '/pages/index/index' })
+        if (getCurrentPages().length > 1) {
+          wx.navigateBack()
+        } else {
+          wx.switchTab({ url: '/pages/index/index' })
+        }
       }, 1500)
     } catch (err) {
       wx.hideLoading()

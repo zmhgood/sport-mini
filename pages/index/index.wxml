@@ -114,7 +114,7 @@
     <view class="exercise-list">
       <view class="exercise-item card" wx:for="{{filteredExercises}}" wx:key="id"
             bindtap="goToExercise" data-id="{{item.id}}">
-        <image class="exercise-image" src="{{item.image || '/images/exercise/default-exercise.jpg'}}" mode="aspectFill"></image>
+        <image class="exercise-image" src="{{item.image || '/images/exercise/default-exercise.jpg'}}" mode="aspectFit"></image>
         <view class="exercise-info">
           <text class="exercise-name">{{item.name}}</text>
           <text class="exercise-target">目标肌肉：{{item.targetMuscle}}</text>
@@ -127,6 +127,11 @@
         </view>
       </view>
     </view>
-    <view class="empty-tip" wx:if="{{filteredExercises.length === 0}}">暂无相关锻炼</view>
+    <view class="empty-tip" wx:if="{{recommendLoading}}">正在加载动作…</view>
+    <view class="empty-tip" wx:elif="{{recommendError}}">
+      <text>{{recommendError}}</text>
+      <button bindtap="getRecommendExercises">重试</button>
+    </view>
+    <view class="empty-tip" wx:elif="{{filteredExercises.length === 0}}">暂无相关锻炼</view>
   </view>
 </view>

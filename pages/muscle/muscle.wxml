@@ -27,13 +27,18 @@
   <view class="exercise-section">
     <view class="section-header">
       <text class="title-medium">推荐动作</text>
-      <text class="text-hint">共{{exercises.length}}个动作</text>
+      <text class="text-hint" wx:if="{{!loading && !loadError}}">共{{exercises.length}}个动作</text>
     </view>
 
     <view wx:if="{{loading}}" class="loading">
       <text>加载中...</text>
     </view>
 
+    <view wx:elif="{{loadError}}" class="loading">
+      <text>{{loadError}}</text>
+      <button bindtap="getExercises">重试</button>
+    </view>
+    <view wx:elif="{{exercises.length === 0}}" class="loading">暂无相关锻炼</view>
     <view wx:else class="exercise-list">
       <view class="exercise-card card" wx:for="{{exercises}}" wx:key="id" 
             bindtap="goToExercise" data-id="{{item.id}}">
@@ -44,7 +49,7 @@
           </view>
         </view>
         
-        <image class="exercise-image" src="{{item.image || '/images/exercise/default-exercise.jpg'}}" mode="aspectFill"></image>
+        <image class="exercise-image" src="{{item.image || '/images/exercise/default-exercise.jpg'}}" mode="aspectFit"></image>
         
         <view class="card-info">
           <view class="info-row flex-row">

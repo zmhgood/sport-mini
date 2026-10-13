@@ -87,6 +87,17 @@ Page({
     wx.navigateTo({ url: '/pages/family/join?type=join' })
   },
 
+  onShareAppMessage() {
+    const { family, isAdmin } = this.data
+    if (!isAdmin || !family || !family.invite_code) {
+      return { title: '爸妈动起来', path: '/pages/index/index' }
+    }
+    return {
+      title: `邀请你加入「${family.name}」，一起锻炼`,
+      path: `/pages/family/join?type=join&code=${encodeURIComponent(family.invite_code)}`
+    }
+  },
+
   copyInviteCode() {
     wx.setClipboardData({
       data: this.data.family.invite_code,

@@ -332,3 +332,11 @@
   background: #FFFFFF;
   font-size: 28rpx;
 }
+
+.invite-share {
+  margin: 0;
+  padding: 12rpx 16rpx;
+  min-height: 72rpx;
+  line-height: 1.5;
+  background: transparent;
+}

@@ -7,6 +7,8 @@ Page({
     userInfo: null,
     isLoggedIn: false,
     bannerList: [],
+    recommendLoading: true,
+    recommendError: '',
     recommendExercises: [],
     filteredExercises: [],
     muscleGroups: [],
@@ -72,49 +74,29 @@ Page({
   },
 
   // 获取推荐锻炼
-  getRecommendExercises() {
-    const path = api.isLoggedIn() ? '/exercises/recommend' : '/exercises'
-    api.request(path, 'GET').then(res => {
-      if (res.code === 0) {
-        // 后端返回 { list: [...], total: n } 格式
-        let exercises = res.data.list || res.data || []
-        console.log('[getRecommendExercises] 原始数据:', exercises)
-        // 根据 muscle_group_id 添加 category 字段
-        // 1=上肢, 2=核心, 3=下肢 (根据实际数据库配置)
-        exercises.forEach(item => {
-          if (item.muscle_group_id === 1) {
-            item.category = 'upper'
-          } else if (item.muscle_group_id === 2) {
-            item.category = 'core'
-          } else if (item.muscle_group_id === 3) {
-            item.category = 'lower'
-          } else {
-            item.category = 'all'
-          }
-          // 映射图片字段
-          item.image = item.image_url || item.image || ''
-          // 映射目标肌肉字段
-          item.targetMuscle = item.target_muscle || item.targetMuscle || ''
-        })
-        console.log('[getRecommendExercises] 转换后:', exercises)
-        this.setData({ 
-          recommendExercises: exercises,
-          filteredExercises: exercises
-        })
-      }
-    }).catch(() => {
-      // 使用模拟数据
-      const exercises = [
-        { id: 1, name: '坐姿抬腿', targetMuscle: '大腿前侧', difficulty: '简单', duration: 10, image: '/images/exercise/default-exercise.jpg', category: 'lower', muscle_group_id: 3 },
-        { id: 2, name: '靠墙静蹲', targetMuscle: '大腿、臀部', difficulty: '中等', duration: 15, image: '/images/exercise/default-exercise.jpg', category: 'lower', muscle_group_id: 3 },
-        { id: 3, name: '手臂环绕', targetMuscle: '肩部', difficulty: '简单', duration: 5, image: '/images/exercise/default-exercise.jpg', category: 'upper', muscle_group_id: 1 },
-        { id: 4, name: '平板支撑', targetMuscle: '核心', difficulty: '中等', duration: 10, image: '/images/exercise/default-exercise.jpg', category: 'core', muscle_group_id: 2 }
-      ]
-      this.setData({ 
+  async getRecommendExercises() {
+    if (this._recommendLoading) return
+    this._recommendLoading = true
+    this.setData({ recommendLoading: true, recommendError: '' })
+    try {
+      const res = await api.request('/exercises', 'GET')
+      if (res.code !== 0) throw new Error(res.message || '动作加载失败')
+      const exercises = (res.data.list || res.data || []).map(item => ({
+        ...item,
+        category: ({ 1: 'upper', 2: 'core', 3: 'lower' })[item.muscle_group_id] || 'all',
+        image: item.image_url || item.image || '',
+        targetMuscle: item.target_muscle || item.targetMuscle || ''
+      }))
+      this.setData({
         recommendExercises: exercises,
-        filteredExercises: exercises
+        filteredExercises: this.data.currentCategory === 'all' ? exercises : exercises.filter(item => item.category === this.data.currentCategory)
       })
-    })
+    } catch (err) {
+      this.setData({ recommendError: err.message || '动作加载失败，请重试', recommendExercises: [], filteredExercises: [] })
+    } finally {
+      this._recommendLoading = false
+      this.setData({ recommendLoading: false })
+    }
   },
 
   // 加载家庭待完成任务（多家庭版本）

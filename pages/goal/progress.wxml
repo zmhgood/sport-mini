@@ -4,7 +4,7 @@
   <view class="exercise-mode" wx:if="{{exercise}}">
     <!-- 动作信息 -->
     <view class="exercise-header">
-      <image class="exercise-image" src="{{exercise.image_url || ''}}" mode="aspectFill"></image>
+      <image class="exercise-image" src="{{exercise.image_url || ''}}" mode="aspectFit"></image>
       <view class="exercise-info">
         <text class="exercise-name">{{exercise.name}}</text>
         <text class="exercise-desc">每组 {{exercise.reps}} 次</text>
@@ -20,6 +20,11 @@
       <progress class="progress-bar" percent="{{completedPercent}}" stroke-width="12" activeColor="#22C55E" backgroundColor="#E5E7EB" />
     </view>
 
+    <view wx:if="{{progressLoading}}">正在读取今日进度…</view>
+    <view wx:elif="{{progressError}}">
+      <text>{{progressError}}</text>
+      <button bindtap="loadExerciseProgress">重试</button>
+    </view>
     <!-- 组数选择 -->
     <view class="sets-section">
       <text class="section-title">选择已完成的组</text>
@@ -38,7 +43,7 @@
 
     <!-- 提交按钮 -->
     <view class="submit-section">
-      <button class="btn-submit" bindtap="submitProgress" loading="{{loading}}">
+      <button class="btn-submit" bindtap="submitProgress" loading="{{loading}}" disabled="{{loading || progressLoading || progressError || submitted}}">
         提交进度 ({{completedSets}}/{{exercise.sets}})
       </button>
     </view>

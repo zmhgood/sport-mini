@@ -60,14 +60,14 @@
     <view class="section-title">锻炼动作</view>
     <view class="exercise-list">
       <view class="exercise-item" wx:for="{{goal.exercises}}" wx:key="id">
-        <image class="exercise-image" src="{{item.exercise.image_url || ''}}"></image>
+        <image class="exercise-image" src="{{item.exercise.image_url || '/images/exercise/default-exercise.jpg'}}" mode="aspectFit"></image>
         <view class="exercise-info">
           <text class="exercise-name">{{item.exercise.name}}</text>
           <text class="exercise-target">{{item.exercise.target_muscle}}</text>
           <text class="exercise-sets">{{item.sets}}组 × {{item.reps}}次</text>
         </view>
         <button class="btn-start {{exerciseStatus[item.id].is_done ? 'btn-done' : ''}}" 
-                bindtap="startExercise" 
+                bindtap="startExercise" loading="{{starting}}" disabled="{{starting}}"
                 data-index="{{index}}" 
                 data-item="{{item}}">
           {{exerciseStatus[item.id].is_done ? '已完成' : exerciseStatus[item.id].has_progress ? '继续锻炼' : '开始锻炼'}}

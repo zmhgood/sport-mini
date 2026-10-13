@@ -5,6 +5,7 @@ Page({
   data: {
     isLoggedIn: false,
     userInfo: null,
+    versionText: '',
     currentFamily: {},      // 当前选择的家庭
     statistics: {
       totalDays: 0,
@@ -25,15 +26,23 @@ Page({
       { id: 'family', name: '我的家庭', value: '管理', icon: '/images/icons/family.svg' },
       { id: 'goals', name: '锻炼目标', value: '查看', icon: '/images/icons/goal.svg' },
       { id: 'profile', name: '个人信息', value: '编辑', icon: '/images/icons/profile-active.svg' },
-      { id: 'fontSize', name: '字体大小', value: '标准', icon: '/images/icons/text-size.svg' },
-      { id: 'voice', name: '语音播报', value: '开启', icon: '/images/icons/volume.svg' },
-      { id: 'reminder', name: '锻炼提醒', value: '每日 8:00', icon: '/images/icons/bell.svg' },
-      { id: 'emergency', name: '紧急联系', value: '设置', icon: '/images/icons/phone.svg' }
+      { id: 'fontSize', name: '字体大小', value: '暂未开放', icon: '/images/icons/text-size.svg' },
+      { id: 'voice', name: '语音播报', value: '暂未开放', icon: '/images/icons/volume.svg' },
+      { id: 'reminder', name: '锻炼提醒', value: '暂未开放', icon: '/images/icons/bell.svg' },
+      { id: 'emergency', name: '紧急联系', value: '暂未开放', icon: '/images/icons/phone.svg' }
     ]
   },
 
   onLoad() {
+    this.loadVersion()
     this.checkLogin()
+  },
+
+  loadVersion() {
+    const { envVersion, version } = wx.getAccountInfoSync().miniProgram
+    this.setData({
+      versionText: version ? `v${version}` : ({ develop: '开发版', trial: '体验版', release: '正式版' })[envVersion] || '版本信息暂不可用'
+    })
   },
 
   onShow() {

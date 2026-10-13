@@ -6,6 +6,7 @@ Page({
     loading: true,
     loadError: '',
     goalId: null,
+    starting: false,
     goal: null,
     progress: null,
     currentUserId: null,
@@ -126,7 +127,40 @@ Page({
     wx.navigateTo({ url: `/pages/goal/progress?id=${this.data.goalId}` })
   },
 
-  startExercise(e) {
+  async startExercise(e) {
+    if (this.data.starting || this.data.loading || this.data.loadError) return
+    const { goal, currentUserId, goalId } = this.data
+    if (!currentUserId) {
+      wx.navigateTo({ url: '/pages/login/login' })
+      return
+    }
+    this.setData({ starting: true })
+    try {
+      const participating = (goal.members || []).some(member => member.user_id == currentUserId)
+      if (!participating) {
+        const confirmed = await new Promise(resolve => wx.showModal({
+          title: '加入锻炼目标',
+          content: '您还未参与这个目标。加入后即可记录自己的锻炼进度。',
+          confirmText: '加入并锻炼',
+          success: result => resolve(result.confirm),
+          fail: () => resolve(false)
+        }))
+        if (!confirmed) return
+        const res = await api.request(`/goals/${goalId}/members`, 'POST', { user_id: Number(currentUserId) })
+        if (res.code !== 0) throw new Error(res.message || '加入目标失败')
+        // 刷新参与状态，防止返回后再次重复加入。
+        const updatedGoal = await this.loadGoal()
+        this.setData({ goal: updatedGoal })
+      }
+      this.openExercise(e)
+    } catch (err) {
+      wx.showToast({ title: err.message || '开始锻炼失败，请重试', icon: 'none' })
+    } finally {
+      this.setData({ starting: false })
+    }
+  },
+
+  openExercise(e) {
     const item = e.currentTarget.dataset.item
     // 跳转到锻炼执行页面，传递动作信息
     const exerciseData = encodeURIComponent(JSON.stringify({

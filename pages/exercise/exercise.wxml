@@ -1,8 +1,13 @@
+<view class="container" wx:if="{{loading}}">正在加载动作…</view>
+<view class="container" wx:elif="{{loadError}}">
+  <text>{{loadError}}</text>
+  <button bindtap="retryLoad">重试</button>
+</view>
 <!--pages/exercise/exercise.wxml-->
-<view class="container" wx:if="{{exercise}}">
+<view class="container" wx:elif="{{exercise}}">
   <!-- 顶部图片/GIF区域 -->
   <view class="media-section">
-    <image class="cover-image" src="{{exercise.image}}" mode="aspectFill"></image>
+    <image class="cover-image" src="{{exercise.image}}" mode="aspectFit"></image>
     <view class="play-btn" wx:if="{{exercise.gif_url}}" bindtap="viewGif">
       <text class="play-icon">🎬</text>
       <text class="play-text">查看动图</text>

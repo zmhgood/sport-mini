@@ -51,7 +51,7 @@
     <view class="section">
       <view class="section-header">
         <text class="section-title">家庭成员</text>
-        <text class="section-action" wx:if="{{isAdmin}}" bindtap="goJoin">邀请新成员</text>
+        <button class="section-action invite-share" wx:if="{{isAdmin && family.invite_code}}" open-type="share">邀请新成员</button>
       </view>
       <view class="member-list">
         <view class="member-item" wx:for="{{members}}" wx:key="id">

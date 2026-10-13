@@ -7,7 +7,7 @@
       <text class="form-label">家庭名称</text>
       <input class="form-input" placeholder="请输入家庭名称" value="{{name}}" bindinput="onNameInput" />
     </view>
-    <button class="btn-submit" bindtap="createFamily" loading="{{loading}}">创建</button>
+    <button class="btn-submit" bindtap="createFamily" loading="{{loading}}" disabled="{{loading}}">创建</button>
   </view>
 
   <!-- 加入家庭表单 -->
@@ -17,6 +17,6 @@
       <text class="form-label">邀请码</text>
       <input class="form-input" placeholder="请输入6位邀请码" maxlength="6" value="{{inviteCode}}" bindinput="onCodeInput" />
     </view>
-    <button class="btn-submit" bindtap="joinFamily" loading="{{loading}}">加入</button>
+    <button class="btn-submit" bindtap="joinFamily" loading="{{loading}}" disabled="{{loading}}">加入</button>
   </view>
 </view>

@@ -9,6 +9,9 @@ Page({
     completedSets: 0,
     completedPercent: 0,
     loading: false,
+    progressLoading: false,
+    progressError: '',
+    submitted: false,
     
     // 进度查看模式
     myProgress: null,
@@ -77,8 +80,10 @@ Page({
     const { goalId, exercise, setsList } = this.data
     if (!exercise || !exercise.goal_exercise_id) return
 
+    this.setData({ progressLoading: true, progressError: '' })
     try {
       const res = await api.request(`/goals/${goalId}/progress`, 'GET')
+      if (res.code !== 0) throw new Error(res.message || '进度加载失败')
       if (res.code === 0 && res.data) {
         // 找到当前用户的进度
         const myProgress = res.data.member_stats?.find(m => m.user_id == this.data.currentUserId)
@@ -100,12 +105,15 @@ Page({
         }
       }
     } catch (err) {
-      console.error('加载进度失败:', err)
+      this.setData({ progressError: err.message || '进度加载失败，请重试' })
+    } finally {
+      this.setData({ progressLoading: false })
     }
   },
 
   // 切换组数选择
   toggleSet(e) {
+    if (this.data.loading || this.data.progressLoading || this.data.progressError || this.data.submitted) return
     const index = e.currentTarget.dataset.index
     const setsList = this.data.setsList
     setsList[index].checked = !setsList[index].checked
@@ -119,6 +127,7 @@ Page({
 
   // 提交进度
   async submitProgress() {
+    if (this.data.loading || this.data.progressLoading || this.data.progressError || this.data.submitted) return
     const { goalId, exercise, completedSets } = this.data
     
     if (completedSets === 0) {
@@ -137,8 +146,8 @@ Page({
         goal_exercise_id: exercise.goal_exercise_id,
         completed_sets: completedSets
       })
-      console.log('提交结果:', res)
       if (res.code === 0) {
+        this.setData({ submitted: true })
         wx.showToast({ title: '记录成功', icon: 'success' })
         setTimeout(() => {
           wx.navigateBack()
@@ -148,7 +157,7 @@ Page({
       }
     } catch (err) {
       console.error('提交失败:', err)
-      wx.showToast({ title: '提交失败', icon: 'none' })
+      wx.showToast({ title: err.message || '提交失败，请重试', icon: 'none' })
     } finally {
       this.setData({ loading: false })
     }
@@ -203,16 +212,22 @@ Page({
   },
 
   async updateProgress(exerciseId, completedSets) {
+    if (this.data.loading) return
+    this.setData({ loading: true })
     try {
       const res = await api.request(`/goals/${this.data.goalId}/complete`, 'POST', {
         goal_exercise_id: exerciseId,
         completed_sets: completedSets
       })
       if (res.code === 0) {
-        this.loadProgress()
+        await this.loadProgress()
+      } else {
+        throw new Error(res.message || '更新失败')
       }
     } catch (err) {
-      wx.showToast({ title: '更新失败', icon: 'none' })
+      wx.showToast({ title: err.message || '更新失败', icon: 'none' })
+    } finally {
+      this.setData({ loading: false })
     }
   },
 

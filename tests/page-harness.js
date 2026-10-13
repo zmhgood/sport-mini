@@ -9,16 +9,22 @@ function deferred() {
   return { promise, resolve, reject }
 }
 
-function loadPage(relativePath, request, storage = {}) {
+function loadPage(relativePath, request, storage = {}, options = {}) {
   let definition
   const calls = []
   const sandbox = {
     Page(value) { definition = value },
-    require() { return { request(url, method) { calls.push(url); return request(url, method) } } },
+    require() { return { request(url, method, data) { calls.push(url); return request(url, method, data) } } },
+    getApp: () => ({ globalData: {} }),
+    getCurrentPages: () => options.pages || [{}],
+    setTimeout: options.setTimeout || (() => {}),
     wx: {
       getStorageSync: key => storage[key],
       setStorageSync: (key, value) => { storage[key] = value },
-      navigateTo() {}, showToast() {}
+      navigateTo() {}, navigateBack() {}, redirectTo() {}, setNavigationBarTitle() {},
+      removeStorageSync: key => { delete storage[key] },
+      showToast() {},
+      ...options.wx
     },
     console
   }
@@ -62,6 +68,13 @@ function visibleText(relativePath, data) {
         continue
       }
       const attrs = node.attrs
+      if ('wx:for' in attrs) {
+        const { 'wx:for': loop, ...itemAttrs } = attrs
+        for (const [index, item] of (evaluate(loop, scope) || []).entries()) {
+          text += render([{ ...node, attrs: itemAttrs }], { ...scope, [attrs['wx:for-item'] || 'item']: item, index })
+        }
+        continue
+      }
       if ('wx:if' in attrs) {
         matched = !!evaluate(attrs['wx:if'], scope)
         if (!matched) continue
@@ -73,11 +86,7 @@ function visibleText(relativePath, data) {
         if (matched) continue
         matched = true
       }
-      if ('wx:for' in attrs) {
-        for (const [index, item] of (evaluate(attrs['wx:for'], scope) || []).entries()) {
-          text += render(node.children, { ...scope, [attrs['wx:for-item'] || 'item']: item, index })
-        }
-      } else text += render(node.children, scope)
+      text += render(node.children, scope)
     }
     return text
   }
