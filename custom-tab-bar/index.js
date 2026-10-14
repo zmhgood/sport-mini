@@ -2,6 +2,7 @@
 Component({
   data: {
     selected: 0,
+    hidden: false,
     color: "#7A858B",
     selectedColor: "#176B73",
     list: [

@@ -178,7 +178,7 @@ Page({
         const colors = this.data.segmentColors
         
         // 找到当前用户的进度
-        const myProgress = progress.member_stats?.find(m => m.user_id == this.data.currentUserId)
+        const myProgress = progress.member_stats?.find(m => m.user_id == this.data.currentUserId) || null
         if (myProgress && myProgress.exercise_stats) {
           myProgress.exercise_stats.forEach((ex, index) => {
             ex.color = colors[index % colors.length]

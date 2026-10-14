@@ -1,0 +1,567 @@
+{
+  "date": "2026-10-14",
+  "baseCommit": "a285376926b5a546b852665900fbb5b40e0768d4",
+  "branch": "codex/qa-integrity-20261013",
+  "experienceVersion": "1.0.20261013.2 (user-confirmed; does not include these changes)",
+  "scope": "Official original-project simulator; synthetic fixtures and mocked requests; no production business writes",
+  "registeredPages": 16,
+  "unitTests": {
+    "passed": 84,
+    "failed": 0,
+    "skipped": 0
+  },
+  "riskAudit": {
+    "passed": 13
+  },
+  "runs": [
+    {
+      "configuration": "320px",
+      "runners": [
+        {
+          "runner": "layout",
+          "assertions": 17,
+          "passed": 17,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/layout-final320-visible.json",
+          "evidenceSha256": "6d10e9b2f5db14fa83ba8d6a690462c6965cfecc970548fd9dc5aa1a9263d602"
+        },
+        {
+          "runner": "surfaces",
+          "assertions": 46,
+          "passed": 46,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/surfaces-final320.json",
+          "evidenceSha256": "74b486322fac61f8a333dc21132681da5e7672811508db016a3d8e0f555a0b54"
+        },
+        {
+          "runner": "pages",
+          "assertions": 91,
+          "passed": 91,
+          "cases": [
+            "login",
+            "profile edit",
+            "family join",
+            "family create",
+            "goal detail",
+            "workout",
+            "exercise detail",
+            "create goal",
+            "progress view",
+            "family detail",
+            "history",
+            "goal list",
+            "agreement",
+            "privacy",
+            "media viewer"
+          ],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/pages-final320.json",
+          "evidenceSha256": "9699dfa0a214ecd8190c8b7297c921feb2b16c348721248ac968878551aa487c"
+        }
+      ],
+      "device": {
+        "model": "iPhone 5",
+        "width": 320,
+        "height": 504,
+        "fontSize": 16,
+        "safeBottom": 0
+      }
+    },
+    {
+      "configuration": "360px",
+      "runners": [
+        {
+          "runner": "layout",
+          "assertions": 17,
+          "passed": 17,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/layout-final360-port9422.json",
+          "evidenceSha256": "ad736d9b7311cee7fc14ae886acde63860f75d2b178fc440a8b653c4cf6bb346"
+        },
+        {
+          "runner": "surfaces",
+          "assertions": 46,
+          "passed": 46,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/surfaces-final360-port9422.json",
+          "evidenceSha256": "daeba9d10609761e5f39e5e35473de4dfacf621fd66621d61d0011b1591c2dad"
+        },
+        {
+          "runner": "pages",
+          "assertions": 92,
+          "passed": 92,
+          "cases": [
+            "login",
+            "profile edit",
+            "family join",
+            "family create",
+            "goal detail",
+            "workout",
+            "exercise detail",
+            "create goal",
+            "progress view",
+            "family detail",
+            "history",
+            "goal list",
+            "agreement",
+            "privacy",
+            "media viewer"
+          ],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/pages-final360-validated.json",
+          "evidenceSha256": "3800209a0d83f680a25de0b446d9e55e5c663976d17a3f64506f6d0f928ffabb"
+        }
+      ],
+      "device": {
+        "model": "Nexus 5",
+        "width": 360,
+        "height": 572,
+        "fontSize": 16,
+        "safeBottom": 0
+      }
+    },
+    {
+      "configuration": "375px",
+      "runners": [
+        {
+          "runner": "layout",
+          "assertions": 17,
+          "passed": 17,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/layout-final375.json",
+          "evidenceSha256": "d87d9b12de17a52ea5d1f94351021a5649969c626df8e8976d57953bcffce8d6"
+        },
+        {
+          "runner": "surfaces",
+          "assertions": 46,
+          "passed": 46,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/surfaces-final375.json",
+          "evidenceSha256": "a527d1fb0d8721ccf397b655be7e6c875aff7dcb0bca466f16bc402233f6e0ec"
+        },
+        {
+          "runner": "pages",
+          "assertions": 92,
+          "passed": 92,
+          "cases": [
+            "login",
+            "profile edit",
+            "family join",
+            "family create",
+            "goal detail",
+            "workout",
+            "exercise detail",
+            "create goal",
+            "progress view",
+            "family detail",
+            "history",
+            "goal list",
+            "agreement",
+            "privacy",
+            "media viewer"
+          ],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/pages-final375.json",
+          "evidenceSha256": "d4c70fca28f0de966c65004bea482dae49e5f4d16590d9c67ab8c56b0c943ed0"
+        }
+      ],
+      "device": {
+        "model": "iPhone 6/7/8",
+        "width": 375,
+        "height": 603,
+        "fontSize": 16,
+        "safeBottom": 0
+      }
+    },
+    {
+      "configuration": "390px",
+      "runners": [
+        {
+          "runner": "layout",
+          "assertions": 17,
+          "passed": 17,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/layout-final390-visible.json",
+          "evidenceSha256": "226625b29694065485dfc62d2adae2b6bef99d1d8ef8031e7d5a8489318c8752"
+        },
+        {
+          "runner": "surfaces",
+          "assertions": 48,
+          "passed": 48,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/surfaces-final390-recovered.json",
+          "evidenceSha256": "cf1bb6794d004a48deb8c149b5384bca7c3619cd9a5400cfb6c5298188481d29"
+        },
+        {
+          "runner": "pages",
+          "assertions": 92,
+          "passed": 92,
+          "cases": [
+            "login",
+            "profile edit",
+            "family join",
+            "family create",
+            "goal detail",
+            "workout",
+            "exercise detail",
+            "create goal",
+            "progress view",
+            "family detail",
+            "history",
+            "goal list",
+            "agreement",
+            "privacy",
+            "media viewer"
+          ],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/pages-final390-recovered.json",
+          "evidenceSha256": "88170368ecaf09a6e67f54c755d5f26ddcf06210537a310e7855b02ea6d27037"
+        }
+      ],
+      "device": {
+        "model": "iPhone 12/13 (Pro)",
+        "width": 390,
+        "height": 753,
+        "fontSize": 16,
+        "safeBottom": 34
+      }
+    },
+    {
+      "configuration": "430px",
+      "runners": [
+        {
+          "runner": "layout",
+          "assertions": 17,
+          "passed": 17,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/layout-final430.json",
+          "evidenceSha256": "4f541ce5efe4c7a164375ee291a0662bae15233d920f1b7f6b673795c2f59d2d"
+        },
+        {
+          "runner": "surfaces",
+          "assertions": 46,
+          "passed": 46,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/surfaces-final430.json",
+          "evidenceSha256": "597f4bedb5b40b82a63e1ca8e7e30b4eb281726b87087947a41e9eb3707c4d96"
+        },
+        {
+          "runner": "pages",
+          "assertions": 92,
+          "passed": 92,
+          "cases": [
+            "login",
+            "profile edit",
+            "family join",
+            "family create",
+            "goal detail",
+            "workout",
+            "exercise detail",
+            "create goal",
+            "progress view",
+            "family detail",
+            "history",
+            "goal list",
+            "agreement",
+            "privacy",
+            "media viewer"
+          ],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/pages-final430.json",
+          "evidenceSha256": "83d41f44f0efabcacc53944a3e0cd25f84c52fc4c59711a3db85bfcbb9f3ed7f"
+        }
+      ],
+      "device": {
+        "model": "iPhone 14 Pro Max",
+        "width": 430,
+        "height": 834,
+        "fontSize": 16,
+        "safeBottom": 34
+      }
+    },
+    {
+      "configuration": "430px字体26",
+      "runners": [
+        {
+          "runner": "layout",
+          "assertions": 17,
+          "passed": 17,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/layout-final430-font26.json",
+          "evidenceSha256": "9867da359f4809a121d884e101ba6f2f2e33c74f6ffd76f073dba19c5eb222f4"
+        },
+        {
+          "runner": "surfaces",
+          "assertions": 46,
+          "passed": 46,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/surfaces-final430-font26.json",
+          "evidenceSha256": "50cf560ad7f2d85fb0881b249887aa9dfdf6dcb7853006e2edb2a67d6b730fde"
+        },
+        {
+          "runner": "pages",
+          "assertions": 92,
+          "passed": 92,
+          "cases": [
+            "login",
+            "profile edit",
+            "family join",
+            "family create",
+            "goal detail",
+            "workout",
+            "exercise detail",
+            "create goal",
+            "progress view",
+            "family detail",
+            "history",
+            "goal list",
+            "agreement",
+            "privacy",
+            "media viewer"
+          ],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/pages-final430-font26.json",
+          "evidenceSha256": "35a644e1a3fc452b6114b0616cd24ffef773cdf855a10926ad6a10d18bf48899"
+        }
+      ],
+      "device": {
+        "model": "iPhone 14 Pro Max",
+        "width": 430,
+        "height": 834,
+        "fontSize": 26,
+        "safeBottom": 34
+      }
+    },
+    {
+      "configuration": "390px短视口字体26",
+      "runners": [
+        {
+          "runner": "layout",
+          "assertions": 17,
+          "passed": 17,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/layout-final-compact390-font26.json",
+          "evidenceSha256": "6b983335f47bc750f3ed2b308fae7240a319c5b7bca304e949771a74442db3cd"
+        },
+        {
+          "runner": "surfaces",
+          "assertions": 46,
+          "passed": 46,
+          "cases": [],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/surfaces-final-compact390-font26.json",
+          "evidenceSha256": "0a7df938ced431b364d7a735528f91dd766e5aac61f1fd859c6f628a13950c2a"
+        },
+        {
+          "runner": "pages",
+          "assertions": 92,
+          "passed": 92,
+          "cases": [
+            "login",
+            "profile edit",
+            "family join",
+            "family create",
+            "goal detail",
+            "workout",
+            "exercise detail",
+            "create goal",
+            "progress view",
+            "family detail",
+            "history",
+            "goal list",
+            "agreement",
+            "privacy",
+            "media viewer"
+          ],
+          "evidenceFile": "/private/tmp/sport-compat-20261014-followup/pages-final-compact390-font26.json",
+          "evidenceSha256": "31376828bb2e8070ef8a8984fd02fc953d3154775925fb1b051265ffde3fcaa1"
+        }
+      ],
+      "device": {
+        "model": "QA-短视口390x520",
+        "width": 390,
+        "height": 452,
+        "fontSize": 26,
+        "safeBottom": 34
+      }
+    }
+  ],
+  "gaps": [
+    "Real iOS/Android keyboard and touch",
+    "Physical system font scaling",
+    "Sharing and two-account permissions",
+    "GIF/video decoding and network business behavior"
+  ],
+  "nativeReturn390": {
+    "passed": true,
+    "input": "DevTools native Simulate operation > Back",
+    "result": {
+      "route": "pages/index/index",
+      "stack": [
+        "pages/index/index"
+      ],
+      "tab": {
+        "hidden": false,
+        "selected": 0
+      },
+      "writes": []
+    },
+    "screenshots": [
+      "/private/tmp/sport-compat-20261014-followup/native-390-before-return.png",
+      "/private/tmp/sport-compat-20261014-followup/native-390-after-return.png"
+    ]
+  },
+  "progressEmptyFix": {
+    "before": {
+      "passed": 1,
+      "failed": 2
+    },
+    "afterUnit": {
+      "passed": 3
+    },
+    "note": "One-line explicit null for absent personal stats; no API or database change; layout grid preceded this final logic fix, focused simulator regression follows."
+  },
+  "supplementalRuns": [
+    {
+      "file": "/private/tmp/sport-compat-20261014-followup/pages-progress-fix-compact390-validated.json",
+      "sha256": "a3158d46f8461f08208c44eba00815794fb62353e152760c0a38efe71ae8b1b3",
+      "cases": [
+        "workout",
+        "progress view",
+        "empty progress refresh"
+      ],
+      "assertions": 17,
+      "device": {
+        "width": 390,
+        "height": 452,
+        "fontSize": 26
+      }
+    },
+    {
+      "file": "/private/tmp/sport-compat-20261014-followup/pages-progress-fix320.json",
+      "sha256": "22612e793f8bcc98fc8b29a0ac4638dc90caa4f4f5aedb478ead6b4aaa3095fb",
+      "cases": [
+        "workout",
+        "progress view",
+        "empty progress refresh"
+      ],
+      "assertions": 17,
+      "device": {
+        "width": 320,
+        "height": 504,
+        "fontSize": 16
+      }
+    },
+    {
+      "file": "/private/tmp/sport-compat-20261014-followup/pages-media-final320.json",
+      "sha256": "0bcefaf67701c3d78307366fa8c7b4333c7edbb3afb7d54f951892d73c327579",
+      "cases": [
+        "media viewer"
+      ],
+      "assertions": 6,
+      "device": {
+        "width": 320,
+        "height": 504,
+        "fontSize": 16
+      }
+    }
+  ],
+  "supersededOrInterruptedRuns": [
+    {
+      "file": "layout-final-compact390-relaunch.json",
+      "error": "family-1: sheet fits viewport",
+      "failedChecks": [
+        "family-1: sheet fits viewport"
+      ]
+    },
+    {
+      "file": "layout-final-compact390.json",
+      "error": "family-1: sheet fits viewport",
+      "failedChecks": [
+        "family-1: sheet fits viewport"
+      ]
+    },
+    {
+      "file": "layout-final320-fresh.json",
+      "error": "family-1: sheet fits viewport",
+      "failedChecks": [
+        "family-1: sheet fits viewport"
+      ]
+    },
+    {
+      "file": "layout-final320.json",
+      "error": "family-1: sheet fits viewport",
+      "failedChecks": [
+        "family-1: sheet fits viewport"
+      ]
+    },
+    {
+      "file": "layout-final360-fresh.json",
+      "error": "60 second test timeout",
+      "failedChecks": []
+    },
+    {
+      "file": "layout-final360.json",
+      "error": "family-1: sheet fits viewport",
+      "failedChecks": [
+        "family-1: sheet fits viewport"
+      ]
+    },
+    {
+      "file": "layout-final390.json",
+      "error": "60 second test timeout",
+      "failedChecks": []
+    },
+    {
+      "file": "pages-final360-port9422.json",
+      "error": null,
+      "failedChecks": [
+        ".content above safe bottom"
+      ]
+    },
+    {
+      "file": "surfaces-final-compact390.json",
+      "error": "timeout",
+      "failedChecks": []
+    }
+  ],
+  "toolNotes": [
+    "SDK single-field data query maps null to undefined; empty-progress assertion uses full data snapshot plus independent logic-layer readback",
+    "SDK page stack/render context and background animation were intermittently stale; reset original project and automation endpoint then verified visible window",
+    "SDK navigateBack success was insufficient; native menu return and independent SDK readback verified home and visible tab bar",
+    "Document-end check corrected: upper edge may scroll offscreen while final content remains reachable; media has a separate full-viewport check"
+  ],
+  "sourceSha256": {
+    "custom-tab-bar/index.js": "ec675237fcc58f4620ba632c4980360eda7a11309a460cdb9f2b71944676201e",
+    "custom-tab-bar/index.wxml": "147cded19c6c3d9c302d7b308bdc682df9d7a0c4860e47f79ae8daf21049f3bb",
+    "pages/agreement/agreement.wxss": "6a273cdd328ebcc704a5725c3c8befeefcb3f70f26707da48a3404774f9141aa",
+    "pages/exercise/exercise.wxss": "91c8077df602c78c257e37d2d1fd2b50c92346eed5243b1e12e3cde2e34b6d66",
+    "pages/family/family.wxss": "a1fe838787f7b0aedaf7aae237c119c4d6758ac2034cb3a9619cad8cbbd13b1d",
+    "pages/family/join.wxml": "650aee4b3f90bea5d459e53299f1055a0be52ae6a3e3efed5ff709b482ee55ba",
+    "pages/family/join.wxss": "00a775c6cf914268068c4ec80b44d132dce6533e25a5bb6d35ee8c4fb41f5fba",
+    "pages/goal/create.wxml": "77c229da07323e07b1711f6e0bcfbe250c84fc519fc3305c029208aa71875d94",
+    "pages/goal/create.wxss": "8a065316914f74db3ea76d875414a2ebf9bab8e5350038f154e5e27b5e71c0e5",
+    "pages/goal/detail.wxss": "041be7f9456d5bfbfe81abbad12c31b2fd4af91ece665cd75b1b1913fb04727b",
+    "pages/goal/goal.wxss": "5f35bbe47f14f0e478d51e487294a57a134694b228a5098c79659566d7eb88ed",
+    "pages/goal/progress.js": "b2c3032393cabc53830a22908be92e83f679debc0cd39eada5eca07dff74ac88",
+    "pages/goal/progress.wxss": "733a04fa85edd0126bf4dcba3bed0df7843d2a64dc9309f02e04667275b06f8f",
+    "pages/history/history.wxss": "5bdb282ea558d4deb71f3b9c1fd1b0744cdcde2e9b328f67fceaf4a4f80cf6cf",
+    "pages/index/index.js": "3b254530f6cacb0299f34503e23137207912d0d1206ba8a9fdd6f445c309da66",
+    "pages/index/index.wxml": "195ff9935716923b3e6f96c85d79665dcd5685cc9f59ebae3b5a5537d32535eb",
+    "pages/index/index.wxss": "2bda409af95d78cd51c133c38025c94d68c1dd533a99bccd9754e4f645ab8d4f",
+    "pages/login/login.wxml": "56c50a893939a13714e8f170aca272449fc0325973829a347f9b723579091df1",
+    "pages/login/login.wxss": "64120d4b8cf5d52fd59dcc630890f5476451f9ac4d762cd2f3560821eee45ac3",
+    "pages/privacy/privacy.wxss": "137e7e9caaecdab424cb0d6189cd8aa2e382052641b5249757c21650a15855ec",
+    "pages/profile-edit/profile-edit.wxml": "3e7f13dfe00b79074809de7c96f9db329dfb32e5eb2f40a104cfe55c5b2dab9c",
+    "pages/profile-edit/profile-edit.wxss": "506084038bc93e5d29fa1c4673ec0dd9e7182d12eedeb717a09641f5a53067b1",
+    "tests/family-popup.test.js": "6c7251510f802ac69b95d8742caea5bac059dfbc061f8822bc612f6b535c4eb8",
+    "tests/progress-empty.test.js": "2a315be35b97614fccb0ab81825027bb267d9e776ec9c91201672ec2086449ec",
+    "tests/simulator/pages.cjs": "9f4df3da7ed71e5c332bf94e35b2bc8758d525ca41bed667e068a4755914992f",
+    "tests/simulator/surfaces.cjs": "eb1c33f481ebe50e771fcd726f1152c03ffbfa580e028345cdf78df1c055d344",
+    "tests/simulator/family-layout.cjs": "03ead44bafba2bd586fe9c5ceb2ffc1927f6b4e89ee083e508d233677f16732f"
+  },
+  "temporarySettingsRestored": {
+    "restored": true,
+    "hotReload": true,
+    "method": "exact original bytes"
+  },
+  "simulatorRestored": {
+    "model": "iPhone 5",
+    "fontSize": 16,
+    "scalePercent": 100,
+    "page": "pages/index/index"
+  }
+}

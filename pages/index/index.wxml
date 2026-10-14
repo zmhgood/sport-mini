@@ -27,14 +27,14 @@
         <text class="family-popup-title">选择家庭</text>
         <text class="family-popup-close" bindtap="closeFamilyPopup">✕</text>
       </view>
-      <view class="family-list">
+      <scroll-view class="family-list" scroll-y style="height: {{families.length * 116}}rpx;">
         <view class="family-item {{currentFamily.id === item.id ? 'active' : ''}}" 
               wx:for="{{families}}" wx:key="id" 
               bindtap="selectFamily" data-id="{{item.id}}">
           <text class="family-item-name">{{item.name}}</text>
           <text class="family-item-check" wx:if="{{currentFamily.id === item.id}}">✓</text>
         </view>
-      </view>
+      </scroll-view>
       <view class="family-popup-footer">
         <button class="join-family-btn" bindtap="goToJoinFamily">+ 加入新家庭</button>
       </view>

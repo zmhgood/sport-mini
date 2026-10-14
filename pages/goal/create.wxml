@@ -3,7 +3,7 @@
   <!-- 目标名称 -->
   <view class="section">
     <view class="section-title">目标名称</view>
-    <input class="name-input" placeholder="例如：每日健身计划" value="{{name}}" bindinput="onNameInput" />
+    <input class="name-input" placeholder="例如：每日健身计划" value="{{name}}" bindinput="onNameInput" cursor-spacing="96" />
   </view>
 
   <!-- 选择成员 -->
@@ -38,9 +38,9 @@
           <text class="exercise-name">{{item.name}}</text>
           <view class="exercise-config">
             <text class="config-label">组数:</text>
-            <input class="config-input" type="number" value="{{item.sets}}" bindinput="onSetsInput" data-index="{{index}}" data-field="sets" />
+            <input class="config-input" type="number" value="{{item.sets}}" bindinput="onSetsInput" data-index="{{index}}" data-field="sets" cursor-spacing="96" />
             <text class="config-label">每组次数:</text>
-            <input class="config-input" type="number" value="{{item.reps}}" bindinput="onRepsInput" data-index="{{index}}" data-field="reps" />
+            <input class="config-input" type="number" value="{{item.reps}}" bindinput="onRepsInput" data-index="{{index}}" data-field="reps" cursor-spacing="96" />
           </view>
         </view>
         <text class="remove-btn" bindtap="removeExercise" data-index="{{index}}">×</text>
@@ -75,7 +75,7 @@
       <view class="category-tab {{currentCategory === 'lower' ? 'active' : ''}}" 
             bindtap="switchCategory" data-category="lower">下肢</view>
     </view>
-    <view class="modal-body">
+    <scroll-view class="modal-body" scroll-y>
       <view class="exercise-option {{item._selected ? 'selected' : ''}}" 
             wx:for="{{filteredExerciseList}}" wx:key="id" 
             bindtap="selectExercise" data-item="{{item}}">
@@ -91,7 +91,7 @@
       <view class="empty-list" wx:if="{{filteredExerciseList.length === 0}}">
         <text>该分类暂无动作</text>
       </view>
-    </view>
+    </scroll-view>
     <view class="modal-footer">
       <text class="selected-count">已选择 {{selectedCount}} 个动作</text>
       <button class="btn-confirm" bindtap="confirmExercises">确认选择</button>

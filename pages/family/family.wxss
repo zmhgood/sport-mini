@@ -305,6 +305,7 @@
 }
 
 .action-buttons .btn-secondary {
+  min-height: 44px;
   background: #FFFFFF;
   color: #3B82F6;
   font-size: 30rpx;
@@ -314,6 +315,7 @@
 }
 
 .action-buttons .btn-danger {
+  min-height: 44px;
   font-size: 30rpx;
   padding: 24rpx 0;
 }
@@ -336,7 +338,7 @@
 .invite-share {
   margin: 0;
   padding: 12rpx 16rpx;
-  min-height: 72rpx;
+  min-height: max(72rpx, 44px);
   line-height: 1.5;
   background: transparent;
 }

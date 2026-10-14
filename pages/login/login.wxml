@@ -45,6 +45,7 @@
           value="{{wechatNickName}}"
           bindinput="onNickNameInput"
           bindblur="onNickNameInput"
+          cursor-spacing="96"
         />
       </view>
       

@@ -14,13 +14,14 @@
         placeholder="请输入昵称"
         value="{{userInfo.nick_name}}"
         bindinput="onNickNameInput"
+        cursor-spacing="96"
       />
     </view>
 
     <!-- 性别 -->
     <view class="form-item">
       <text class="label">性别</text>
-      <picker mode="selector" range="{{genderOptions}}" range-key="label" bindchange="onGenderChange">
+      <picker class="gender-picker" mode="selector" range="{{genderOptions}}" range-key="label" bindchange="onGenderChange">
         <view class="picker">
           <text class="picker-text">{{genderOptions[userInfo.gender].label}}</text>
           <text class="arrow">></text>
@@ -37,6 +38,7 @@
         placeholder="请输入年龄"
         value="{{userInfo.age}}"
         bindinput="onAgeInput"
+        cursor-spacing="96"
       />
       <text class="unit">岁</text>
     </view>
@@ -50,6 +52,7 @@
         placeholder="请输入身高"
         value="{{userInfo.height}}"
         bindinput="onHeightInput"
+        cursor-spacing="96"
       />
       <text class="unit">cm</text>
     </view>
@@ -63,6 +66,7 @@
         placeholder="请输入体重"
         value="{{userInfo.weight}}"
         bindinput="onWeightInput"
+        cursor-spacing="96"
       />
       <text class="unit">kg</text>
     </view>
@@ -75,6 +79,7 @@
         placeholder="如有特殊健康状况请填写（选填）"
         value="{{userInfo.health_status}}"
         bindinput="onHealthStatusInput"
+        cursor-spacing="96"
         maxlength="200"
       />
     </view>

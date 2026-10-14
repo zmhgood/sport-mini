@@ -245,6 +245,7 @@
 .btn-start {
   width: 160rpx;
   height: 64rpx;
+  min-height: 44px;
   background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
   color: #FFFFFF;
   font-size: 26rpx;

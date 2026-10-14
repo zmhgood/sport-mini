@@ -4,6 +4,7 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
   padding: 60rpx 40rpx;
+  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
   position: relative;
   overflow: hidden;

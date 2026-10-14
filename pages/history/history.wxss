@@ -2,7 +2,7 @@
 
 .container {
   padding: 24rpx;
-  padding-bottom: 60rpx;
+  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
   background: linear-gradient(180deg, #FEF3C7 0%, #F8FAFC 30%);
   min-height: 100vh;
 }

@@ -34,12 +34,17 @@ Page({
     console.log('[onShow] 首页显示')
     // 设置tabBar选中状态
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ selected: 0 })
+      this.getTabBar().setData({ selected: 0, hidden: false })
     }
+    this.setData({ showFamilyPopup: false })
     this.checkLogin()
     this.getRecommendExercises()
     this.updateProgress()
     this.loadFamilyGoals()
+  },
+
+  onHide() {
+    this.closeFamilyPopup()
   },
 
   // 初始化数据
@@ -164,12 +169,18 @@ Page({
 
   // 打开家庭选择弹窗
   switchFamily() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ hidden: true })
+    }
     this.setData({ showFamilyPopup: true })
   },
 
   // 关闭家庭选择弹窗
   closeFamilyPopup() {
     this.setData({ showFamilyPopup: false })
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ hidden: false })
+    }
   },
 
   // 阻止事件冒泡
@@ -185,9 +196,9 @@ Page({
       wx.setStorageSync('currentFamilyId', familyId)
       this.setData({ 
         currentFamily: family,
-        familyName: family.name,
-        showFamilyPopup: false 
+        familyName: family.name
       })
+      this.closeFamilyPopup()
       // 重新加载该家庭的任务
       this.loadFamilyGoals()
     }
@@ -195,9 +206,9 @@ Page({
 
   // 跳转到加入家庭页面
   goToJoinFamily() {
-    this.setData({ showFamilyPopup: false })
+    this.closeFamilyPopup()
     wx.navigateTo({
-      url: '/pages/family/join'
+      url: '/pages/family/join?type=join'
     })
   },
 

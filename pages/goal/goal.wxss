@@ -3,6 +3,7 @@
   min-height: 100vh;
   background: #F5F7FA;
   padding: 24rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
 }
 
 .goal-list {
