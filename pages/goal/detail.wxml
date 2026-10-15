@@ -78,7 +78,6 @@
 
           </view>
         </view>
-        <button class="exercise-demo" bindtap="showExercisePreview" data-item="{{item}}">查看动作示范</button>
         <view class="exercise-actions" wx:if="{{canSubmit}}">
           <button class="primary-action" bindtap="completeAll" loading="{{actionLoading}}" disabled="{{actionLoading || exerciseStatus[item.id].is_done}}" data-item="{{item}}">{{exerciseStatus[item.id].is_done ? '已完成' : '完成全部'}}</button>
           <button class="partial-toggle" bindtap="togglePartial" disabled="{{actionLoading}}" data-item="{{item}}">{{partialSets[item.id] ? '收起分组' : '部分完成'}}</button>

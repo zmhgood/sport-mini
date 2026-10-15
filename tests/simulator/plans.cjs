@@ -337,7 +337,7 @@ function mockResponse(options) {
     await mini.pageScrollTo(99999)
     const cardGeometry = await mini.evaluate(() => new Promise(resolve => {
       const q = wx.createSelectorQuery().in(getCurrentPages().slice(-1)[0])
-      q.select('.exercise-item').boundingClientRect(); q.select('.exercise-main').boundingClientRect(); q.select('.exercise-name').boundingClientRect(); q.select('.exercise-demo').boundingClientRect(); q.select('.exercise-actions').boundingClientRect(); q.select('.primary-action').boundingClientRect()
+      q.select('.exercise-item').boundingClientRect(); q.select('.exercise-main').boundingClientRect(); q.select('.exercise-name').boundingClientRect(); q.select('.exercise-image').boundingClientRect(); q.select('.exercise-actions').boundingClientRect(); q.select('.primary-action').boundingClientRect()
       q.exec(resolve)
     }))
     check('compact detail keeps action text wide and controls below the exercise', cardGeometry[2].width >= 100 && cardGeometry[4].top >= cardGeometry[1].bottom - 1 && cardGeometry[4].right <= cardGeometry[0].right + 1 && cardGeometry[5].height >= 44, cardGeometry)

@@ -259,8 +259,6 @@
   font-weight: 500;
 }
 
-.exercise-demo { display: flex; width: 100%; min-width: 100%; max-width: 100%; min-height: 44px; margin: 24rpx 0 0; padding: 16rpx; border-radius: 16rpx; background: #E8F5F2; color: #176B73; font-size: calc(28rpx * var(--app-font-scale, 1)); line-height: 1.4; }
-
 .exercise-target {
   font-size: calc(26rpx * var(--app-font-scale, 1));
   color: #64748B;

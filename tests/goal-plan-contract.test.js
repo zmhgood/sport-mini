@@ -180,7 +180,8 @@ test('any family member can open the exercise demonstration page and completed a
   page.openExercise({ currentTarget: { dataset: { item: { exercise_id: 31 } } } })
   assert.equal(navigation[0], '/pages/exercise/exercise?id=31')
   const template = fs.readFileSync('pages/goal/detail.wxml', 'utf8')
-  assert.match(template, /查看动作示范/)
+  assert.match(template, /class="exercise-main" bindtap="showExercisePreview"[^>]*>[\s\n]*<image class="exercise-image"/)
+  assert.doesNotMatch(template, /class="exercise-demo"/)
   assert.match(template, /disabled="\{\{actionLoading \|\| exerciseStatus\[item\.id\]\.is_done\}\}"/)
 })
 

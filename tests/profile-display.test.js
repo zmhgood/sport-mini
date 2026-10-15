@@ -18,6 +18,7 @@ for (const [envVersion, version, expected] of [
     const text = visibleText('pages/profile/profile.wxml', page.data)
     assert.match(text, new RegExp(`爸妈动起来 ${expected.replaceAll('.', '\\.')}`))
     assert.doesNotMatch(text, /v1\.0\.0/)
+    assert.doesNotMatch(text, /专为老年人设计的肌肉锻炼助手/)
   })
 }
 
