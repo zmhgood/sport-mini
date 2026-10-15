@@ -11,6 +11,7 @@
   <!-- 目标信息 -->
   <view class="goal-header">
     <text class="goal-name">{{goal.name}}</text>
+    <text class="plan-badge">{{goal.plan_type === 'personal' ? '个人计划' : '共同计划'}}{{goal.is_active == false ? ' · 已暂停' : ''}}</text>
     <view class="goal-stats">
       <text class="stat-item">{{goal.memberCount || 0}}人参与</text>
       <text class="stat-divider">|</text>
@@ -18,10 +19,21 @@
     </view>
   </view>
 
+  <view class="more-area">
+    <button class="primary-action join-action" wx:if="{{goal.plan_type === 'shared' && !goal.is_participating && goal.is_active != false}}" bindtap="joinGoal" loading="{{starting}}" disabled="{{starting}}">加入并开始</button>
+    <view class="more-toggle" bindtap="toggleMore">更多 {{showMore ? '⌃' : '⌄'}}</view>
+    <view class="more-menu" wx:if="{{showMore}}">
+      <text wx:if="{{goal.can_manage}}" bindtap="editGoal">编辑计划</text>
+      <text wx:if="{{goal.can_manage && goal.is_active != false}}" bindtap="setGoalActive" data-active="false">暂停计划</text>
+      <text wx:if="{{goal.can_manage && goal.is_active == false}}" bindtap="setGoalActive" data-active="true">恢复计划</text>
+      <text wx:if="{{goal.plan_type === 'shared' && goal.is_participating}}" bindtap="leaveGoal">退出共同计划</text>
+    </view>
+  </view>
+
   <!-- 今日进度 -->
   <view class="section">
     <view class="section-header">
-      <text class="section-title">今日进度</text>
+      <text class="section-title">{{historicalView ? progressDate + ' 进度' : '今日进度'}}</text>
       <text class="section-action" bindtap="goProgress">查看详情</text>
     </view>
     <view class="progress-list">
@@ -60,18 +72,25 @@
     <view class="section-title">锻炼动作</view>
     <view class="exercise-list">
       <view class="exercise-item" wx:for="{{goal.exercises}}" wx:key="id">
-        <image class="exercise-image" src="{{item.exercise.image_url || '/images/exercise/default-exercise.jpg'}}" mode="aspectFit"></image>
-        <view class="exercise-info">
-          <text class="exercise-name">{{item.exercise.name}}</text>
-          <text class="exercise-target">{{item.exercise.target_muscle}}</text>
-          <text class="exercise-sets">{{item.sets}}组 × {{item.reps}}次</text>
+        <view class="exercise-main">
+          <image class="exercise-image" src="{{item.exercise.image_url || '/images/exercise/default-exercise.jpg'}}" mode="aspectFit"></image>
+          <view class="exercise-info">
+            <text class="exercise-name">{{item.exercise.name || item.exercise_name || item.name}}</text>
+            <text class="exercise-target">{{item.exercise.target_muscle}}</text>
+            <text class="exercise-sets">{{item.sets}}组 × {{item.reps}}次</text>
+            <text class="exercise-demo" bindtap="openExercise" data-item="{{item}}">查看动作示范</text>
+          </view>
         </view>
-        <button class="btn-start {{exerciseStatus[item.id].is_done ? 'btn-done' : ''}}" 
-                bindtap="startExercise" loading="{{starting}}" disabled="{{starting}}"
-                data-index="{{index}}" 
-                data-item="{{item}}">
-          {{exerciseStatus[item.id].is_done ? '已完成' : exerciseStatus[item.id].has_progress ? '继续锻炼' : '开始锻炼'}}
-        </button>
+        <view class="exercise-actions" wx:if="{{canSubmit}}">
+          <button class="primary-action" bindtap="completeAll" loading="{{actionLoading}}" disabled="{{actionLoading || exerciseStatus[item.id].is_done}}" data-item="{{item}}">{{exerciseStatus[item.id].is_done ? '已完成' : '完成全部'}}</button>
+          <text class="partial-toggle" bindtap="togglePartial" data-item="{{item}}">{{partialSets[item.id] ? '收起分组' : '部分完成'}}</text>
+        </view>
+        <text class="readonly-action" wx:elif="{{historicalView && canRecord}}">历史进度仅供查看</text>
+        <text class="readonly-action" wx:elif="{{goal.is_active == false && canRecord}}">计划已暂停</text>
+        <view class="partial-panel" wx:if="{{partialSets[item.id] && canSubmit}}">
+          <view class="partial-set {{partialChecked ? 'checked' : ''}}" wx:for="{{partialSets[item.id]}}" wx:for-item="partialChecked" wx:key="index" bindtap="togglePartialSet" data-id="{{item.id}}" data-index="{{index}}">第 {{index + 1}} 组　{{partialChecked ? '✓' : '○'}}</view>
+          <button class="partial-save" bindtap="savePartial" data-id="{{item.id}}" loading="{{actionLoading}}" disabled="{{actionLoading}}">保存已完成组</button>
+        </view>
       </view>
     </view>
   </view>

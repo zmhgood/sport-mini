@@ -7,6 +7,14 @@ Page({
     loadError: '',
     goalId: null,
     starting: false,
+    actionLoading: false,
+    showMore: false,
+    partialSets: {},
+    progressDate: '',
+    canRecord: false,
+    canSubmit: false,
+    currentDate: '',
+    historicalView: false,
     goal: null,
     progress: null,
     currentUserId: null,
@@ -48,7 +56,18 @@ Page({
         this.loadProgress(this.data.selectedDate)
       ])
       goal.memberCount = (progressData.progress.member_stats || []).filter(member => member.is_current_member !== false).length
-      this.setData({ goal, ...progressData })
+      const progressDate = progressData.progress.date || this.data.selectedDate || goal.current_date
+      const canRecord = goal.plan_type === 'personal'
+        ? goal.executor_id == this.data.currentUserId
+        : !!goal.is_participating
+      const currentDate = goal.current_date || ''
+      const canSubmit = canRecord && !!currentDate && progressDate === currentDate && goal.is_active !== false && goal.is_active !== 0
+      const historicalView = !!(currentDate && progressDate && progressDate !== currentDate)
+      if (historicalView) {
+        goal.exercises = (progressData.progress.exercises || []).map(item => ({ ...item, exercise: item.exercise || {} }))
+        goal.exerciseCount = goal.exercises.length
+      }
+      this.setData({ goal, ...progressData, progressDate, currentDate, canRecord, canSubmit, historicalView })
     } catch (err) {
       this.setData({ loadError: '目标信息加载失败，请重试' })
     } finally {
@@ -61,8 +80,10 @@ Page({
     const res = await api.request(`/goals/${this.data.goalId}`, 'GET')
     if (res.code !== 0 || !res.data) throw new Error('目标详情加载失败')
     const goal = res.data
+    goal.plan_type = goal.plan_type || 'shared'
     goal.memberCount = (goal.members && goal.members.length) || 0
     goal.exerciseCount = (goal.exercises && goal.exercises.length) || 0
+    goal.exercises = (goal.exercises || []).map(item => ({ ...item, exercise: item.exercise || {} }))
     return goal
   },
 
@@ -126,7 +147,56 @@ Page({
 
 
   goProgress() {
-    wx.navigateTo({ url: `/pages/goal/progress?id=${this.data.goalId}` })
+    wx.navigateTo({ url: `/pages/goal/progress?id=${this.data.goalId}&date=${this.data.progressDate || (this.data.goal || {}).current_date || ''}` })
+  },
+
+  toggleMore() { this.setData({ showMore: !this.data.showMore }) },
+
+  editGoal() {
+    if (!this.data.goal || !this.data.goal.can_manage) return
+    wx.navigateTo({ url: `/pages/goal/create?id=${this.data.goalId}&family_id=${this.data.goal.family_id || ''}` })
+  },
+
+  async setGoalActive(e) {
+    if (this.data.actionLoading || !this.data.goal || !this.data.goal.can_manage) return
+    const active = e.currentTarget.dataset.active === 'true'
+    this.setData({ actionLoading: true })
+    try {
+      const res = await api.request(`/goals/${this.data.goalId}`, 'PUT', { is_active: active })
+      if (res.code !== 0) throw new Error(res.message || '操作失败')
+      await this.loadDetails()
+      wx.showToast({ title: active ? '计划已恢复' : '计划已暂停', icon: 'success' })
+    } catch (err) { wx.showToast({ title: err.message || '操作失败', icon: 'none' }) }
+    finally { this.setData({ actionLoading: false, showMore: false }) }
+  },
+
+  async joinGoal() {
+    const { goal, goalId, currentUserId } = this.data
+    if (!goal || goal.plan_type !== 'shared' || goal.is_participating || this.data.starting) return
+    if (!currentUserId) { wx.navigateTo({ url: '/pages/login/login' }); return }
+    this.setData({ starting: true })
+    try {
+      const res = await api.request(`/goals/${goalId}/members`, 'POST', { user_id: Number(currentUserId) })
+      if (res.code !== 0) throw new Error(res.message || '加入失败')
+      await this.loadDetails()
+      wx.showToast({ title: '已加入并开始', icon: 'success' })
+    } catch (err) { wx.showToast({ title: err.message || '加入失败，请重试', icon: 'none' }) }
+    finally { this.setData({ starting: false }) }
+  },
+
+  leaveGoal() {
+    if (!this.data.goal || this.data.goal.plan_type !== 'shared' || !this.data.goal.is_participating) return
+    wx.showModal({ title: '退出共同计划', content: '退出后将不再记录你的计划进度。', success: async result => {
+      if (!result.confirm) return
+      this.setData({ actionLoading: true })
+      try {
+        const res = await api.request(`/goals/${this.data.goalId}/members/me`, 'DELETE')
+        if (res.code !== 0) throw new Error(res.message || '退出失败')
+        await this.loadDetails()
+        wx.showToast({ title: '已退出计划', icon: 'success' })
+      } catch (err) { wx.showToast({ title: err.message || '退出失败，请重试', icon: 'none' }) }
+      finally { this.setData({ actionLoading: false, showMore: false }) }
+    } })
   },
 
   async startExercise(e) {
@@ -136,45 +206,65 @@ Page({
       wx.navigateTo({ url: '/pages/login/login' })
       return
     }
-    this.setData({ starting: true })
-    try {
-      const participating = (goal.members || []).some(member => member.user_id == currentUserId)
-      if (!participating) {
-        const confirmed = await new Promise(resolve => wx.showModal({
-          title: '加入锻炼目标',
-          content: '您还未参与这个目标。加入后即可记录自己的锻炼进度。',
-          confirmText: '加入并锻炼',
-          success: result => resolve(result.confirm),
-          fail: () => resolve(false)
-        }))
-        if (!confirmed) return
-        const res = await api.request(`/goals/${goalId}/members`, 'POST', { user_id: Number(currentUserId) })
-        if (res.code !== 0) throw new Error(res.message || '加入目标失败')
-        // 刷新参与状态，防止返回后再次重复加入。
-        const updatedGoal = await this.loadGoal()
-        this.setData({ goal: updatedGoal })
-      }
-      this.openExercise(e)
-    } catch (err) {
-      wx.showToast({ title: err.message || '开始锻炼失败，请重试', icon: 'none' })
-    } finally {
-      this.setData({ starting: false })
+    if (goal.plan_type === 'personal' && goal.executor_id != currentUserId) return
+    if (goal.plan_type === 'shared' && !goal.is_participating) return
+    this.openExercise(e)
+  },
+
+  async completeAll(e) {
+    const item = e.currentTarget.dataset.item
+    if (this.data.actionLoading || !this.mayRecord()) return
+    await this.saveCompletion(item.id, item.sets)
+  },
+
+  mayRecord() {
+    const goal = this.data.goal || {}
+    const participant = goal.plan_type === 'personal'
+      ? goal.executor_id == this.data.currentUserId
+      : !!goal.is_participating
+    return participant && this.data.canSubmit && this.data.progressDate === goal.current_date
+  },
+
+  togglePartial(e) {
+    const item = e.currentTarget.dataset.item
+    const partialSets = { ...this.data.partialSets }
+    if (partialSets[item.id]) { delete partialSets[item.id] } else {
+      partialSets[item.id] = Array.from({ length: Number(item.sets) || 0 }, (_, i) => i < (this.data.exerciseStatus[item.id] || {}).completed_sets)
     }
+    this.setData({ partialSets })
+  },
+
+  togglePartialSet(e) {
+    const { id, index } = e.currentTarget.dataset
+    const partialSets = { ...this.data.partialSets, [id]: [...this.data.partialSets[id]] }
+    partialSets[id][index] = !partialSets[id][index]
+    this.setData({ partialSets })
+  },
+
+  async savePartial(e) {
+    const id = e.currentTarget.dataset.id
+    await this.saveCompletion(id, (this.data.partialSets[id] || []).filter(Boolean).length)
+  },
+
+  async saveCompletion(goalExerciseId, completedSets) {
+    if (this.data.actionLoading || !this.mayRecord() || completedSets < 1) return
+    this.setData({ actionLoading: true })
+    try {
+      const res = await api.request(`/goals/${this.data.goalId}/complete`, 'POST', {
+        goal_exercise_id: goalExerciseId,
+        completed_sets: completedSets,
+        date: this.data.progressDate || (this.data.goal || {}).current_date
+      })
+      if (res.code !== 0) throw new Error(res.message || '记录失败')
+      await this.loadDetails()
+      this.setData({ partialSets: { ...this.data.partialSets, [goalExerciseId]: null } })
+      wx.showToast({ title: '已记录', icon: 'success' })
+    } catch (err) { wx.showToast({ title: err.message || '记录失败，请重试', icon: 'none' }) }
+    finally { this.setData({ actionLoading: false }) }
   },
 
   openExercise(e) {
     const item = e.currentTarget.dataset.item
-    // 跳转到锻炼执行页面，传递动作信息
-    const exerciseData = encodeURIComponent(JSON.stringify({
-      goal_exercise_id: item.id,
-      exercise_id: item.exercise_id,
-      name: item.exercise.name,
-      sets: item.sets,
-      reps: item.reps,
-      image_url: item.exercise.image_url
-    }))
-    wx.navigateTo({ 
-      url: `/pages/goal/progress?goal_id=${this.data.goalId}&exercise=${exerciseData}`
-    })
+    wx.navigateTo({ url: `/pages/exercise/exercise?id=${item.exercise_id}` })
   }
 })

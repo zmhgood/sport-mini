@@ -1,29 +1,51 @@
 <!--pages/goal/create.wxml-->
 <view class="container">
+  <view class="load-error" wx:if="{{isEditing && goalLoading}}">正在读取计划…</view>
+  <view class="load-error" wx:if="{{goalError}}">
+    <text>{{goalError}}</text>
+    <button class="retry-button" bindtap="retryLoadGoal">重试读取计划</button>
+  </view>
+  <view class="load-error" wx:if="{{membersError}}">
+    <text>{{membersError}}</text>
+    <button class="retry-button" bindtap="loadMembers">重试加载成员</button>
+  </view>
+  <view class="load-error" wx:elif="{{membersLoading}}">正在加载家庭成员…</view>
   <!-- 目标名称 -->
   <view class="section">
-    <view class="section-title">目标名称</view>
+    <view class="section-title">计划名称</view>
     <input class="name-input" placeholder="例如：每日健身计划" value="{{name}}" bindinput="onNameInput" cursor-spacing="96" />
   </view>
 
-  <!-- 选择成员 -->
-  <view class="section">
+  <view class="section" wx:if="{{!isEditing}}">
+    <view class="section-title">计划类型</view>
+    <view class="plan-types">
+      <view class="plan-type {{planType === 'personal' ? 'active' : ''}}" data-type="personal" bindtap="setPlanType">个人计划</view>
+      <view class="plan-type {{planType === 'shared' ? 'active' : ''}}" data-type="shared" bindtap="setPlanType">共同计划</view>
+    </view>
+    <text class="plan-hint" wx:if="{{planType === 'personal'}}">每天自动安排；家庭管理员可为家人创建</text>
+    <text class="plan-hint" wx:else>家庭成员可自愿加入；创建时只选择自己是否参加</text>
+    <view class="self-participation" wx:if="{{planType === 'shared'}}" bindtap="toggleSharedParticipation">
+      <text class="self-check {{participateInShared ? 'checked' : ''}}">{{participateInShared ? '✓' : ''}}</text>
+      <text>我参加这个计划</text>
+    </view>
+  </view>
+
+  <!-- 个人计划执行成员 -->
+  <view class="section" wx:if="{{planType === 'personal'}}">
     <view class="section-header">
-      <text class="section-title">选择成员</text>
-      <text class="selected-count" wx:if="{{members.length > 0}}">已选 {{selectedMemberCount}} 人</text>
+      <text class="section-title">计划成员</text>
     </view>
     <view class="member-grid" wx:if="{{members.length > 0}}">
-      <view class="member-item {{item.selected ? 'selected' : ''}}" 
+      <view class="member-item {{item.selected ? 'selected' : ''}} {{isEditing ? 'read-only' : ''}}"
             wx:for="{{members}}" wx:key="user_id" 
-            bindtap="toggleMember" data-id="{{item.user_id}}">
+            bindtap="onExecutorChange" data-id="{{item.user_id}}" wx:if="{{isEditing ? item.user_id == executorId : (isAdmin || item.user_id == currentUserId)}}">
         <image class="member-avatar" src="{{item.user.avatar_url || '/images/default-avatar.svg'}}"></image>
-        <text class="member-name">{{item.user.nick_name || '老年朋友'}}</text>
+        <text class="member-name">{{item.user.nick_name || '家庭成员'}}{{item.user_id == currentUserId ? '（我）' : ''}}</text>
         <view class="check-icon" wx:if="{{item.selected}}">✓</view>
       </view>
     </view>
-    <view class="empty-list" wx:else>
-      <text>暂无家庭成员，请先邀请成员加入家庭</text>
-    </view>
+    <text class="plan-hint" wx:if="{{isEditing}}">执行成员仅展示，不可修改</text>
+    <text class="plan-hint" wx:elif="{{!isAdmin}}">个人计划只由本人执行</text>
   </view>
 
   <!-- 选择动作 -->
@@ -53,7 +75,7 @@
 
   <!-- 提交按钮 -->
   <view class="submit-section">
-    <button class="btn-submit" bindtap="createGoal" loading="{{loading}}">创建目标</button>
+      <button class="btn-submit" bindtap="createGoal" loading="{{loading}}" disabled="{{loading || membersLoading || !membersLoaded || membersError || goalLoading || goalError || (isEditing && !goalLoaded)}}">{{isEditing ? '保存修改' : '创建计划'}}</button>
   </view>
 </view>
 

@@ -16,7 +16,10 @@ function loadPage(relativePath, request, storage = {}, options = {}) {
     Page(value) { definition = value },
     require(modulePath) {
       if (!modulePath.endsWith('/api')) return require(path.resolve(path.dirname(filename), modulePath))
-      return { request(url, method, data) { calls.push(url); return request(url, method, data) } }
+      return {
+        request(url, method, data) { calls.push(url); return request(url, method, data) },
+        isLoggedIn: () => !!storage.token
+      }
     },
     getApp: () => ({ globalData: {} }),
     getCurrentPages: () => options.pages || [{}],

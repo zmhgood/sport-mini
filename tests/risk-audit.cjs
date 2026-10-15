@@ -44,10 +44,10 @@ async function main() {
     await page.getExercises()
     assert.deepEqual(Array.from(page.data.exercises, x => x.id), [202, 207], 'Upper limb tab must include upper/shoulder and exclude core/lower')
   })
-  await probe('GOAL-05', 'pages/goal/create.js:187', async () => {
+  await probe('GOAL-05', 'pages/goal/create.js:239', async () => {
     const wait = deferred()
     const { page, calls } = loadPage('pages/goal/create.js', () => wait.promise)
-    page.setData({ familyId: 700, name: 'Synthetic goal', members: [{ user_id: 701, selected: true }],
+    page.setData({ familyId: 700, membersLoaded: true, name: 'Synthetic goal', planType: 'personal', executorId: 701,
       selectedExercises: [{ exercise_id: 702, sets: 3, reps: 10 }] })
     const pending = [page.createGoal(), page.createGoal()]
     const count = calls.length

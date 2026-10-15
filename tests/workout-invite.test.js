@@ -5,46 +5,49 @@ const ok = data => ({ code: 0, data })
 const exercise = { id: 3, exercise_id: 1, sets: 3, reps: 10, exercise: { name: '测试动作' } }
 function detail(request, confirm = true, members = []) {
   const navigations = [], errors = []
+  let modalCount = 0
   const result = loadPage('pages/goal/detail.js', request, { userId: 7 }, { wx: {
-    showModal: ({ success }) => success({ confirm }),
+    showModal: ({ success }) => { modalCount++; success({ confirm }) },
     navigateTo: ({ url }) => navigations.push(url),
     showToast: ({ title }) => errors.push(title)
   } })
   result.page.onLoad({ id: 9 })
-  result.page.setData({ loading: false, goal: { members }, currentUserId: 7 })
-  return { ...result, navigations, errors }
+  result.page.setData({ loading: false, goal: { plan_type: 'shared', is_participating: members.some(member => member.user_id == 7), members }, currentUserId: 7 })
+  return { ...result, navigations, errors, get modalCount() { return modalCount } }
 }
-const start = page => page.startExercise({ currentTarget: { dataset: { item: exercise } } })
-test('nonparticipant joins the goal before opening workout; returning does not join twice', async () => {
+test('shared-plan join sends only the current user; returning does not join twice', async () => {
   const writes = []
-  const { page, navigations } = detail(async (url, method, data) => {
+  const { page, navigations, modalCount } = detail(async (url, method, data) => {
     if (method === 'POST') { writes.push({ url, data }); return ok() }
     return ok({ members: [{ user_id: 7 }], exercises: [exercise] })
   })
-  await start(page)
+  page.loadDetails = async () => page.setData({ goal: { ...page.data.goal, is_participating: true, members: [{ user_id: 7 }] } })
+  await page.joinGoal()
   assert.equal(writes.length, 1)
   assert.equal(writes[0].url, '/goals/9/members')
   assert.equal(writes[0].data.user_id, 7)
-  assert.match(navigations[0], /^\/pages\/goal\/progress\?goal_id=9&exercise=/)
-  await start(page)
+  assert.equal(modalCount, 0)
+  assert.equal(navigations.length, 0)
+  await page.joinGoal()
   assert.equal(writes.length, 1)
 })
-test('cancelled join has no request and no navigation', async () => {
-  const { page, calls, navigations } = detail(() => { throw Error('unexpected') }, false)
-  await start(page); assert.equal(calls.length, 0); assert.equal(navigations.length, 0)
+test('personal plans cannot be joined by a non-executor', async () => {
+  const { page, calls, navigations } = detail(() => { throw Error('unexpected') })
+  page.setData({ goal: { plan_type: 'personal', executor_id: 8, is_participating: false } })
+  await page.joinGoal(); assert.equal(calls.length, 0); assert.equal(navigations.length, 0)
 })
-test('join failure preserves error and prevents workout navigation', async () => {
+test('shared-plan join failure preserves error and does not navigate', async () => {
   const { page, navigations, errors } = detail(async () => { throw Error('无权限操作') })
-  await start(page); assert.equal(navigations.length, 0); assert.equal(errors[0], '无权限操作'); assert.equal(page.data.starting, false)
+  await page.joinGoal(); assert.equal(navigations.length, 0); assert.equal(errors[0], '无权限操作'); assert.equal(page.data.starting, false)
 })
-test('existing participant starts without an extra API write', async () => {
+test('existing participant cannot join again or navigate to workout automatically', async () => {
   const { page, calls, navigations } = detail(() => { throw Error('unexpected') }, true, [{ user_id: 7 }])
-  await start(page); assert.equal(calls.length, 0); assert.equal(navigations.length, 1)
+  await page.joinGoal(); assert.equal(calls.length, 0); assert.equal(navigations.length, 0)
 })
-test('double start cannot create duplicate membership while pending', async () => {
+test('double join cannot create duplicate membership while pending', async () => {
   const wait = deferred()
   const { page, calls } = detail(url => url.endsWith('/members') ? wait.promise : Promise.resolve(ok({ members: [{ user_id: 7 }] })))
-  const first = start(page); await Promise.resolve(); await start(page)
+  const first = page.joinGoal(); await Promise.resolve(); await page.joinGoal()
   assert.equal(calls.length, 1); wait.resolve(ok()); await first
 })
 function progress(request) {

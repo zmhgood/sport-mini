@@ -4,6 +4,7 @@ const api = require('../../utils/api')
 Page({
   data: {
     goalId: null,
+    progressDate: '',
     exercise: null,  // 当前锻炼的动作信息
     setsList: [],    // 组数列表，用于 checkbox
     completedSets: 0,
@@ -44,17 +45,19 @@ Page({
       }
       this.setData({ 
         goalId: options.goal_id,
-        exercise
+        exercise,
+        progressDate: options.date || ''
       })
       this.initSetsList()
       this.loadExerciseProgress() // 加载已有进度
     } else if (options.goal_id) {
       // 进度查看模式
       this.setData({ goalId: options.goal_id })
+      this.setData({ progressDate: options.date || '' })
       this.loadProgress()
     } else if (options.id) {
       // 兼容旧的路由方式
-      this.setData({ goalId: options.id })
+      this.setData({ goalId: options.id, progressDate: options.date || '' })
       this.loadProgress()
     }
   },
@@ -86,9 +89,11 @@ Page({
 
     this.setData({ progressLoading: true, progressError: '' })
     try {
-      const res = await api.request(`/goals/${goalId}/progress`, 'GET')
+      const dateParam = this.data.progressDate ? `?date=${this.data.progressDate}` : ''
+      const res = await api.request(`/goals/${goalId}/progress${dateParam}`, 'GET')
       if (res.code !== 0 || !res.data) throw new Error(res.message || '进度加载失败')
       if (res.code === 0 && res.data) {
+        this.setData({ progressDate: res.data.date || this.data.progressDate })
         // 找到当前用户的进度
         const myProgress = res.data.member_stats?.find(m => m.user_id == this.data.currentUserId)
         if (myProgress && myProgress.exercise_stats) {
@@ -148,7 +153,8 @@ Page({
     try {
       const res = await api.request(`/goals/${goalId}/complete`, 'POST', {
         goal_exercise_id: exercise.goal_exercise_id,
-        completed_sets: completedSets
+        completed_sets: completedSets,
+        date: this.data.progressDate
       })
       if (res.code === 0) {
         this.setData({ submitted: true })
@@ -171,10 +177,12 @@ Page({
   async loadProgress() {
     this.setData({ progressLoading: true, progressError: '' })
     try {
-      const res = await api.request(`/goals/${this.data.goalId}/progress`, 'GET')
+      const dateParam = this.data.progressDate ? `?date=${this.data.progressDate}` : ''
+      const res = await api.request(`/goals/${this.data.goalId}/progress${dateParam}`, 'GET')
       if (res.code !== 0 || !res.data) throw new Error(res.message || '进度加载失败')
       if (res.code === 0 && res.data) {
         const progress = res.data
+        this.setData({ progressDate: progress.date || this.data.progressDate })
         const colors = this.data.segmentColors
         
         // 找到当前用户的进度
@@ -225,7 +233,8 @@ Page({
     try {
       const res = await api.request(`/goals/${this.data.goalId}/complete`, 'POST', {
         goal_exercise_id: exerciseId,
-        completed_sets: completedSets
+        completed_sets: completedSets,
+        date: this.data.progressDate
       })
       if (res.code === 0) {
         await this.loadProgress()

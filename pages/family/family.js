@@ -75,7 +75,8 @@ Page({
     return (res.data || []).map(g => ({
       ...g,
       memberCount: (g.members && g.members.length) || 0,
-      exerciseCount: (g.exercises && g.exercises.length) || 0
+      exerciseCount: (g.exercises && g.exercises.length) || 0,
+      planLabel: g.plan_type === 'personal' ? '个人计划' : '共同计划'
     }))
   },
 

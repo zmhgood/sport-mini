@@ -36,6 +36,16 @@
   color: #3B82F6;
 }
 
+.plan-types { display: flex; gap: 16rpx; }
+.plan-type { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; border: 2rpx solid #CBD5E1; border-radius: 16rpx; color: #475569; font-size: 29rpx; }
+.plan-type.active { border-color: #176B73; background: #EAF6F4; color: #135D60; font-weight: 600; }
+.plan-hint { display: block; margin-top: 16rpx; color: #64748B; font-size: 25rpx; line-height: 1.5; }
+.load-error { margin: 20rpx 24rpx; color: #9A3412; font-size: 27rpx; }
+.retry-button { min-height: 44px; margin-top: 12rpx; padding: 0 22rpx; color: #135D60; background: #EAF6F4; border-radius: 22rpx; font-size: 26rpx; }
+.self-participation { display: flex; gap: 14rpx; align-items: center; min-height: 48px; margin-top: 12rpx; color: #1E293B; font-size: 28rpx; }
+.self-check { width: 38rpx; height: 38rpx; display: flex; align-items: center; justify-content: center; border: 2rpx solid #94A3B8; border-radius: 8rpx; color: #fff; }
+.self-check.checked { border-color: #176B73; background: #176B73; }
+
 .name-input {
   width: 100%;
   height: 88rpx;

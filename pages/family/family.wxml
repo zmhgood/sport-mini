@@ -78,7 +78,7 @@
         <view class="goal-item" wx:for="{{goals}}" wx:key="id" bindtap="goGoalDetail" data-id="{{item.id}}">
           <view class="goal-info">
             <text class="goal-name">{{item.name}}</text>
-            <text class="goal-members">{{item.memberCount || 0}}人参与 · {{item.exerciseCount || 0}}个动作</text>
+            <text class="goal-members">{{item.planLabel}} · {{item.memberCount || 0}}人参与 · {{item.exerciseCount || 0}}个动作</text>
           </view>
           <text class="goal-arrow">›</text>
         </view>

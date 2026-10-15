@@ -64,6 +64,7 @@
 
     <!-- 柱状图 -->
     <view class="chart-card card">
+      <text>每日完成组数</text>
       <text wx:if="{{weekStatsLoading}}">正在加载周统计…</text>
       <view wx:elif="{{weekStatsError}}"><text>{{weekStatsError}}</text><button bindtap="retryWeekStats">重试</button></view>
       <!-- 周范围标题 -->

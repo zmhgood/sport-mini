@@ -57,17 +57,21 @@
   <!-- 多家庭待完成任务 -->
   <view class="section" wx:if="{{isLoggedIn}}">
     <view class="section-header flex-between">
-      <text class="title-medium">今日任务</text>
+      <text class="title-medium">今天做什么</text>
       <text class="text-primary" wx:if="{{totalPendingGoals > 0}}">待完成 {{totalPendingGoals}} 项</text>
     </view>
     
+    <view class="empty-tip" wx:if="{{goalsLoading}}">正在加载今日安排…</view>
+    <view class="empty-tip" wx:elif="{{goalsError}}">
+      <text>{{goalsError}}</text><button class="join-family-btn-small" bindtap="loadFamilyGoals">重试</button>
+    </view>
     <!-- 按家庭分组展示任务 -->
-    <view class="families-tasks-list" wx:if="{{familiesWithGoals.length > 0}}">
-      <view class="family-tasks-card" wx:for="{{familiesWithGoals}}" wx:key="family_id" wx:for-item="family">
+    <view class="families-tasks-list" wx:elif="{{hasTodayTasks}}">
+      <view class="family-tasks-card" wx:if="{{family.goals.length > 0}}" wx:for="{{familiesWithGoals}}" wx:key="family_id" wx:for-item="family">
         <!-- 家庭标题 -->
         <view class="family-tasks-header">
           <text class="family-tasks-name">{{family.family_name}}</text>
-          <text class="family-tasks-count" wx:if="{{family.goals.length > 0}}">{{family.goals.length}}个目标</text>
+          <text class="family-tasks-count" wx:if="{{family.goals.length > 0}}">{{family.goals.length}}个计划</text>
         </view>
         
         <!-- 该家庭的目标列表 -->
@@ -76,7 +80,7 @@
                 bindtap="goToGoalDetail" data-id="{{item.id}}">
             <view class="goal-info">
               <text class="goal-name">{{item.name}}</text>
-              <text class="goal-desc">{{item.member_count}}人参与 · {{item.exercise_count}}个动作</text>
+              <text class="goal-desc">{{item.plan_type === 'personal' ? '个人安排' : '共同计划'}} · {{item.exercise_count}}个动作</text>
             </view>
             <view class="goal-progress">
               <text class="progress-text">{{item.today_completed}}/{{item.total_exercises}}</text>
@@ -89,8 +93,9 @@
     </view>
     
     <view class="empty-tip" wx:elif="{{isLoggedIn}}">
-      <text>暂无家庭任务</text>
-      <button class="join-family-btn-small" bindtap="goToJoinFamily">+加入家庭</button>
+      <text>今日无安排</text>
+      <button class="join-family-btn-small" wx:if="{{families.length > 0}}" bindtap="goToFamily">看看家人的安排</button>
+      <button class="join-family-btn-small" wx:else bindtap="goToJoinFamily">+加入家庭</button>
     </view>
     <view class="empty-tip" wx:else>请登录后查看家庭任务</view>
   </view>

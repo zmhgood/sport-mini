@@ -167,10 +167,12 @@ Page({
       if (requestId !== this._weekRequestId || token !== wx.getStorageSync('token')) return
       if (res.code !== 0 || !res.data) throw new Error(res.message || '周统计加载失败')
       if (res.code === 0 && res.data) {
-        const stats = (res.data.stats || []).map(item => {
+        const rows = res.data.stats || []
+        const maxCompleted = Math.max(1, ...rows.map(item => Number(item.count || 0)))
+        const stats = rows.map(item => {
           const totalSets = Number(item.totalSets || 0)
           const count = Number(item.count || 0)
-          const rawPercent = totalSets > 0 ? (count / totalSets) * 100 : 0
+          const rawPercent = count / maxCompleted * 100
           const barPercent = Math.min(100, rawPercent)
           return { ...item, totalSets, count, barPercent }
         })

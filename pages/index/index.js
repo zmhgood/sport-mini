@@ -14,6 +14,9 @@ Page({
     filteredExercises: [],
     muscleGroups: [],
     // 多家庭数据结构
+    goalsLoading: true,
+    goalsError: '',
+    hasTodayTasks: false,
     familiesWithGoals: [], // 所有家庭及其目标 [{family_id, family_name, goals: []}]
     totalPendingGoals: 0,  // 总待完成任务数
     families: [],
@@ -106,66 +109,40 @@ Page({
 
   // 加载家庭待完成任务（多家庭版本）
   async loadFamilyGoals() {
-    console.log('[loadFamilyGoals] 开始加载, isLoggedIn:', api.isLoggedIn())
-    if (!api.isLoggedIn()) {
-      console.log('[loadFamilyGoals] 未登录，清空数据')
-      this.setData({ familiesWithGoals: [], families: [], currentFamily: {}, totalPendingGoals: 0 })
+    const token = wx.getStorageSync('token')
+    if (!token) {
+      this._goalsRequest = null
+      this.setData({ familiesWithGoals: [], families: [], currentFamily: {}, totalPendingGoals: 0, hasTodayTasks: false, goalsLoading: false, goalsError: '' })
       return
     }
+    if (this._goalsRequest && this._goalsRequest.token === token) return
+    const request = { token }
+    this._goalsRequest = request
+    this.setData({ goalsLoading: true, goalsError: '' })
     try {
-      console.log('[loadFamilyGoals] 调用接口 /goals/families')
       const res = await api.request('/goals/families', 'GET')
-      console.log('[loadFamilyGoals] 接口返回:', res)
-      
-      if (res.code === 0 && res.data) {
-        const familiesWithGoals = res.data || []
-        console.log('[loadFamilyGoals] 获取到家庭数据:', familiesWithGoals.length, '个家庭')
-        
-        // 计算总待完成任务数
-        let totalPending = 0
-        familiesWithGoals.forEach(family => {
-          console.log('[loadFamilyGoals] 家庭:', family.family_name, '目标数:', family.goals ? family.goals.length : 0)
-          if (family.goals) {
-            family.goals.forEach(goal => {
-              const remaining = goal.total_exercises - goal.today_completed
-              if (remaining > 0) {
-                totalPending += remaining
-              }
-            })
-          }
-        })
-        
-        // 提取家庭列表（用于切换功能）
-        const families = familiesWithGoals.map(f => ({
-          id: f.family_id,
-          name: f.family_name
-        }))
-        console.log('[loadFamilyGoals] 提取的家庭列表:', families)
-        
-        // 从缓存获取上次选中的家庭
-        const cachedFamilyId = wx.getStorageSync('currentFamilyId')
-        const currentFamily = cachedFamilyId 
-          ? families.find(f => f.id === cachedFamilyId) || families[0]
-          : families[0]
-        
-        console.log('[loadFamilyGoals] 设置数据:', {familiesWithGoals, families, currentFamily, totalPending})
-        this.setData({ 
-          familiesWithGoals: familiesWithGoals,
-          families: families,
-          currentFamily: currentFamily || {},
-          totalPendingGoals: totalPending
-        }, () => {
-          console.log('[loadFamilyGoals] 数据设置完成, familiesWithGoals:', this.data.familiesWithGoals)
-        })
-      } else {
-        console.log('[loadFamilyGoals] 接口返回错误或无数据:', res)
-        this.setData({ familiesWithGoals: [], families: [], currentFamily: {}, totalPendingGoals: 0 })
-      }
+      if (this._goalsRequest !== request || wx.getStorageSync('token') !== token) return
+      if (res.code !== 0 || !Array.isArray(res.data)) throw new Error('今日安排加载失败，请重试')
+      const familiesWithGoals = res.data.map(f => ({ ...f, goals: f.goals || [] }))
+      const families = familiesWithGoals.map(f => ({ id: f.family_id, name: f.family_name }))
+      const cachedFamilyId = wx.getStorageSync('currentFamilyId')
+      const currentFamily = families.find(f => f.id == cachedFamilyId) || families[0] || {}
+      const goals = familiesWithGoals.flatMap(f => f.goals)
+      const totalPendingGoals = goals.reduce((sum, g) => sum + Math.max(0, (g.total_exercises || 0) - (g.today_completed || 0)), 0)
+      this.setData({ familiesWithGoals, families, currentFamily, totalPendingGoals, hasTodayTasks: goals.length > 0 })
     } catch (err) {
-      console.error('[loadFamilyGoals] 加载家庭目标失败:', err)
-      this.setData({ familiesWithGoals: [], families: [], currentFamily: {}, totalPendingGoals: 0 })
+      if (this._goalsRequest === request && wx.getStorageSync('token') === token) {
+        this.setData({ goalsError: '今日安排加载失败，请重试' })
+      }
+    } finally {
+      if (this._goalsRequest === request) {
+        this._goalsRequest = null
+        this.setData({ goalsLoading: false })
+      }
     }
   },
+
+  goToFamily() { wx.navigateTo({ url: '/pages/family/family' }) },
 
   // 打开家庭选择弹窗
   switchFamily() {

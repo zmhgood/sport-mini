@@ -6,6 +6,13 @@ const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-
 Page({
   data: {
     familyId: null,
+    goalId: null,
+    isEditing: false,
+    planType: 'personal',
+    participateInShared: true,
+    isAdmin: false,
+    currentUserId: null,
+    executorId: null,
     name: '',
     members: [],
     selectedMemberCount: 0,
@@ -15,34 +22,88 @@ Page({
     currentCategory: 'all',
     selectedCount: 0,
     showExerciseModal: false,
-    loading: false
+    loading: false,
+    membersLoading: false,
+    membersLoaded: false,
+    membersError: '',
+    goalLoading: false,
+    goalLoaded: false,
+    goalError: ''
   },
 
   onLoad(options) {
-    this.setData({ familyId: options.family_id })
-    this.loadMembers()
+    const currentUserId = wx.getStorageSync('userId') || (wx.getStorageSync('userInfo') || {}).id
+    this.setData({ familyId: options.family_id, goalId: options.id || null, isEditing: !!options.id, currentUserId, executorId: currentUserId })
+    if (options.id) wx.setNavigationBarTitle({ title: '编辑计划' })
     this.loadExercises()
+    if (options.id) this.loadGoal(options.id).then(() => this.loadMembers())
+    else this.loadMembers()
   },
 
   async loadMembers() {
+    this.setData({ membersLoading: true, membersError: '' })
     if (!this.data.familyId) {
-      console.error('缺少family_id参数')
+      this.setData({ membersLoading: false, membersError: '缺少家庭信息，请返回重试' })
       return
     }
     try {
       const res = await api.request(`/family/members?family_id=${this.data.familyId}`, 'GET')
-      if (res.code === 0) {
-        const members = (res.data || []).map(m => ({
-          ...m,
-          user: m.user || {},
-          selected: true // 默认全选
-        }))
-        const selectedMemberCount = members.filter(m => m.selected).length
-        this.setData({ members, selectedMemberCount })
-      }
+      if (res.code !== 0 || !Array.isArray(res.data)) throw new Error('家庭成员加载失败')
+      const members = res.data.map(m => ({
+        ...m,
+        user: m.user || {},
+        selected: m.user_id == this.data.executorId
+      }))
+      const family = await api.request(`/family/${this.data.familyId}`, 'GET')
+      if (family.code !== 0 || !family.data) throw new Error('家庭身份加载失败')
+      const current = (family.data.members || []).find(m => m.user_id == this.data.currentUserId)
+      const isAdmin = !!(current && current.role === 'admin')
+      this.setData({ members, selectedMemberCount: 1, isAdmin, executorId: this.data.executorId || this.data.currentUserId, membersLoaded: true })
     } catch (err) {
       console.error('加载成员失败:', err)
+      this.setData({ membersError: '家庭成员加载失败，请重试' })
+    } finally {
+      this.setData({ membersLoading: false })
     }
+  },
+
+  async loadGoal(goalId = this.data.goalId) {
+    this.setData({ goalLoading: true, goalError: '' })
+    try {
+      const res = await api.request(`/goals/${goalId}`, 'GET')
+      if (res.code !== 0 || !res.data) throw new Error('目标加载失败')
+      const goal = res.data
+      const pendingExercises = goal.pending_effective_date && goal.pending_exercises ? goal.pending_exercises : goal.exercises
+      const members = this.data.members.map(m => ({ ...m, selected: m.user_id == goal.executor_id }))
+      this.setData({ name: goal.name || '', planType: goal.plan_type || 'shared', executorId: goal.executor_id, members, selectedExercises: (pendingExercises || []).map(item => ({
+        exercise_id: item.exercise_id,
+        name: (item.exercise && item.exercise.name) || item.exercise_name || item.name || '',
+        sets: item.sets,
+        reps: item.reps
+      })), goalLoaded: true })
+    } catch (err) {
+      wx.showToast({ title: '目标加载失败', icon: 'none' })
+      this.setData({ goalError: '目标加载失败，请重试' })
+    } finally {
+      this.setData({ goalLoading: false })
+    }
+  },
+
+  retryLoadGoal() {
+    return this.loadGoal(this.data.goalId).then(() => this.loadMembers())
+  },
+
+  setPlanType(e) {
+    if (this.data.isEditing) return
+    this.setData({ planType: e.currentTarget.dataset.type })
+  },
+
+  toggleSharedParticipation() { this.setData({ participateInShared: !this.data.participateInShared }) },
+
+  onExecutorChange(e) {
+    if (this.data.isEditing) return
+    const executorId = e.currentTarget.dataset.id
+    this.setData({ executorId, members: this.data.members.map(m => ({ ...m, selected: m.user_id == executorId })) })
   },
 
   async loadExercises() {
@@ -72,15 +133,11 @@ Page({
   },
 
   toggleMember(e) {
+    if (this.data.planType === 'shared') return
     const id = e.currentTarget.dataset.id
-    const members = this.data.members.map(m => {
-      if (m.user_id == id) {  // 使用宽松比较，兼容数字和字符串类型
-        return { ...m, selected: !m.selected }
-      }
-      return m
-    })
-    const selectedMemberCount = members.filter(m => m.selected).length
-    this.setData({ members, selectedMemberCount })
+    if (!this.data.isAdmin && id != this.data.currentUserId) return
+    const members = this.data.members.map(m => ({ ...m, selected: m.user_id == id }))
+    this.setData({ members, selectedMemberCount: 1, executorId: id })
   },
 
   // 切换分类
@@ -181,15 +238,14 @@ Page({
   },
 
   async createGoal() {
-    if (this.data.loading || this._completed) return
+    if (this.data.loading || this._completed || this.data.membersLoading || !this.data.membersLoaded || this.data.membersError || this.data.goalLoading || this.data.goalError || (this.data.isEditing && !this.data.goalLoaded)) return
     if (!this.data.name.trim()) {
       wx.showToast({ title: '请输入目标名称', icon: 'none' })
       return
     }
 
-    const selectedMembers = this.data.members.filter(m => m.selected)
-    if (selectedMembers.length === 0) {
-      wx.showToast({ title: '请选择至少一个成员', icon: 'none' })
+    if (this.data.planType === 'personal' && !this.data.executorId) {
+      wx.showToast({ title: '请选择计划成员', icon: 'none' })
       return
     }
 
@@ -202,7 +258,8 @@ Page({
     try {
       const data = {
         name: this.data.name,
-        member_ids: selectedMembers.map(m => m.user_id),
+        plan_type: this.data.planType,
+        ...(this.data.planType === 'personal' ? { executor_id: Number(this.data.executorId) } : { member_ids: this.data.participateInShared && this.data.currentUserId ? [Number(this.data.currentUserId)] : [] }),
         exercises: this.data.selectedExercises.map(e => ({
           exercise_id: e.exercise_id,
           sets: e.sets,
@@ -216,13 +273,16 @@ Page({
         this._requestKey = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2)
       }
       data.request_id = this._requestKey
-      const res = await api.request(`/goals?family_id=${this.data.familyId}`, 'POST', data)
+      const res = this.data.isEditing
+        ? await api.request(`/goals/${this.data.goalId}`, 'PUT', { name: data.name, exercises: data.exercises })
+        : await api.request(`/goals?family_id=${this.data.familyId}`, 'POST', data)
       if (res.code === 0) {
         this._completed = true
-        wx.showToast({ title: '创建成功', icon: 'success' })
+        const pendingDate = res.data && res.data.pending_effective_date
+        wx.showToast({ title: pendingDate ? `修改将于 ${pendingDate} 生效` : (this.data.isEditing ? '保存成功' : '创建成功'), icon: 'none', duration: 2200 })
         setTimeout(() => {
           wx.navigateBack()
-        }, 1500)
+        }, pendingDate ? 2600 : 1500)
       } else {
         wx.showToast({ title: res.message || '创建失败', icon: 'none' })
       }
