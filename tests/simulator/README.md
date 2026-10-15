@@ -22,3 +22,8 @@ node tests/simulator/pages.cjs device-label
 SDK 截图默认关闭；`MINI_QA_SCREENSHOTS=1` 才启用。优先用开发者工具窗口截图留证。SDK `navigateBack` 曾返回成功但页面栈与可见窗口不一致，不在这些脚本里使用；390px返回另通过「模拟操作 → 返回」验证。遇到状态不一致，停止该轮，恢复原项目自动化连接后复测，不能把工具异常当作产品通过或失败。
 
 执行后恢复模拟请求，并重新编译清除仅在页面内存中的测试资料；不要清除用户缓存。模拟器不能替代真实 iOS/Android、输入法、系统字体、分享、账号权限及GIF/视频解码测试。
+# 动图与弹窗回归
+
+`media-popups.cjs <label>` 检查动作图文预览、进度页 GIF、图片回退、动作列表滚动、分类回顶、底部确认栏和安全区。复用上方的 `MINI_AUTOMATOR_PATH`、`MINI_AUTOMATOR_ENDPOINT` 与 `MINI_QA_OUTPUT` 环境变量。
+
+使用官方模拟器和合成计划数据，拦截并拒绝全部 API 写入。GIF 使用公开动作资源。默认结束时恢复 `wx.request`。仅在需要原生鼠标验证时传 `--hold-picker`：它会保留弹窗及请求拦截，验证后需恢复 `wx.request` 或重新编译原项目。用例通过不代表真机键盘、触屏手势已验证。

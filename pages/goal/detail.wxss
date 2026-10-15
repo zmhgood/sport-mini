@@ -1,4 +1,11 @@
 /* pages/goal/detail.wxss */
+.preview-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+.preview-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); }
+.preview-panel { position: relative; width: calc(100% - 48rpx); box-sizing: border-box; padding: 24rpx; border-radius: 24rpx; background: #FFFFFF; }
+.preview-header { display: flex; align-items: center; gap: 16rpx; margin-bottom: 16rpx; }
+.preview-title { flex: 1; min-width: 0; font-size: 34rpx; font-weight: 600; color: #1E293B; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.preview-close { flex-shrink: 0; margin: 0; width: 44px; min-width: 44px; max-width: 44px; height: 44px; padding: 0; line-height: 44px; font-size: 40rpx; color: #64748B; background: #F8FAFC; }
+.preview-close::after { border: none; }
 .container {
   min-height: 100vh;
   background: #F5F7FA;

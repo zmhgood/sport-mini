@@ -1,4 +1,5 @@
 <!--pages/goal/detail.wxml-->
+<page-meta page-style="{{previewExercise ? 'overflow: hidden;' : ''}}" />
 <view class="container">
   <view class="load-state" wx:if="{{loading}}">
     <text>正在加载，请稍候…</text>
@@ -72,13 +73,13 @@
     <view class="section-title">锻炼动作</view>
     <view class="exercise-list">
       <view class="exercise-item" wx:for="{{goal.exercises}}" wx:key="id">
-        <view class="exercise-main">
+        <view class="exercise-main" bindtap="showExercisePreview" data-item="{{item}}" aria-role="button" aria-label="查看{{item.exercise.name || item.exercise_name || item.name}}动作示范">
           <image class="exercise-image" src="{{item.exercise.image_url || '/images/exercise/default-exercise.jpg'}}" mode="aspectFit"></image>
           <view class="exercise-info">
             <text class="exercise-name">{{item.exercise.name || item.exercise_name || item.name}}</text>
             <text class="exercise-target">{{item.exercise.target_muscle}}</text>
             <text class="exercise-sets">{{item.sets}}组 × {{item.reps}}次</text>
-            <text class="exercise-demo" bindtap="openExercise" data-item="{{item}}">查看动作示范</text>
+            <text class="exercise-demo">点击查看动作示范</text>
           </view>
         </view>
         <view class="exercise-actions" wx:if="{{canSubmit}}">
@@ -114,4 +115,14 @@
 
   <!-- 操作按钮 -->
   </block>
+</view>
+<view class="preview-modal" wx:if="{{previewExercise}}">
+  <view class="preview-backdrop" bindtap="closeExercisePreview" catchtouchmove="stopPropagation"></view>
+  <view class="preview-panel" catchtap="stopPropagation" catchtouchmove="stopPropagation">
+    <view class="preview-header">
+      <text class="preview-title">{{previewExercise.name}}</text>
+      <button class="preview-close" size="mini" bindtap="closeExercisePreview" aria-label="关闭动作示范">×</button>
+    </view>
+    <exercise-media exercise="{{previewExercise}}" exercise-id="{{previewExerciseId}}" />
+  </view>
 </view>

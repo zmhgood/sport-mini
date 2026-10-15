@@ -68,11 +68,11 @@
       </view>
     </view>
 
-    <!-- 家庭目标 -->
+    <!-- 家庭计划 -->
     <view class="section">
       <view class="section-header">
-        <text class="section-title">家庭目标</text>
-        <text class="section-action" bindtap="goCreateGoal">创建目标</text>
+        <text class="section-title">家庭计划</text>
+        <text class="section-action" bindtap="goCreateGoal">创建计划</text>
       </view>
       <view class="goal-list" wx:if="{{goals.length > 0}}">
         <view class="goal-item" wx:for="{{goals}}" wx:key="id" bindtap="goGoalDetail" data-id="{{item.id}}">
@@ -84,7 +84,7 @@
         </view>
       </view>
       <view class="empty-list" wx:else>
-        <text>暂无家庭目标</text>
+        <text>暂无家庭计划</text>
       </view>
     </view>
 

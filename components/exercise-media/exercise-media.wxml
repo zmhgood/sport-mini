@@ -1,0 +1,11 @@
+<view class="media">
+  <view class="media-frame">
+    <video wx:if="{{src && isVideo && !failed}}" class="media-content" src="{{src}}" poster="{{cover}}" controls object-fit="contain" bindloadedmetadata="onLoad" binderror="onError"></video>
+    <image wx:elif="{{src && !failed}}" class="media-content" src="{{src}}" mode="aspectFit" bindload="onLoad" binderror="onError"></image>
+    <text class="media-loading" wx:if="{{loading}}">正在加载示范…</text>
+  </view>
+  <view class="media-status">
+    <text>{{message}}</text>
+    <button wx:if="{{failed || fetchError}}" class="media-retry" bindtap="retry">重试</button>
+  </view>
+</view>

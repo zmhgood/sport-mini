@@ -51,12 +51,8 @@
   margin-bottom: 24rpx;
 }
 
-.exercise-header .exercise-image {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 16rpx;
-  margin-right: 24rpx;
-}
+.exercise-demo-header { display: block; }
+.exercise-demo-header .exercise-info { margin-top: 24rpx; }
 
 .exercise-header .exercise-info {
   flex: 1;

@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "锻炼进度"
+  "navigationBarTitleText": "锻炼进度",
+  "usingComponents": { "exercise-media": "/components/exercise-media/exercise-media" }
 }

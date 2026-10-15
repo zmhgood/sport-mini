@@ -9,6 +9,8 @@ Page({
     starting: false,
     actionLoading: false,
     showMore: false,
+    previewExercise: null,
+    previewExerciseId: 0,
     partialSets: {},
     progressDate: '',
     canRecord: false,
@@ -69,7 +71,7 @@ Page({
       }
       this.setData({ goal, ...progressData, progressDate, currentDate, canRecord, canSubmit, historicalView })
     } catch (err) {
-      this.setData({ loadError: '目标信息加载失败，请重试' })
+      this.setData({ loadError: '计划信息加载失败，请重试' })
     } finally {
       this._loadInProgress = false
       this.setData({ loading: false })
@@ -78,7 +80,7 @@ Page({
 
   async loadGoal() {
     const res = await api.request(`/goals/${this.data.goalId}`, 'GET')
-    if (res.code !== 0 || !res.data) throw new Error('目标详情加载失败')
+    if (res.code !== 0 || !res.data) throw new Error('计划详情加载失败')
     const goal = res.data
     goal.plan_type = goal.plan_type || 'shared'
     goal.memberCount = (goal.members && goal.members.length) || 0
@@ -91,7 +93,7 @@ Page({
     const queryDate = date || ''
     const dateParam = queryDate ? `?date=${queryDate}` : ''
     const res = await api.request(`/goals/${this.data.goalId}/progress${dateParam}`, 'GET')
-    if (res.code !== 0 || !res.data) throw new Error('目标进度加载失败')
+    if (res.code !== 0 || !res.data) throw new Error('计划进度加载失败')
     const progress = res.data
     // 为每个动作添加颜色和计算进度
     const colors = this.data.segmentColors
@@ -262,6 +264,18 @@ Page({
     } catch (err) { wx.showToast({ title: err.message || '记录失败，请重试', icon: 'none' }) }
     finally { this.setData({ actionLoading: false }) }
   },
+
+  showExercisePreview(e) {
+    const item = e.currentTarget.dataset.item
+    if (!item) return
+    this.setData({ previewExercise: { ...item.exercise, name: item.exercise?.name || item.exercise_name || item.name }, previewExerciseId: Number(item.exercise_id || item.exercise?.id) || 0 })
+  },
+
+  closeExercisePreview() {
+    this.setData({ previewExercise: null, previewExerciseId: 0 })
+  },
+
+  stopPropagation() {},
 
   openExercise(e) {
     const item = e.currentTarget.dataset.item

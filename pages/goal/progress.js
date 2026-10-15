@@ -40,7 +40,7 @@ Page({
       // 锻炼模式：单个动作锻炼
       let exercise
       try { exercise = JSON.parse(decodeURIComponent(options.exercise)) } catch (err) {
-        this.setData({ progressError: '动作参数无效，请返回目标页重新打开' })
+        this.setData({ progressError: '动作参数无效，请返回计划页重新打开' })
         return
       }
       this.setData({ 

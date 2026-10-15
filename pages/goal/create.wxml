@@ -1,4 +1,5 @@
 <!--pages/goal/create.wxml-->
+<page-meta page-style="{{showExerciseModal ? 'overflow: hidden;' : ''}}" />
 <view class="container">
   <view class="load-error" wx:if="{{isEditing && goalLoading}}">正在读取计划…</view>
   <view class="load-error" wx:if="{{goalError}}">
@@ -80,14 +81,15 @@
 </view>
 
 <!-- 动作选择弹窗 -->
-<view class="modal" wx:if="{{showExerciseModal}}" bindtap="closeExerciseModal">
+<view class="modal" wx:if="{{showExerciseModal}}">
+  <view class="modal-backdrop" bindtap="closeExerciseModal" catchtouchmove="stopPropagation"></view>
   <view class="modal-content" catchtap="stopPropagation">
-    <view class="modal-header">
+    <view class="modal-header" catchtouchmove="stopPropagation">
       <text class="modal-title">选择动作 (可多选)</text>
-      <text class="modal-close" bindtap="closeExerciseModal">×</text>
+      <button class="modal-close" size="mini" bindtap="closeExerciseModal" aria-label="关闭动作选择">×</button>
     </view>
     <!-- 分类标签 -->
-    <view class="category-tabs">
+    <view class="category-tabs" catchtouchmove="stopPropagation">
       <view class="category-tab {{currentCategory === 'all' ? 'active' : ''}}" 
             bindtap="switchCategory" data-category="all">全部</view>
       <view class="category-tab {{currentCategory === 'upper' ? 'active' : ''}}" 
@@ -97,7 +99,9 @@
       <view class="category-tab {{currentCategory === 'lower' ? 'active' : ''}}" 
             bindtap="switchCategory" data-category="lower">下肢</view>
     </view>
-    <scroll-view class="modal-body" scroll-y>
+    <scroll-view class="modal-body" scroll-y scroll-into-view="{{modalScrollTarget}}">
+      <view id="exercise-list-start"></view>
+      <view class="modal-list">
       <view class="exercise-option {{item._selected ? 'selected' : ''}}" 
             wx:for="{{filteredExerciseList}}" wx:key="id" 
             bindtap="selectExercise" data-item="{{item}}">
@@ -113,8 +117,9 @@
       <view class="empty-list" wx:if="{{filteredExerciseList.length === 0}}">
         <text>该分类暂无动作</text>
       </view>
+      </view>
     </scroll-view>
-    <view class="modal-footer">
+    <view class="modal-footer" catchtouchmove="stopPropagation">
       <text class="selected-count">已选择 {{selectedCount}} 个动作</text>
       <button class="btn-confirm" bindtap="confirmExercises">确认选择</button>
     </view>

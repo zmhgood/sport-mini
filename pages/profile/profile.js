@@ -28,8 +28,8 @@ Page({
     canGoPrev: true,        // 是否可以向左滑动
     canGoNext: true,        // 是否可以向右滑动
     settings: [
-      { id: 'family', name: '我的家庭', value: '管理', icon: '/images/icons/family.svg' },
-      { id: 'goals', name: '锻炼目标', value: '查看', icon: '/images/icons/goal.svg' },
+      { id: 'family', name: '家庭成员和计划', value: '管理', icon: '/images/icons/family.svg' },
+      { id: 'goals', name: '我的锻炼计划', value: '查看', icon: '/images/icons/goal.svg' },
       { id: 'profile', name: '个人信息', value: '编辑', icon: '/images/icons/profile-active.svg' },
       { id: 'fontSize', name: '字体大小', value: '暂未开放', icon: '/images/icons/text-size.svg' },
       { id: 'voice', name: '语音播报', value: '暂未开放', icon: '/images/icons/volume.svg' },

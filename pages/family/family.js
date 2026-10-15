@@ -71,7 +71,7 @@ Page({
 
   async loadGoals(familyId) {
     const res = await api.request(`/goals/family?family_id=${familyId}`, 'GET')
-    if (res.code !== 0) throw new Error('家庭目标加载失败')
+    if (res.code !== 0) throw new Error('家庭计划加载失败')
     return (res.data || []).map(g => ({
       ...g,
       memberCount: (g.members && g.members.length) || 0,

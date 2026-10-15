@@ -22,6 +22,7 @@ Page({
     currentCategory: 'all',
     selectedCount: 0,
     showExerciseModal: false,
+    modalScrollTarget: 'exercise-list-start',
     loading: false,
     membersLoading: false,
     membersLoaded: false,
@@ -71,7 +72,7 @@ Page({
     this.setData({ goalLoading: true, goalError: '' })
     try {
       const res = await api.request(`/goals/${goalId}`, 'GET')
-      if (res.code !== 0 || !res.data) throw new Error('目标加载失败')
+      if (res.code !== 0 || !res.data) throw new Error('计划加载失败')
       const goal = res.data
       const pendingExercises = goal.pending_effective_date && goal.pending_exercises ? goal.pending_exercises : goal.exercises
       const members = this.data.members.map(m => ({ ...m, selected: m.user_id == goal.executor_id }))
@@ -82,8 +83,8 @@ Page({
         reps: item.reps
       })), goalLoaded: true })
     } catch (err) {
-      wx.showToast({ title: '目标加载失败', icon: 'none' })
-      this.setData({ goalError: '目标加载失败，请重试' })
+      wx.showToast({ title: '计划加载失败', icon: 'none' })
+      this.setData({ goalError: '计划加载失败，请重试' })
     } finally {
       this.setData({ goalLoading: false })
     }
@@ -148,10 +149,13 @@ Page({
     if (category !== 'all') {
       filtered = exerciseList.filter(e => e._category === category)
     }
-    this.setData({ currentCategory: category, filteredExerciseList: filtered })
+    this.setData({ currentCategory: category, filteredExerciseList: filtered, modalScrollTarget: '' }, () => {
+      this.setData({ modalScrollTarget: 'exercise-list-start' })
+    })
   },
 
   addExercise() {
+    wx.hideKeyboard?.()
     // 打开弹窗前，同步已选择状态到 exerciseList
     const selectedIds = this.data.selectedExercises.map(e => e.exercise_id)
     const exerciseList = this.data.exerciseList.map(e => ({
@@ -164,7 +168,8 @@ Page({
       currentCategory: 'all',
       filteredExerciseList: exerciseList,
       selectedCount: selectedIds.length,
-      showExerciseModal: true 
+      showExerciseModal: true,
+      modalScrollTarget: 'exercise-list-start'
     })
   },
 
@@ -240,7 +245,7 @@ Page({
   async createGoal() {
     if (this.data.loading || this._completed || this.data.membersLoading || !this.data.membersLoaded || this.data.membersError || this.data.goalLoading || this.data.goalError || (this.data.isEditing && !this.data.goalLoaded)) return
     if (!this.data.name.trim()) {
-      wx.showToast({ title: '请输入目标名称', icon: 'none' })
+      wx.showToast({ title: '请输入计划名称', icon: 'none' })
       return
     }
 

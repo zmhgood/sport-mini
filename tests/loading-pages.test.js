@@ -25,7 +25,7 @@ test('family initially renders loading, never a false no-family message', async 
   const list = deferred(), detail = deferred(), goals = deferred()
   const { page } = loadPage(familyJS, url => url === '/families' ? list.promise : url === '/family/4' ? detail.promise : goals.promise, { userId: 7 })
   assert.match(visibleText(familyWXML, page.data), /正在加载/)
-  assert.doesNotMatch(visibleText(familyWXML, page.data), /未加入家庭|暂无家庭目标/)
+  assert.doesNotMatch(visibleText(familyWXML, page.data), /未加入家庭|暂无家庭计划/)
   const work = page.loadFamilies()
   list.resolve(ok([{ id: 4 }]))
   await flush()
@@ -38,7 +38,7 @@ test('family initially renders loading, never a false no-family message', async 
   assert.match(text, /Test family/)
   assert.match(text, /Test goal/)
   assert.match(text, /管理员/)
-  assert.doesNotMatch(text, /未加入家庭|暂无家庭目标/)
+  assert.doesNotMatch(text, /未加入家庭|暂无家庭计划/)
 })
 
 test('genuine empty family renders only after a successful list response', async () => {
@@ -51,7 +51,7 @@ test('genuine empty family renders only after a successful list response', async
 test('family with no goals shows the genuine goal-empty state', async () => {
   const { page } = loadPage(familyJS, url => url.startsWith('/goals/') ? Promise.resolve(ok([])) : familyReplies(url), { userId: 7 })
   await page.loadFamilies()
-  assert.match(visibleText(familyWXML, page.data), /暂无家庭目标/)
+  assert.match(visibleText(familyWXML, page.data), /暂无家庭计划/)
   assert.doesNotMatch(visibleText(familyWXML, page.data), /未加入家庭/)
 })
 
@@ -66,7 +66,7 @@ for (const failing of ['/families', '/family/4', '/goals/family?family_id=4']) {
       await page.loadFamilies()
       const text = visibleText(familyWXML, page.data)
       assert.match(text, /加载失败.*重试/)
-      assert.doesNotMatch(text, /未加入家庭|暂无家庭目标|Test family/)
+      assert.doesNotMatch(text, /未加入家庭|暂无家庭计划|Test family/)
       fail = false
       await page.loadFamilies()
       assert.match(visibleText(familyWXML, page.data), /Test family/)

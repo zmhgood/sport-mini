@@ -3,8 +3,8 @@
   <!-- 单个动作锻炼模式 -->
   <view class="exercise-mode" wx:if="{{exercise}}">
     <!-- 动作信息 -->
-    <view class="exercise-header">
-      <image class="exercise-image" src="{{exercise.image_url || ''}}" mode="aspectFit"></image>
+    <view class="exercise-header exercise-demo-header">
+      <exercise-media exercise="{{exercise}}" exercise-id="{{exercise.exercise_id || exercise.id || 0}}" />
       <view class="exercise-info">
         <text class="exercise-name">{{exercise.name}}</text>
         <text class="exercise-desc">每组 {{exercise.reps}} 次</text>

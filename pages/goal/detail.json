@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "目标详情"
+  "navigationBarTitleText": "计划详情",
+  "usingComponents": { "exercise-media": "/components/exercise-media/exercise-media" }
 }

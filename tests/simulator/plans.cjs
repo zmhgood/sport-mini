@@ -210,7 +210,7 @@ function mockResponse(options) {
       }
       const qa = getApp().__plansQa
       qa.family = { id: 901, name: '模拟家庭', invite_code: 'SYN901', members: [qa.member(7), qa.member(8)] }
-      qa.exercise = { id: 31, name: '模拟抬腿动作', image_url: '/images/exercise/default-exercise.jpg', gif_url: '/images/exercise/default-exercise.jpg', video_url: '', target_muscle: '下肢', description: '模拟示范动作说明。', difficulty: '简单', sets: 3, reps: 10, calories: 5 }
+      qa.exercise = { id: 31, name: '模拟抬腿动作', image_url: '/images/exercise/default-exercise.jpg', gif_url: '', video_url: '', target_muscle: '下肢', description: '模拟示范动作说明。', difficulty: '简单', sets: 3, reps: 10, calories: 5 }
       const goal = (id, planType, executorId, members, exerciseId = 31) => ({
         id, family_id: 901, name: planType === 'personal' ? '模拟个人计划' : '模拟共同计划', plan_type: planType,
         executor_id: executorId, members: members.map(qa.member), exercises: [qa.goalExercise(exerciseId, 3, 10, id * 10 + 1), qa.goalExercise(32, 3, 8, id * 10 + 2)],
@@ -233,7 +233,7 @@ function mockResponse(options) {
     await settled(current)
     await waitFor(async () => !!await current.$('.family-info'), 'family data')
     const createLinks = await current.$$('.section-action')
-    const createButton = await findByText(createLinks, '创建目标')
+    const createButton = await findByText(createLinks, '创建计划')
     if (!createButton) throw new Error('create-plan link not found')
     await createButton.tap()
     await waitFor(async () => (await mini.currentPage()).path === 'pages/goal/create', 'create route')
@@ -406,14 +406,19 @@ function mockResponse(options) {
     current = await page('/pages/goal/detail?id=902')
     await settled(current)
     check('returning from history restores the current exercise revision', (await current.data('goal')).exercises[0].exercise_id === 31)
-    const demo = await current.$('.exercise-demo')
-    if (!demo) throw new Error('exercise demo link not rendered')
+    const demo = await current.$('.exercise-main .exercise-image')
+    if (!demo) throw new Error('exercise demo image not rendered')
+    const writesBeforeDemo = await mini.evaluate(() => getApp().__plansQa.writes.length)
     await demo.tap()
-    await waitFor(async () => (await mini.currentPage()).path === 'pages/exercise/exercise', 'exercise demo navigation')
-    const demoPage = await mini.currentPage()
-    await settled(demoPage)
-    check('exercise demo details load from shared exercise page', (await demoPage.data('exercise')).name === '模拟抬腿动作', await demoPage.data('exercise'))
+    await waitFor(async () => !!await current.$('.preview-panel'), 'exercise preview popup')
+    const media = await current.$('exercise-media')
+    await waitFor(async () => !await media.data('loading'), 'static demonstration loaded')
+    check('exercise image opens inline preview on the plan page', (await mini.currentPage()).path === 'pages/goal/detail' && (await current.data('previewExercise')).name === '模拟抬腿动作')
+    check('cover-only exercise does not remain loading', await media.data('message') === '动作图片' && !await media.data('failed'))
     await capture('exercise-demo-small-screen')
+    await (await current.$('.preview-close')).tap()
+    await waitFor(async () => !await current.data('previewExercise'), 'exercise preview close')
+    check('preview creates no progress writes', await mini.evaluate(() => getApp().__plansQa.writes.length) === writesBeforeDemo)
 
     result.requestCount = await mini.evaluate(() => getApp().__plansQa.requests.length)
     result.syntheticWriteCount = await mini.evaluate(() => getApp().__plansQa.writes.length)

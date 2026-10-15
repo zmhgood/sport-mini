@@ -201,15 +201,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: flex-end;
   z-index: 1000;
 }
 
+.modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5); }
+
 .modal-content {
+  position: relative;
   width: 100%;
-  max-height: 80vh;
+  height: 85vh;
   background: #FFFFFF;
   border-radius: 32rpx 32rpx 0 0;
   overflow: hidden;
@@ -233,16 +235,26 @@
 }
 
 .modal-close {
+  flex-shrink: 0;
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  height: 44px;
+  line-height: 44px;
+  padding: 0;
+  margin: 0 0 0 16rpx;
+  background: transparent;
   font-size: 48rpx;
   color: #94A3B8;
 }
+.modal-close::after { border: none; }
 
 .modal-body {
-  padding: 24rpx;
   flex: 1;
-  height: 560rpx;
+  height: 0;
   min-height: 0;
 }
+.modal-list { padding: 24rpx; }
 
 .exercise-option {
   display: flex;
@@ -294,16 +306,21 @@
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
   border-top: 1rpx solid #F1F5F9;
   display: flex;
+  gap: 16rpx;
   justify-content: space-between;
   align-items: center;
 }
 
 .selected-count {
+  flex: 1;
+  min-width: 0;
   font-size: 28rpx;
   color: #64748B;
 }
 
 .btn-confirm {
+  flex-shrink: 0;
+  margin: 0;
   min-width: 200rpx;
   height: 72rpx;
   min-height: 44px;
@@ -319,6 +336,7 @@
 /* 分类标签 */
 .category-tabs {
   display: flex;
+  flex-shrink: 0;
   padding: 16rpx 24rpx;
   gap: 16rpx;
   background: #FFFFFF;

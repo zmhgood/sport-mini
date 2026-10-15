@@ -37,9 +37,10 @@ function loadPage(relativePath, request, storage = {}, options = {}) {
   const filename = path.join(__dirname, '..', relativePath)
   vm.runInNewContext(fs.readFileSync(filename, 'utf8'), sandbox, { filename })
   const page = { ...definition, data: JSON.parse(JSON.stringify(definition.data)), snapshots: [] }
-  page.setData = function (update) {
+  page.setData = function (update, callback) {
     Object.assign(this.data, update)
     this.snapshots.push(JSON.parse(JSON.stringify(this.data)))
+    callback?.()
   }
   return { page, calls }
 }

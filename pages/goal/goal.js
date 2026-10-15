@@ -26,7 +26,7 @@ Page({
         this.setData({ goals })
       }
     } catch (err) {
-      console.error('加载目标失败:', err)
+      console.error('加载计划失败:', err)
     }
   },
 
