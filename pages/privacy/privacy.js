@@ -1,5 +1,6 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/privacy/privacy.js
-Page({
+Page(withFontSize({
   data: {
     content: `
 ## 隐私政策
@@ -62,4 +63,4 @@ Page({
   onLoad() {
     // 页面加载
   }
-})
+}, wx))

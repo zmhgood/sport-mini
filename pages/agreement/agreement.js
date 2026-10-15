@@ -1,5 +1,6 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/agreement/agreement.js
-Page({
+Page(withFontSize({
   data: {
     content: `
 ## 用户协议
@@ -59,4 +60,4 @@ Page({
   onLoad() {
     // 页面加载
   }
-})
+}, wx))

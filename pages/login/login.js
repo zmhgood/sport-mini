@@ -1,8 +1,9 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/login/login.js
 const app = getApp()
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     loading: false,
     showWechatForm: false, // 是否显示微信头像昵称表单
@@ -193,4 +194,4 @@ Page({
       wx.showToast({ title: err.message || '登录失败', icon: 'none' })
     }
   }
-})
+}, wx))

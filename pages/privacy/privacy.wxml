@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/privacy/privacy.wxml-->
 <view class="privacy-container">
   <view class="content">

@@ -16,7 +16,8 @@
     "pages/goal/progress",
     "pages/history/history",
     "pages/agreement/agreement",
-    "pages/privacy/privacy"
+    "pages/privacy/privacy",
+    "pages/font-size/font-size"
   ],
   "window": {
     "backgroundTextStyle": "light",

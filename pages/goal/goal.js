@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/goal/goal.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     goals: []
   },
@@ -34,4 +35,4 @@ Page({
     const id = e.currentTarget.dataset.id
     wx.navigateTo({ url: `/pages/goal/detail?id=${id}` })
   }
-})
+}, wx))

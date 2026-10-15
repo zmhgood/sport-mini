@@ -6,7 +6,7 @@
   z-index: 999;
   display: flex;
   box-sizing: border-box;
-  height: calc(112rpx + env(safe-area-inset-bottom));
+  height: calc(var(--app-tab-height, 112rpx) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
   background: #FFFFFF;
   border-top: 1rpx solid #E3EAEA;
@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  height: 112rpx;
+  height: var(--app-tab-height, 112rpx);
   padding: 6rpx 0;
 }
 
@@ -48,9 +48,9 @@
 .tab-text {
   flex-shrink: 0;
   margin-top: 4rpx;
-  font-size: 24rpx;
+  font-size: calc(24rpx * var(--app-font-scale, 1));
   font-weight: 500;
-  line-height: 30rpx;
+  line-height: 1.25;
   white-space: nowrap;
   color: #7A858B;
 }

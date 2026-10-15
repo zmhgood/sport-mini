@@ -1,9 +1,10 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/goal/create.js
 const api = require('../../utils/api')
 
 const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-category')
 
-Page({
+Page(withFontSize({
   data: {
     familyId: null,
     goalId: null,
@@ -297,4 +298,4 @@ Page({
       this.setData({ loading: false })
     }
   }
-})
+}, wx))

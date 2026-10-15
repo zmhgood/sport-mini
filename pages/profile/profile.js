@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/profile/profile.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     isLoggedIn: false,
     userInfo: null,
@@ -31,7 +32,7 @@ Page({
       { id: 'family', name: '家庭成员和计划', value: '管理', icon: '/images/icons/family.svg' },
       { id: 'goals', name: '我的锻炼计划', value: '查看', icon: '/images/icons/goal.svg' },
       { id: 'profile', name: '个人信息', value: '编辑', icon: '/images/icons/profile-active.svg' },
-      { id: 'fontSize', name: '字体大小', value: '暂未开放', icon: '/images/icons/text-size.svg' },
+      { id: 'fontSize', name: '字体大小', value: '标准', icon: '/images/icons/text-size.svg' },
       { id: 'voice', name: '语音播报', value: '暂未开放', icon: '/images/icons/volume.svg' },
       { id: 'reminder', name: '锻炼提醒', value: '暂未开放', icon: '/images/icons/bell.svg' },
       { id: 'emergency', name: '紧急联系', value: '暂未开放', icon: '/images/icons/phone.svg' }
@@ -369,6 +370,9 @@ Page({
       case 'goals':
         wx.navigateTo({ url: '/pages/goal/goal' })
         break
+      case 'fontSize':
+        wx.navigateTo({ url: '/pages/font-size/font-size' })
+        break
       case 'profile':
         wx.navigateTo({ url: '/pages/profile-edit/profile-edit' })
         break
@@ -387,4 +391,4 @@ Page({
       path: '/pages/index/index'
     }
   }
-})
+}, wx))

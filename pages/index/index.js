@@ -1,9 +1,10 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/index/index.js
 const app = getApp()
 const api = require('../../utils/api')
 const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-category')
 
-Page({
+Page(withFontSize({
   data: {
     userInfo: null,
     isLoggedIn: false,
@@ -181,6 +182,11 @@ Page({
     }
   },
 
+  goToCreateFamily() {
+    this.closeFamilyPopup()
+    wx.navigateTo({ url: '/pages/family/join?type=create' })
+  },
+
   // 跳转到加入家庭页面
   goToJoinFamily() {
     this.closeFamilyPopup()
@@ -271,4 +277,4 @@ Page({
       path: '/pages/index/index'
     }
   }
-})
+}, wx))

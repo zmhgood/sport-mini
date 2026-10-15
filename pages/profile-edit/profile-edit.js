@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/profile-edit/profile-edit.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     userInfo: {
       nick_name: '',
@@ -145,4 +146,4 @@ Page({
   onCancel() {
     wx.navigateBack()
   }
-})
+}, wx))

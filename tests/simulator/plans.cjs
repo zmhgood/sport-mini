@@ -59,6 +59,7 @@ const settled = async current => {
   }
 }
 const capture = async name => {
+  if (process.env.MINI_QA_SCREENSHOTS === '0') { result.screenshotStatus = 'not captured; visual review pending'; return }
   const file = path.join(output, `${name}.png`)
   await mini.screenshot({ path: file })
   result.screenshots.push(file)
@@ -311,12 +312,13 @@ function mockResponse(options) {
     const joinWrite = await mini.evaluate(() => getApp().__plansQa.writes.find(write => write.route === '/goals/903/members'))
     check('shared plan join includes only current user', !!joinWrite && joinWrite.data.user_id === 7, joinWrite)
     await mini.pageScrollTo(0)
+    await mini.mockWxMethod('showActionSheet', options => {
+      getApp().__plansQa.lastMenu = options.itemList
+      return { tapIndex: options.itemList.indexOf('退出共同计划') }
+    })
     await (await current.$('.more-toggle')).trigger('tap')
-    await waitFor(async () => await current.data('showMore') === true, 'manager menu open')
-    const sharedMenu = await readText(await current.$('.more-menu'))
-    check('shared participant can find exit under more', sharedMenu.includes('退出共同计划'))
-    const leaveAction = await findByText(await current.$$('.more-menu text'), '退出共同计划')
-    await leaveAction.tap()
+    await waitFor(async () => await mini.evaluate(() => !!getApp().__plansQa.lastMenu), 'native menu captured')
+    check('shared participant can find exit under more', (await mini.evaluate(() => getApp().__plansQa.lastMenu)).includes('退出共同计划'))
     await waitFor(async () => (await current.data('goal')).is_participating === false, 'leave shared plan')
     check('shared exit uses self membership endpoint', await mini.evaluate(() => getApp().__plansQa.writes.some(write => write.route === '/goals/903/members/me' && write.method === 'DELETE')))
 
@@ -359,21 +361,21 @@ function mockResponse(options) {
     const partialWrite = await mini.evaluate(() => getApp().__plansQa.writes.find(write => write.route === '/goals/902/complete' && write.data.completed_sets === 2))
     check('partial completion writes selected set count', !!partialWrite && partialWrite.data.date === '2026-10-15', partialWrite)
 
+    await mini.mockWxMethod('showActionSheet', options => {
+      getApp().__plansQa.lastMenu = options.itemList
+      return { tapIndex: options.itemList.indexOf('暂停计划') }
+    })
     await (await current.$('.more-toggle')).trigger('tap')
-    await waitFor(async () => await current.data('showMore') === true, 'paused menu open')
-    check('manager more menu exposes edit and pause controls', !!await current.$('.more-menu') && (await readText(await current.$('.more-menu'))).includes('编辑计划') && (await readText(await current.$('.more-menu'))).includes('暂停计划'))
-    const menuActions = await current.$$('.more-menu text')
-    const pauseAction = await findByText(menuActions, '暂停计划')
-    if (!pauseAction) throw new Error('pause action not found')
-    await pauseAction.tap()
     await waitFor(async () => (await current.data('goal')).is_active === false && await current.data('actionLoading') === false, 'plan paused')
-    await (await current.$('.more-toggle')).tap()
-    await waitFor(async () => await current.data('showMore') === true && !!await current.$('.more-menu'), 'resume menu open')
-    check('paused plan exposes resume control', (await readText(await current.$('.more-menu'))).includes('恢复计划'))
-    const resumeActions = await current.$$('.more-menu text')
-    const resumeAction = await findByText(resumeActions, '恢复计划')
-    if (!resumeAction) throw new Error('resume action not found')
-    await resumeAction.tap()
+    const pauseMenu = await mini.evaluate(() => getApp().__plansQa.lastMenu)
+    check('manager more menu exposes edit and pause controls', pauseMenu.includes('编辑计划') && pauseMenu.includes('暂停计划'))
+    await mini.mockWxMethod('showActionSheet', options => {
+      getApp().__plansQa.lastMenu = options.itemList
+      return { tapIndex: options.itemList.indexOf('恢复计划') }
+    })
+    await (await current.$('.more-toggle')).trigger('tap')
+    await waitFor(async () => (await current.data('goal')).is_active === true && await current.data('actionLoading') === false, 'plan resumed')
+    check('paused plan exposes resume control', (await mini.evaluate(() => getApp().__plansQa.lastMenu)).includes('恢复计划'))
     await waitFor(async () => (await current.data('goal')).is_active === true && await current.data('actionLoading') === false, 'plan resumed')
 
     current = await page('/pages/goal/detail?id=902&date=2026-10-14')
@@ -453,6 +455,7 @@ async function cleanup() {
   if (!mini) return
   await mini.restoreWxMethod('request').catch(() => {})
   await mini.restoreWxMethod('showModal').catch(() => {})
+  await mini.restoreWxMethod('showActionSheet').catch(() => {})
   await mini.evaluate(() => {
     if (getApp().__plansQa) getApp().__plansQa.restore()
   }).then(() => { result.storageBackup.restored = true; save(); promoteValidRun() }).catch(error => {

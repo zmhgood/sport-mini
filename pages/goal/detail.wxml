@@ -1,5 +1,5 @@
 <!--pages/goal/detail.wxml-->
-<page-meta page-style="{{previewExercise ? 'overflow: hidden;' : ''}}" />
+<page-meta page-style="{{fontPageStyle}} {{previewExercise ? 'overflow: hidden;' : ''}}" />
 <view class="container">
   <view class="load-state" wx:if="{{loading}}">
     <text>正在加载，请稍候…</text>
@@ -11,7 +11,10 @@
   <block wx:else>
   <!-- 目标信息 -->
   <view class="goal-header">
-    <text class="goal-name">{{goal.name}}</text>
+    <view class="goal-heading">
+      <text class="goal-name">{{goal.name}}</text>
+      <button class="more-toggle" size="mini" wx:if="{{goal.can_manage || (goal.plan_type === 'shared' && goal.is_participating)}}" bindtap="toggleMore" disabled="{{actionLoading}}" aria-label="更多计划操作">更多 ···</button>
+    </view>
     <text class="plan-badge">{{goal.plan_type === 'personal' ? '个人计划' : '共同计划'}}{{goal.is_active == false ? ' · 已暂停' : ''}}</text>
     <view class="goal-stats">
       <text class="stat-item">{{goal.memberCount || 0}}人参与</text>
@@ -20,15 +23,8 @@
     </view>
   </view>
 
-  <view class="more-area">
-    <button class="primary-action join-action" wx:if="{{goal.plan_type === 'shared' && !goal.is_participating && goal.is_active != false}}" bindtap="joinGoal" loading="{{starting}}" disabled="{{starting}}">加入并开始</button>
-    <view class="more-toggle" bindtap="toggleMore">更多 {{showMore ? '⌃' : '⌄'}}</view>
-    <view class="more-menu" wx:if="{{showMore}}">
-      <text wx:if="{{goal.can_manage}}" bindtap="editGoal">编辑计划</text>
-      <text wx:if="{{goal.can_manage && goal.is_active != false}}" bindtap="setGoalActive" data-active="false">暂停计划</text>
-      <text wx:if="{{goal.can_manage && goal.is_active == false}}" bindtap="setGoalActive" data-active="true">恢复计划</text>
-      <text wx:if="{{goal.plan_type === 'shared' && goal.is_participating}}" bindtap="leaveGoal">退出共同计划</text>
-    </view>
+  <view class="join-area" wx:if="{{goal.plan_type === 'shared' && !goal.is_participating && goal.is_active != false}}">
+    <button class="primary-action join-action" bindtap="joinGoal" loading="{{starting}}" disabled="{{starting}}">加入并开始</button>
   </view>
 
   <!-- 今日进度 -->
@@ -79,12 +75,13 @@
             <text class="exercise-name">{{item.exercise.name || item.exercise_name || item.name}}</text>
             <text class="exercise-target">{{item.exercise.target_muscle}}</text>
             <text class="exercise-sets">{{item.sets}}组 × {{item.reps}}次</text>
-            <text class="exercise-demo">点击查看动作示范</text>
+
           </view>
         </view>
+        <button class="exercise-demo" bindtap="showExercisePreview" data-item="{{item}}">查看动作示范</button>
         <view class="exercise-actions" wx:if="{{canSubmit}}">
           <button class="primary-action" bindtap="completeAll" loading="{{actionLoading}}" disabled="{{actionLoading || exerciseStatus[item.id].is_done}}" data-item="{{item}}">{{exerciseStatus[item.id].is_done ? '已完成' : '完成全部'}}</button>
-          <text class="partial-toggle" bindtap="togglePartial" data-item="{{item}}">{{partialSets[item.id] ? '收起分组' : '部分完成'}}</text>
+          <button class="partial-toggle" bindtap="togglePartial" disabled="{{actionLoading}}" data-item="{{item}}">{{partialSets[item.id] ? '收起分组' : '部分完成'}}</button>
         </view>
         <text class="readonly-action" wx:elif="{{historicalView && canRecord}}">历史进度仅供查看</text>
         <text class="readonly-action" wx:elif="{{goal.is_active == false && canRecord}}">计划已暂停</text>

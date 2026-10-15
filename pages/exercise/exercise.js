@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/exercise/exercise.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     exercise: null,
     loading: true,
@@ -62,4 +63,4 @@ Page({
       path: `/pages/exercise/exercise?id=${this.data.exercise?.id}`
     }
   }
-})
+}, wx))

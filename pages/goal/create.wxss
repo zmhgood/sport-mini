@@ -13,7 +13,7 @@
 }
 
 .section-title {
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   font-weight: 600;
   color: #1E293B;
   margin-bottom: 24rpx;
@@ -27,22 +27,22 @@
 }
 
 .selected-count {
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
   color: #3B82F6;
 }
 
 .add-btn {
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #3B82F6;
 }
 
 .plan-types { display: flex; gap: 16rpx; }
-.plan-type { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; border: 2rpx solid #CBD5E1; border-radius: 16rpx; color: #475569; font-size: 29rpx; }
+.plan-type { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; border: 2rpx solid #CBD5E1; border-radius: 16rpx; color: #475569; font-size: calc(29rpx * var(--app-font-scale, 1)); }
 .plan-type.active { border-color: #176B73; background: #EAF6F4; color: #135D60; font-weight: 600; }
-.plan-hint { display: block; margin-top: 16rpx; color: #64748B; font-size: 25rpx; line-height: 1.5; }
-.load-error { margin: 20rpx 24rpx; color: #9A3412; font-size: 27rpx; }
-.retry-button { min-height: 44px; margin-top: 12rpx; padding: 0 22rpx; color: #135D60; background: #EAF6F4; border-radius: 22rpx; font-size: 26rpx; }
-.self-participation { display: flex; gap: 14rpx; align-items: center; min-height: 48px; margin-top: 12rpx; color: #1E293B; font-size: 28rpx; }
+.plan-hint { display: block; margin-top: 16rpx; color: #64748B; font-size: calc(25rpx * var(--app-font-scale, 1)); line-height: 1.5; }
+.load-error { margin: 20rpx 24rpx; color: #9A3412; font-size: calc(27rpx * var(--app-font-scale, 1)); }
+.retry-button { min-height: 44px; margin-top: 12rpx; padding: 0 22rpx; color: #135D60; background: #EAF6F4; border-radius: 22rpx; font-size: calc(26rpx * var(--app-font-scale, 1)); }
+.self-participation { display: flex; gap: 14rpx; align-items: center; min-height: 48px; margin-top: 12rpx; color: #1E293B; font-size: calc(28rpx * var(--app-font-scale, 1)); }
 .self-check { width: 38rpx; height: 38rpx; display: flex; align-items: center; justify-content: center; border: 2rpx solid #94A3B8; border-radius: 8rpx; color: #fff; }
 .self-check.checked { border-color: #176B73; background: #176B73; }
 
@@ -53,7 +53,7 @@
   border: 2rpx solid #E2E8F0;
   border-radius: 16rpx;
   padding: 0 24rpx;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   box-sizing: border-box;
 }
 
@@ -91,7 +91,7 @@
 .member-name {
   width: 100%;
   padding: 0 8rpx;
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
   color: #1E293B;
   text-align: center;
   word-break: break-all;
@@ -109,7 +109,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24rpx;
+  font-size: calc(24rpx * var(--app-font-scale, 1));
 }
 
 /* 动作列表 */
@@ -132,7 +132,7 @@
 }
 
 .exercise-name {
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #1E293B;
   display: block;
   margin-bottom: 12rpx;
@@ -145,7 +145,7 @@
 }
 
 .config-label {
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
   color: #64748B;
 }
 
@@ -156,11 +156,11 @@
   border: 1rpx solid #E2E8F0;
   border-radius: 8rpx;
   text-align: center;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
 }
 
 .remove-btn {
-  font-size: 40rpx;
+  font-size: calc(40rpx * var(--app-font-scale, 1));
   color: #EF4444;
   padding: 0 16rpx;
 }
@@ -169,7 +169,7 @@
   text-align: center;
   padding: 40rpx;
   color: #94A3B8;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
 }
 
 /* 提交 */
@@ -189,7 +189,7 @@
   min-height: 44px;
   background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
   color: #FFFFFF;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   border-radius: 48rpx;
   border: none;
 }
@@ -229,7 +229,7 @@
 }
 
 .modal-title {
-  font-size: 34rpx;
+  font-size: calc(34rpx * var(--app-font-scale, 1));
   font-weight: 600;
   color: #1E293B;
 }
@@ -244,7 +244,7 @@
   padding: 0;
   margin: 0 0 0 16rpx;
   background: transparent;
-  font-size: 48rpx;
+  font-size: calc(48rpx * var(--app-font-scale, 1));
   color: #94A3B8;
 }
 .modal-close::after { border: none; }
@@ -274,14 +274,14 @@
 
 .option-name {
   display: block;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #1E293B;
   word-break: break-all;
 }
 
 .option-target {
   display: block;
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
   color: #64748B;
   margin-top: 8rpx;
   margin-right: 16rpx;
@@ -297,7 +297,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24rpx;
+  font-size: calc(24rpx * var(--app-font-scale, 1));
 }
 
 .modal-footer {
@@ -314,7 +314,7 @@
 .selected-count {
   flex: 1;
   min-width: 0;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #64748B;
 }
 
@@ -327,7 +327,7 @@
   line-height: 72rpx;
   background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
   color: #FFFFFF;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   border-radius: 36rpx;
   border: none;
   padding: 0 32rpx;
@@ -347,7 +347,7 @@
   flex: 1;
   text-align: center;
   padding: 16rpx 0;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #64748B;
   background: #F1F5F9;
   border-radius: 40rpx;
@@ -375,7 +375,7 @@
 }
 
 .option-category {
-  font-size: 22rpx;
+  font-size: calc(22rpx * var(--app-font-scale, 1));
   padding: 4rpx 12rpx;
   border-radius: 8rpx;
   color: #FFFFFF;

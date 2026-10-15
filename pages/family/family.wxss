@@ -16,19 +16,19 @@
 }
 
 .empty-icon {
-  font-size: 120rpx;
+  font-size: calc(120rpx * var(--app-font-scale, 1));
   margin-bottom: 40rpx;
 }
 
 .empty-title {
-  font-size: 36rpx;
+  font-size: calc(36rpx * var(--app-font-scale, 1));
   color: #1E293B;
   font-weight: 600;
   margin-bottom: 16rpx;
 }
 
 .empty-desc {
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #64748B;
   margin-bottom: 60rpx;
 }
@@ -43,7 +43,7 @@
 .btn-primary {
   background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
   color: #FFFFFF;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   padding: 28rpx 0;
   border-radius: 48rpx;
   border: none;
@@ -52,7 +52,7 @@
 .btn-secondary {
   background: #FFFFFF;
   color: #3B82F6;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   padding: 28rpx 0;
   border-radius: 48rpx;
   border: 2rpx solid #3B82F6;
@@ -70,20 +70,26 @@
 .family-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 16rpx;
   margin-bottom: 24rpx;
 }
 
 .family-name {
-  font-size: 40rpx;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: calc(40rpx * var(--app-font-scale, 1));
   font-weight: 600;
 }
 
 .member-count {
+  flex-shrink: 0;
+  white-space: nowrap;
   background: rgba(255, 255, 255, 0.2);
   padding: 8rpx 20rpx;
   border-radius: 20rpx;
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
 }
 
 .invite-section {
@@ -93,7 +99,7 @@
 }
 
 .invite-label {
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
   opacity: 0.8;
   display: block;
   margin-bottom: 12rpx;
@@ -106,7 +112,7 @@
 }
 
 .invite-code {
-  font-size: 48rpx;
+  font-size: calc(48rpx * var(--app-font-scale, 1));
   font-weight: 600;
   letter-spacing: 8rpx;
 }
@@ -115,12 +121,12 @@
   background: rgba(255, 255, 255, 0.3);
   padding: 12rpx 24rpx;
   border-radius: 8rpx;
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
 }
 
 .refresh-btn {
   display: block;
-  font-size: 24rpx;
+  font-size: calc(24rpx * var(--app-font-scale, 1));
   opacity: 0.7;
   margin-top: 16rpx;
   text-align: right;
@@ -142,13 +148,13 @@
 }
 
 .section-title {
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   font-weight: 600;
   color: #1E293B;
 }
 
 .section-action {
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #3B82F6;
 }
 
@@ -169,6 +175,7 @@
 }
 
 .member-avatar {
+  flex-shrink: 0;
   width: 80rpx;
   height: 80rpx;
   border-radius: 50%;
@@ -177,16 +184,18 @@
 
 .member-info {
   flex: 1;
+  min-width: 0;
 }
 
 .member-name {
-  font-size: 30rpx;
+  overflow-wrap: anywhere;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #1E293B;
   display: block;
 }
 
 .member-role {
-  font-size: 24rpx;
+  font-size: calc(24rpx * var(--app-font-scale, 1));
   color: #64748B;
   margin-top: 4rpx;
   display: inline-block;
@@ -200,12 +209,13 @@
 }
 
 .member-actions {
+  flex-shrink: 0;
   display: flex;
   gap: 16rpx;
 }
 
 .action-btn {
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
   color: #EF4444;
   padding: 8rpx 16rpx;
 }
@@ -236,20 +246,20 @@
 }
 
 .goal-name {
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #1E293B;
   display: block;
 }
 
 .goal-members {
-  font-size: 26rpx;
+  font-size: calc(26rpx * var(--app-font-scale, 1));
   color: #64748B;
   margin-top: 8rpx;
   display: block;
 }
 
 .goal-arrow {
-  font-size: 40rpx;
+  font-size: calc(40rpx * var(--app-font-scale, 1));
   color: #CBD5E1;
 }
 
@@ -257,7 +267,7 @@
   text-align: center;
   padding: 40rpx;
   color: #94A3B8;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
 }
 
 /* 退出 */
@@ -268,7 +278,7 @@
 .btn-danger {
   background: #FFFFFF;
   color: #EF4444;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   padding: 24rpx 0;
   border-radius: 48rpx;
   border: 2rpx solid #EF4444;
@@ -287,12 +297,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 24rpx 32rpx;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   color: #1E293B;
 }
 
 .selector-arrow {
-  font-size: 24rpx;
+  font-size: calc(24rpx * var(--app-font-scale, 1));
   color: #94A3B8;
 }
 
@@ -308,7 +318,7 @@
   min-height: 44px;
   background: #FFFFFF;
   color: #3B82F6;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   padding: 24rpx 0;
   border-radius: 48rpx;
   border: 2rpx solid #3B82F6;
@@ -316,7 +326,7 @@
 
 .action-buttons .btn-danger {
   min-height: 44px;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   padding: 24rpx 0;
 }
 
@@ -324,7 +334,7 @@
   padding: 120rpx 40rpx;
   text-align: center;
   color: #64748B;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
 }
 
 .retry-btn {
@@ -332,7 +342,7 @@
   width: 240rpx;
   color: #3B82F6;
   background: #FFFFFF;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
 }
 
 .invite-share {

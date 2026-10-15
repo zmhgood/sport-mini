@@ -1,5 +1,5 @@
 <!--pages/goal/create.wxml-->
-<page-meta page-style="{{showExerciseModal ? 'overflow: hidden;' : ''}}" />
+<page-meta page-style="{{fontPageStyle}} {{showExerciseModal ? 'overflow: hidden;' : ''}}" />
 <view class="container">
   <view class="load-error" wx:if="{{isEditing && goalLoading}}">正在读取计划…</view>
   <view class="load-error" wx:if="{{goalError}}">

@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/family/family.wxml-->
 <view class="container">
   <view class="load-state" wx:if="{{loading}}">
@@ -90,6 +91,7 @@
 
     <!-- 操作按钮 -->
     <view class="action-buttons">
+      <button class="btn-secondary" bindtap="goCreate">创建新家庭</button>
       <button class="btn-secondary" bindtap="goJoin">加入其他家庭</button>
       <button class="btn-danger" bindtap="leaveFamily">退出当前家庭</button>
     </view>

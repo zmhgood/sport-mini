@@ -12,7 +12,7 @@
 }
 
 .form-title {
-  font-size: 36rpx;
+  font-size: calc(36rpx * var(--app-font-scale, 1));
   font-weight: 600;
   color: #1E293B;
   text-align: center;
@@ -25,7 +25,7 @@
 
 .form-label {
   display: block;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #64748B;
   margin-bottom: 16rpx;
 }
@@ -37,7 +37,7 @@
   border: 2rpx solid #E2E8F0;
   border-radius: 16rpx;
   padding: 0 24rpx;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   box-sizing: border-box;
 }
 
@@ -47,7 +47,7 @@
   min-height: 44px;
   background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
   color: #FFFFFF;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   border-radius: 48rpx;
   border: none;
   margin-top: 48rpx;

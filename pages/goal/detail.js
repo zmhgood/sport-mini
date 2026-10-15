@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/goal/detail.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     loading: true,
     loadError: '',
@@ -152,7 +153,34 @@ Page({
     wx.navigateTo({ url: `/pages/goal/progress?id=${this.data.goalId}&date=${this.data.progressDate || (this.data.goal || {}).current_date || ''}` })
   },
 
-  toggleMore() { this.setData({ showMore: !this.data.showMore }) },
+  getMoreActions() {
+    const goal = this.data.goal || {}
+    const actions = []
+    if (goal.can_manage) {
+      actions.push({ label: '编辑计划', action: 'edit' })
+      actions.push({ label: goal.is_active == false ? '恢复计划' : '暂停计划', action: 'active', active: goal.is_active == false })
+    }
+    if (goal.plan_type === 'shared' && goal.is_participating) actions.push({ label: '退出共同计划', action: 'leave' })
+    return actions
+  },
+
+  toggleMore() {
+    if (this.data.actionLoading || this.data.showMore) return
+    const actions = this.getMoreActions()
+    if (!actions.length) return
+    this.setData({ showMore: true })
+    wx.showActionSheet({
+      itemList: actions.map(item => item.label),
+      success: result => {
+        const item = actions[result.tapIndex]
+        if (!item) return
+        if (item.action === 'edit') this.editGoal()
+        else if (item.action === 'active') this.setGoalActive({ currentTarget: { dataset: { active: String(item.active) } } })
+        else this.leaveGoal()
+      },
+      complete: () => this.setData({ showMore: false })
+    })
+  },
 
   editGoal() {
     if (!this.data.goal || !this.data.goal.can_manage) return
@@ -281,4 +309,4 @@ Page({
     const item = e.currentTarget.dataset.item
     wx.navigateTo({ url: `/pages/exercise/exercise?id=${item.exercise_id}` })
   }
-})
+}, wx))

@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/family/join.wxml-->
 <view class="container">
   <!-- 创建家庭表单 -->

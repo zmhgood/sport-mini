@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/goal/goal.wxml-->
 <view class="container">
   <view class="goal-list" wx:if="{{goals.length > 0}}">

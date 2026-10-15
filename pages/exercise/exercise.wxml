@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <view class="container" wx:if="{{loading}}">正在加载动作…</view>
 <view class="container" wx:elif="{{loadError}}">
   <text>{{loadError}}</text>

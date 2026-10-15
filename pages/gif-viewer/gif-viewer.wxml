@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/gif-viewer/gif-viewer.wxml-->
 <view class="container">
   <video

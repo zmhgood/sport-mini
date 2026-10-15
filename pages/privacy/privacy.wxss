@@ -11,6 +11,6 @@
   border-radius: 16rpx;
   padding: 40rpx 30rpx;
   line-height: 1.8;
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #333;
 }

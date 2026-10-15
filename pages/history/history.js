@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/history/history.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     historyList: [],
     page: 1,
@@ -129,4 +130,4 @@ Page({
     if (!this._initialized) return
     this.loadMore()
   }
-})
+}, wx))

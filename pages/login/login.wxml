@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/login/login.wxml-->
 <view class="login-container">
   <!-- Logo区域 -->

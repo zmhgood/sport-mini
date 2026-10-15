@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/muscle/muscle.wxml-->
 <view class="container">
   <!-- 标签切换 -->

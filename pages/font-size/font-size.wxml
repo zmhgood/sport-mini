@@ -1,0 +1,17 @@
+<page-meta page-style="{{fontPageStyle}}" />
+<view class="container">
+  <view class="setting-heading">选择适合您的字号</view>
+  <text class="setting-description">立即生效，关闭小程序后仍会保留。</text>
+  <view class="font-options">
+    <button wx:for="{{options}}" wx:key="id" class="font-option {{fontSizeId === item.id ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="selectFontSize" aria-label="{{item.label}}字号{{fontSizeId === item.id ? '，已选择' : ''}}">
+      <text>{{item.label}}</text><text class="option-state">{{fontSizeId === item.id ? '已选择 ✓' : '选择'}}</text>
+    </button>
+  </view>
+  <view class="preview-card">
+    <text class="preview-caption">字号预览</text>
+    <text class="preview-name">今天做什么</text>
+    <text class="preview-description">跟着动作示范，按自己的节奏锻炼。</text>
+    <view class="preview-action">完成全部</view>
+  </view>
+  <text class="system-hint">适用于本小程序页面文字。微信标题栏和系统弹窗的字号由微信及手机设置控制。</text>
+</view>

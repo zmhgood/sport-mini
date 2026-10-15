@@ -1,3 +1,4 @@
+<page-meta page-style="{{fontPageStyle}}" />
 <!--pages/index/index.wxml-->
 <view class="container">
   <!-- 顶部用户区域 -->
@@ -36,7 +37,8 @@
         </view>
       </scroll-view>
       <view class="family-popup-footer">
-        <button class="join-family-btn" bindtap="goToJoinFamily">+ 加入新家庭</button>
+        <button class="join-family-btn" bindtap="goToCreateFamily">创建新家庭</button>
+        <button class="join-family-btn" bindtap="goToJoinFamily">加入其他家庭</button>
       </view>
     </view>
   </view>

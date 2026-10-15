@@ -1,5 +1,6 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/gif-viewer/gif-viewer.js
-Page({
+Page(withFontSize({
   data: {
     src: '',
     isVideo: false,
@@ -26,4 +27,4 @@ Page({
   onImageError() {
     wx.showToast({ title: this.data.isVideo ? '视频加载失败' : '动图加载失败', icon: 'none' })
   }
-})
+}, wx))

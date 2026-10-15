@@ -1,0 +1,12 @@
+.container { padding: 32rpx 24rpx; }
+.setting-heading { color: #243235; font-size: calc(36rpx * var(--app-font-scale, 1)); font-weight: 650; }
+.setting-description, .system-hint { display: block; margin-top: 16rpx; color: #5F6F73; font-size: calc(28rpx * var(--app-font-scale, 1)); line-height: 1.6; }
+.font-options { margin: 32rpx 0; }
+.font-option { width: 100%; min-width: 100%; max-width: 100%; min-height: 56px; margin: 16rpx 0; padding: 24rpx; display: flex; justify-content: space-between; gap: 16rpx; border: 2rpx solid #E3EAEA; border-radius: 20rpx; background: #FFFFFF; color: #243235; font-size: calc(32rpx * var(--app-font-scale, 1)); line-height: 1.5; }
+.font-option.selected { border-color: #176B73; background: #E8F5F2; color: #176B73; font-weight: 600; }
+.option-state { flex-shrink: 0; font-size: calc(26rpx * var(--app-font-scale, 1)); }
+.preview-card { padding: 32rpx; background: #FFFFFF; border: 1rpx solid #E3EAEA; border-radius: 24rpx; }
+.preview-caption { display: block; margin-bottom: 24rpx; color: #5F6F73; font-size: calc(26rpx * var(--app-font-scale, 1)); }
+.preview-name { display: block; font-size: calc(36rpx * var(--app-font-scale, 1)); font-weight: 650; }
+.preview-description { display: block; margin: 16rpx 0 32rpx; font-size: calc(30rpx * var(--app-font-scale, 1)); }
+.preview-action { padding: 24rpx; color: #FFFFFF; background: #176B73; text-align: center; border-radius: 16rpx; font-size: calc(30rpx * var(--app-font-scale, 1)); }

@@ -26,13 +26,13 @@ test('unimplemented settings disclose their status without navigation or configu
   const { page } = loadPage('pages/profile/profile.js', async () => ({ code: 0 }), {}, {
     wx: { showToast: value => notices.push(value), navigateTo: value => routes.push(value) }
   })
-  const unfinished = ['fontSize', 'voice', 'reminder', 'emergency']
+  const unfinished = ['voice', 'reminder', 'emergency']
   for (const id of unfinished) {
     assert.equal(page.data.settings.find(item => item.id === id).value, '暂未开放')
     page.goToSetting({ currentTarget: { dataset: { id } } })
   }
   assert.equal(routes.length, 0)
-  assert.equal(notices.length, 4)
+  assert.equal(notices.length, 3)
   assert(notices.every(item => item.title === '功能开发中'))
   const text = visibleText('pages/profile/profile.wxml', page.data)
   assert.doesNotMatch(text, /开启|每日 8:00/)
@@ -43,6 +43,6 @@ test('implemented settings still open their existing pages', () => {
   const { page } = loadPage('pages/profile/profile.js', async () => ({ code: 0 }), {}, {
     wx: { navigateTo: value => routes.push(value.url) }
   })
-  for (const id of ['family', 'goals', 'profile']) page.goToSetting({ currentTarget: { dataset: { id } } })
-  assert.deepEqual(routes, ['/pages/family/family', '/pages/goal/goal', '/pages/profile-edit/profile-edit'])
+  for (const id of ['family', 'goals', 'profile', 'fontSize']) page.goToSetting({ currentTarget: { dataset: { id } } })
+  assert.deepEqual(routes, ['/pages/family/family', '/pages/goal/goal', '/pages/profile-edit/profile-edit', '/pages/font-size/font-size'])
 })

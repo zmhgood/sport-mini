@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/goal/progress.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     goalId: null,
     progressDate: '',
@@ -263,4 +264,4 @@ Page({
       this.updateProgress(goalExerciseId, exercise.completed_sets + 1)
     }
   }
-})
+}, wx))

@@ -68,7 +68,7 @@ async function run(name, fn) {
  })
  await run('profile edit',async()=>{
   const p=await page('/pages/profile-edit/profile-edit','.form-card',{userInfo:{nick_name:longName,gender:2,age:80,height:160,weight:60,health_status:longName.repeat(5)}})
-  await bounds('.input');const caption=(await rects(['.textarea-item .label']))[0];check('health label uses available width without orphan line',caption.height<=48*result.device.windowWidth/750,caption);await bounds('.gender-picker');const picker=(await rects(['.picker']))[0],row=(await rects(['.form-item']))[0];check('gender picker aligns to field right',Math.abs(picker.right-row.right)<2,{picker,row});await bounds('.picker-text')
+  await bounds('.input');const caption=await m.evaluate(()=>new Promise(resolve=>{wx.createSelectorQuery().in(getCurrentPages().slice(-1)[0]).select('.textarea-item .label').fields({size:true,computedStyle:['line-height']}).exec(rows=>resolve(rows[0]))}));check('health label uses available width without orphan line',caption.height<=parseFloat(caption['line-height'])+1,caption);await bounds('.gender-picker');const picker=(await rects(['.picker']))[0],row=(await rects(['.form-item']))[0];check('gender picker aligns to field right',Math.abs(picker.right-row.right)<2,{picker,row});await bounds('.picker-text')
   await m.pageScrollTo(99999)
   await bounds('.btn-save',true,true);await bounds('.btn-cancel',true,true);await bounds('.textarea')
   const area=await p.$('.textarea');await area.input('模拟备注');check('textarea updates state',(await p.data('userInfo')).health_status==='模拟备注')
@@ -80,13 +80,13 @@ async function run(name, fn) {
   check('family input updates state',await p.data(type==='join'?'inviteCode':'name')===(type==='join'?'ABC123':'模拟家庭'))
  })
  await run('goal detail',async()=>{
-  const p=await page('/pages/goal/detail?id=902','.goal-header',{loading:false,loadError:'',goal:{id:902,name:longName.repeat(3),memberCount:2,exerciseCount:6,exercises:Array.from({length:6},(_,i)=>({id:903+i,sets:3,reps:10,exercise:ex}))},progress:{member_stats:[]},memberProgressList:[{user_id:901,user_name:longName.repeat(2),total_sets:18,completed_sets:0,progress_percent:0}]})
-  await bounds('.goal-name');await bounds('.exercise-name');await bounds('.btn-start',false,true)
+  const p=await page('/pages/goal/detail?id=902','.goal-header',{loading:false,loadError:'',canSubmit:true,canRecord:true,goal:{id:902,plan_type:'personal',executor_id:901,is_active:true,can_manage:true,name:longName.repeat(3),memberCount:2,exerciseCount:6,exercises:Array.from({length:6},(_,i)=>({id:903+i,sets:3,reps:10,exercise:ex}))},progress:{member_stats:[]},memberProgressList:[{user_id:901,user_name:longName.repeat(2),total_sets:18,completed_sets:0,progress_percent:0}]})
+  await bounds('.goal-name');await bounds('.exercise-name');await bounds('.primary-action',false,true)
   await m.pageScrollTo(99999);await bounds('.member-name-small');await bounds('.member-progress-text');await bounds('.member-progress-item',true)
  })
  await run('workout',async()=>{
   const p=await page('/pages/goal/progress?goal_id=902&exercise='+encodeURIComponent(JSON.stringify({...ex,goal_exercise_id:903})),'.sets-list',{progressLoading:false,progressError:'',loading:false,submitted:false})
-  await bounds('.exercise-image');await bounds('.exercise-name');await bounds('.btn-submit',true,true)
+  await bounds('.exercise-demo-header');await bounds('.exercise-name');await bounds('.btn-submit',true,true)
   await m.pageScrollTo(99999)
   const [allSets,button]=await m.evaluate(()=>new Promise(resolve=>{const q=wx.createSelectorQuery().in(getCurrentPages().slice(-1)[0]);q.selectAll('.set-item').boundingClientRect();q.select('.submit-section').boundingClientRect();q.exec(resolve)}));const last=allSets.slice(-1)[0]
   check('last set above submit bar',last.bottom<=button.top+1,{last,button})

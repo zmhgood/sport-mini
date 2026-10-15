@@ -26,7 +26,7 @@ async function login(existingName, enteredName, avatarPath = '', pageCount = 1) 
   }
   const filename = path.join(__dirname, '../pages/login/login.js')
   vm.runInNewContext(fs.readFileSync(filename, 'utf8'), {
-    getApp: () => app, require: () => api, Page: value => { definition = value }, wx, getCurrentPages: () => Array(pageCount).fill({}), setTimeout: fn => fn(), console
+    getApp: () => app, require: name => name.endsWith('/api') ? api : require(path.resolve(path.dirname(filename), name)), Page: value => { definition = value }, wx, getCurrentPages: () => Array(pageCount).fill({}), setTimeout: fn => fn(), console
   }, { filename })
   const page = { ...definition, data: { ...definition.data, agreePrivacy: true, wechatNickName: enteredName, wechatAvatarUrl: avatarPath } }
   page.setData = update => Object.assign(page.data, update)

@@ -75,7 +75,7 @@ test('family list template includes long names, selected state and join control'
   page.data.currentFamily = { id: 4 }
   page.switchFamily()
   const text = visibleText('pages/index/index.wxml', page.data)
-  assert.match(text, /这是一个很长的模拟家庭名称用于检查换行.*✓.*加入新家庭/)
+  assert.match(text, /这是一个很长的模拟家庭名称用于检查换行.*✓.*加入其他家庭/)
   page.closeFamilyPopup()
-  assert.doesNotMatch(visibleText('pages/index/index.wxml', page.data), /选择家庭.*加入新家庭/)
+  assert.doesNotMatch(visibleText('pages/index/index.wxml', page.data), /选择家庭.*加入其他家庭/)
 })

@@ -11,7 +11,7 @@
 }
 
 .title {
-  font-size: 36rpx;
+  font-size: calc(36rpx * var(--app-font-scale, 1));
   font-weight: bold;
   color: #333;
 }
@@ -45,20 +45,20 @@
 
 .label {
   width: 160rpx;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #333;
   flex-shrink: 0;
 }
 
 .input {
   flex: 1;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #333;
   text-align: right;
 }
 
 .unit {
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #999;
   margin-left: 10rpx;
 }
@@ -76,12 +76,12 @@
 }
 
 .picker-text {
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #333;
 }
 
 .arrow {
-  font-size: 28rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
   color: #999;
   margin-left: 10rpx;
 }
@@ -91,7 +91,7 @@
   height: 160rpx;
   margin-top: 20rpx;
   padding: 20rpx;
-  font-size: 30rpx;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
   color: #333;
   background: #f9f9f9;
   border-radius: 8rpx;
@@ -108,7 +108,7 @@
   height: 90rpx;
   min-height: 44px;
   line-height: 90rpx;
-  font-size: 32rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
   border-radius: 45rpx;
   border: none;
 }

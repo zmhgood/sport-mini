@@ -1,8 +1,9 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/muscle/muscle.js
 const api = require('../../utils/api')
 const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-category')
 
-Page({
+Page(withFontSize({
   data: {
     currentTab: 0,
     tabs: ['上肢', '核心', '下肢'],
@@ -106,4 +107,4 @@ Page({
     })
   },
 
-})
+}, wx))

@@ -1,7 +1,8 @@
+const { withFontSize } = require('../../utils/font-size')
 // pages/family/join.js
 const api = require('../../utils/api')
 
-Page({
+Page(withFontSize({
   data: {
     type: 'create',
     name: '',
@@ -90,4 +91,4 @@ Page({
       this.setData({ loading: false })
     }
   }
-})
+}, wx))
