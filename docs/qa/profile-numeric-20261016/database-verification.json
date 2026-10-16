@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-16",
+  "engine": "MySQL Community 9.0.0, disposable local instance",
+  "production_data_used": false,
+  "command": "SPORT_INTEGRATION_CONFIG=<private-local-file> go test -p 1 -race -count=1 -json ./...",
+  "test_event_counts": {
+    "pass": 136
+  },
+  "previously_skipped_tests": [
+    {
+      "package": "elderly-fitness/internal/handler",
+      "name": "TestPlanHTTPContractAndFailedTodayLoad",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/handler",
+      "name": "TestProfileHTTPPersistenceAndFamilyFailure",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/middleware",
+      "name": "TestFamilyAccessIntegration",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/repository",
+      "name": "TestListAllLoadsCreatorName",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/repository",
+      "name": "TestWeChatCreateWithLegacyUsername",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestWeChatFailureAndConcurrentAccountCreation",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestMembershipRejoinAndRole",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestRemovedMemberCannotSubmitAndHistoricalDataRemain",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestProgressOwnershipBoundsAndNoPartialWrites",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestProgressIdempotencyConcurrentAndStatReconciliation",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestFirstProgressRaceAndAtomicRollback",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestGoalCreationAndTransferRollback",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestCrossFamilyStatsArchivedHistoryAndDistinctDays",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestProfilePersistenceAndCommentIntegrity",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestLegacyDuplicateProgressReadOnceAndRetained",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestHistoryOverOneThousandAndWeekBoundary",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestCreateRequestRetryIsIdempotent",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestFamilyHistoryMarksDepartedMemberAndRejoin",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestPlanCreationParticipationAndPermissions",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestPlanManagementFollowsCurrentFamilyAdmin",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestPlanRevisionImmediateWithoutProgressAndRejectsStaleAction",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestPlanRevisionWaitsForTomorrowAndPreservesHistoryAndStats",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestPlanProgressRejectsExplicitNonTodayCompletionDate",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestWeekStatsHistoricalCountAndCurrentParticipatingTargets",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestRemovedPlanMemberKeepsHistoryAndRejoinsOnce",
+      "passed": true
+    },
+    {
+      "package": "elderly-fitness/internal/service",
+      "name": "TestLegacyPlanColumnsReceiveCompatibleDefaults",
+      "passed": true
+    }
+  ],
+  "original_profile_test_expectation_updated": "Integer weight; six rejected fraction/range requests independently verified not to partially persist nickname or numeric fields",
+  "limitations": [
+    "Local engine is MySQL 9.0.0; production engine version parity not verified.",
+    "Does not replace pending real-device, multi-account, upload failure or load testing."
+  ]
+}

@@ -46,10 +46,10 @@
     "go_build": "passed"
   },
   "limitations": [
-    "Isolated local database unavailable: 26 integration tests skipped, full database regression incomplete.",
     "Simulator does not replace Android, native keyboard and multi-account testing.",
     "Real profile test used current production backend; new backend validation tested locally only.",
-    "Parameter binding tests are not a full penetration test."
+    "Parameter binding tests are not a full penetration test.",
+    "Database follow-up used isolated MySQL 9.0.0; production engine version parity not verified. Initial run counts retained above for traceability."
   ],
   "release": {
     "deployed": false,
@@ -57,5 +57,14 @@
     "submitted_for_review": false,
     "previous_uploaded_version": "1.0.20261016.3",
     "current_changes_in_previous_version": false
+  },
+  "follow_up_database_verification": {
+    "report": "database-verification.json",
+    "previously_skipped_tests_passed": 26,
+    "full_backend_pass_events": 136,
+    "failed": 0,
+    "skipped": 0,
+    "temporary_database_removed": true,
+    "temporary_instance_stopped": true
   }
 }

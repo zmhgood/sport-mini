@@ -1,5 +1,5 @@
 priority,module,status,remaining_scope,verification
-P1,Database regression,Skipped this run,"26 existing integration tests: family, plan, permissions, statistics",Rerun on isolated MySQL; historical passes do not count for this change
+P1,Database regression,26 previously skipped tests passed in follow-up,"Full backend race suite: 136 pass events, zero failures/skips",Isolated MySQL 9.0.0; see database-verification.json
 P1,Invitation refresh,Missing full verification,"Member permissions, old/new code validity, concurrent refresh/join",Two-account API and DB tests
 P1,Admin authentication lifecycle,Missing complete coverage,"Wrong password, disabled account, old token after disable, rate limits",Isolated account tests
 P1,Exercise CRUD,Missing full DB regression,Create/update/delete boundaries; deleting an exercise used by plans/history,DB integration and admin UI
