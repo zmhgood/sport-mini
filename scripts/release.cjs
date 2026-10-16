@@ -48,7 +48,7 @@ function uploadRelease(release) {
   }
   execFileSync('/Applications/wechatwebdevtools.app/Contents/MacOS/cli', [
     'upload', '--project', release.project, '--version', release.version,
-    '--desc', `爸妈动起来 ${release.version}；修复体验版页脚具体版本号。Git ${release.commit.slice(0, 7)}`,
+    '--desc', `爸妈动起来 ${release.version}；Git ${release.commit.slice(0, 7)}`,
     '--info-output', path.join(release.project, 'upload-info.json')
   ], { stdio: 'inherit' })
 }

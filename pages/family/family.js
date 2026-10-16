@@ -182,6 +182,7 @@ Page(withFontSize({
             const res = await api.request('/family/leave', 'POST', {
               family_id: this.data.family.id
             })
+            if (res.code !== 0) throw new Error(res.message || '退出失败，请稍后重试')
             if (res.code === 0) {
               wx.showToast({ title: '已退出', icon: 'success' })
               // 清除缓存的家庭ID
@@ -190,7 +191,11 @@ Page(withFontSize({
               this.loadFamilies()
             }
           } catch (err) {
-            wx.showToast({ title: '操作失败', icon: 'none' })
+            wx.showModal({
+              title: '无法退出家庭',
+              content: err.message || '退出失败，请稍后重试',
+              showCancel: false
+            })
           }
         }
       }
