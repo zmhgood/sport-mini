@@ -41,7 +41,15 @@
     "unit_tests_passed": 172,
     "new_tests": 4,
     "uploaded": false,
-    "official_simulator_result": "Not verified: automation connection failed on original and restarted official CLI endpoints. CLI auto success was not counted as simulator pass."
+    "official_simulator_result": "Not verified: automation connection failed on original and restarted official CLI endpoints. CLI auto success was not counted as simulator pass.",
+    "official_simulator_follow_up": {
+      "checks_passed": 8,
+      "complete": true,
+      "initial_catalogue_requests_for_three_pages": 1,
+      "synthetic_cache_removed": true,
+      "report": "simulator-complete.json",
+      "note": "Earlier failed connection report retained. Network-capable execution connected successfully to the local official automation port."
+    }
   },
   "limitations": [
     "Three-sample desktop measurements are not a latency SLA or a full mobile benchmark.",

@@ -35,5 +35,30 @@
     "https://cloud.tencent.com/document/product/436/36637",
     "https://cloud.tencent.com/document/product/228/11204",
     "https://cloud.tencent.com/document/product/436/56558"
+  ],
+  "pricing_checked_date": "2026-10-16",
+  "pricing_cny": {
+    "cdn_mainland_first_2tb_per_gb": 0.21,
+    "cos_chengdu_cdn_origin_per_gb": 0.15,
+    "https_requests_free_per_account_per_month": 3000000,
+    "https_overage_per_10000_requests": 0.05,
+    "example": {
+      "cdn_billed_gb": 100,
+      "cos_origin_billed_gb": 10,
+      "traffic_cost": 22.5,
+      "excluded": [
+        "Existing COS storage",
+        "COS request charges",
+        "Optional services",
+        "Discounts or resource bundles"
+      ]
+    },
+    "note": "CDN and COS use their respective billing measurement definitions; actual fees depend on location and account billing."
+  },
+  "pricing_sources": [
+    "https://cloud.tencent.com/document/product/228/75562",
+    "https://buy.cloud.tencent.com.cn/price/cos",
+    "https://cloud.tencent.com/document/product/228/75563",
+    "https://cloud.tencent.com/document/product/436/53863"
   ]
 }

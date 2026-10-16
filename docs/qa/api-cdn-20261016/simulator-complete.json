@@ -1,0 +1,40 @@
+{
+  "checks": [
+    {
+      "name": "home catalogue",
+      "pass": true
+    },
+    {
+      "name": "category filtering",
+      "pass": true
+    },
+    {
+      "name": "plan catalogue",
+      "pass": true
+    },
+    {
+      "name": "three pages share one catalogue request",
+      "pass": true
+    },
+    {
+      "name": "cached category switching",
+      "pass": true
+    },
+    {
+      "name": "expired catalogue refreshes",
+      "pass": true
+    },
+    {
+      "name": "failed refresh shows retry and releases loading",
+      "pass": true
+    },
+    {
+      "name": "failure is not cached and retry succeeds",
+      "pass": true
+    }
+  ],
+  "complete": true,
+  "initialCatalogueRequestCount": 1,
+  "totalCatalogueRequestsBeforeCleanup": 4,
+  "syntheticCacheRemoved": true
+}
