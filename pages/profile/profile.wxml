@@ -22,8 +22,8 @@
 
     <!-- 统计数据 -->
     <view class="stats-card card">
-      <text wx:if="{{statisticsLoading}}">正在加载统计…</text>
-      <view wx:elif="{{statisticsError}}"><text>{{statisticsError}}</text><button bindtap="loadStatistics">重试</button></view>
+      <view class="stats-status" wx:if="{{statisticsLoading}}">正在加载统计…</view>
+      <view class="stats-status" wx:elif="{{statisticsError}}"><text>{{statisticsError}}</text><button bindtap="loadStatistics">重试</button></view>
       <view class="stat-item">
         <text class="stat-value">{{statisticsLoading || statisticsError ? '—' : statistics.totalDays}}</text>
         <text class="stat-label">累计锻炼天数</text>
