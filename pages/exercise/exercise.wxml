@@ -41,10 +41,6 @@
         <text class="info-value">{{exercise.reps}}</text>
         <text class="info-label">每组次数</text>
       </view>
-      <view class="info-item">
-        <text class="info-value">{{exercise.calories}}卡</text>
-        <text class="info-label">消耗热量</text>
-      </view>
     </view>
 
     <view class="description">
