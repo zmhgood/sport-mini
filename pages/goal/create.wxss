@@ -379,6 +379,7 @@
   padding: 4rpx 12rpx;
   border-radius: 8rpx;
   color: #FFFFFF;
+  background: #5E6E72;
 }
 
 .option-category.upper {
