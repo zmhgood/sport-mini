@@ -1,0 +1,28 @@
+[
+  {
+    "sample": 0,
+    "code": 200,
+    "ttfb": 0.210654,
+    "total": 0.210801,
+    "headers": [
+      "server: nginx"
+    ]
+  },
+  {
+    "sample": 1,
+    "code": 200,
+    "ttfb": 1.544254,
+    "total": 1.552611,
+    "headers": [
+      "server: cloudflare",
+      "cf-ray: a4b5d01a7a2e064f-HKG"
+    ]
+  },
+  {
+    "sample": 2,
+    "code": 0,
+    "ttfb": 0.0,
+    "total": 1.456748,
+    "headers": []
+  }
+]

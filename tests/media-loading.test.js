@@ -15,21 +15,26 @@ test('exercise count appears only after a successful response, including a genui
   assert.match(render(), /共0个动作/)
   assert.match(render(), /暂无相关锻炼/)
 })
-test('rapid category changes never let an old response overwrite the selected category', async () => {
-  const first = deferred(), second = deferred()
+test('rapid category changes share a request and render only the latest category', async () => {
+  const pending = deferred()
   let requestCount = 0
-  const { page } = loadPage('pages/muscle/muscle.js', () => ++requestCount === 1 ? first.promise : second.promise)
+  const { page } = loadPage('pages/muscle/muscle.js', () => { requestCount++; return pending.promise })
   const old = page.getExercises(); page.setData({ currentTab: 2 }); const latest = page.getExercises()
-  second.resolve(ok({ list: [{ id: 3, muscle_group_id: 3, name: '下肢动作' }] })); await latest
-  first.resolve(ok({ list: [{ id: 1, muscle_group_id: 2, name: '上肢动作' }] })); await old
+  pending.resolve(ok({ list: [{ id: 1, muscle_group_id: 2 }, { id: 3, muscle_group_id: 3 }] }))
+  await Promise.all([old, latest])
+  assert.equal(requestCount, 1)
   assert.equal(page.data.exercises[0].id, 3); assert.equal(page.data.loading, false)
 })
-test('stale category failures cannot replace a newer success', async () => {
+test('shared category failure releases loading and the latest category can retry', async () => {
   const old = deferred()
   let requestCount = 0
   const { page } = loadPage('pages/muscle/muscle.js', () => ++requestCount === 1 ? old.promise : Promise.resolve(ok({ list: [{ id: 3, muscle_group_id: 3 }] })))
-  const work = page.getExercises(); page.setData({ currentTab: 2 }); await page.getExercises()
-  old.reject(Error('old request failed')); await work
+  const work = page.getExercises(); page.setData({ currentTab: 2 }); const latest = page.getExercises()
+  old.reject(Error('request failed')); await Promise.all([work, latest])
+  assert.equal(requestCount, 1); assert.equal(page.data.loading, false)
+  assert.equal(page.data.loadError, 'request failed')
+  await page.getExercises()
+  assert.equal(requestCount, 2)
   assert.equal(page.data.loadError, ''); assert.equal(page.data.exercises[0].id, 3)
 })
 for (const business of [false, true]) {

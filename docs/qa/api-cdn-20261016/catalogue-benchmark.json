@@ -1,0 +1,11 @@
+{
+  "environment": "Node client running actual public catalogue loader; not a phone UI measurement",
+  "catalogue_items": 10,
+  "network_requests": 1,
+  "cold_ms": 310.830375,
+  "warm_ms": [
+    0.003792000000032658,
+    0.0007090000000289365,
+    0.0005840000000034706
+  ]
+}

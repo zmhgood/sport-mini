@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-16",
+  "baseline": {
+    "mini_version": "1.0.20261016.4",
+    "backend_commit": "e0d4dba773286864cf9d0ac917bb5685c2377108"
+  },
+  "measurements": {
+    "mac_public_before_seconds": [
+      1.336285,
+      1.390315,
+      1.723853
+    ],
+    "mac_origin_https_before_seconds": [
+      0.188358,
+      0.183047,
+      0.264975
+    ],
+    "server_backend_exercises_seconds": 0.003964,
+    "server_public_before_seconds": 1.900101,
+    "server_public_after_seconds": 0.051487,
+    "mac_final_health_seconds": 0.262927,
+    "phone_result": "User confirmed clearly faster after unlocking and reopening experience version"
+  },
+  "network_change": {
+    "host": "www.dosport.online",
+    "original": "Cloudflare Proxied",
+    "current": "DNS only",
+    "origin_address_unchanged": true,
+    "https_verification_preserved": true,
+    "user_approved_temporary_test": true,
+    "user_approved_retaining_direct_route": true,
+    "cloudflare_protection_bypassed_for_host": true,
+    "other_dns_records_unchanged": true
+  },
+  "client_optimization": {
+    "scope": "Public exercise catalogue only, shared by home/exercise/plan creation pages",
+    "ttl_seconds": 60,
+    "concurrent_requests_coalesced": true,
+    "failures_not_cached": true,
+    "personal_data_not_cached": true,
+    "unit_tests_passed": 172,
+    "new_tests": 4,
+    "uploaded": false,
+    "official_simulator_result": "Not verified: automation connection failed on original and restarted official CLI endpoints. CLI auto success was not counted as simulator pass."
+  },
+  "limitations": [
+    "Three-sample desktop measurements are not a latency SLA or a full mobile benchmark.",
+    "DNS propagation samples include old Cloudflare routes and one failed connection; all samples retained.",
+    "Private authenticated endpoint timing was not measured: auto approval rejected the proposed JWT-secret/impersonation method; method was abandoned."
+  ],
+  "submitted_for_review": false,
+  "backend_code_changed_this_round": false
+}

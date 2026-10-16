@@ -1,0 +1,39 @@
+{
+  "status": "Inspected only; CDN not activated and no billing agreement accepted",
+  "console_access": "Correct bucket owner account confirmed after user switched accounts",
+  "current": {
+    "bucket": "sport-online-1407507629",
+    "region": "ap-chengdu",
+    "cdn_service_activated": false,
+    "global_acceleration_enabled": false,
+    "custom_origin_domains": []
+  },
+  "proposed": {
+    "hostname": "media.dosport.online (proposed, not created)",
+    "origin": "sport-online-1407507629.cos.ap-chengdu.myqcloud.com",
+    "protocol": "HTTPS client access and HTTPS origin fetch",
+    "dns": "CNAME to Tencent-assigned CDN target; do not add another Cloudflare proxy layer",
+    "content": "Public exercise images and GIFs only. Do not broadly expose the bucket or change avatar/private data permissions.",
+    "cache": "Start with one day for public static media; versioned object names or targeted purge for replacements; preserve version query parameters.",
+    "wechat": "Add https://media.dosport.online to downloadFile legal domains; keep existing origin domain during transition.",
+    "upload": "Continue authenticated upload through backend/COS; CDN is used for distribution, not uploads."
+  },
+  "required_before_activation": [
+    "Confirm ICP filing for Mainland China acceleration",
+    "Review CDN service agreement and billing with user",
+    "Issue/bind a valid certificate for the media hostname",
+    "Verify public asset scope and any private-origin authorization before granting access",
+    "Configure CNAME, cache rules and HTTPS",
+    "Measure response headers, cache hits and GIF playback from real phones before switching existing asset URLs"
+  ],
+  "sample_public_gif": {
+    "bytes": 4298154,
+    "cache_control_header": null,
+    "note": "CDN reduces repeated/network distance cost; optimize GIF encoding separately if needed."
+  },
+  "documentation": [
+    "https://cloud.tencent.com/document/product/436/36637",
+    "https://cloud.tencent.com/document/product/228/11204",
+    "https://cloud.tencent.com/document/product/436/56558"
+  ]
+}

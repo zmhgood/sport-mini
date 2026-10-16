@@ -11,7 +11,26 @@ function categoryForExercise(exercise) {
   return groupName ? (names[groupName] || 'all') : (legacy[exercise.muscle_group_id] || 'all')
 }
 
+// Only the public exercise catalogue is shared; personal data is never cached here.
+const catalogueCache = new WeakMap()
 async function loadAllExercises(api) {
+  const cached = catalogueCache.get(api)
+  if (cached && cached.expiresAt > Date.now()) return cached.items
+  if (cached && cached.pending) return cached.pending
+  const entry = {}
+  catalogueCache.set(api, entry)
+  entry.pending = fetchAllExercises(api).then(items => {
+    entry.items = items
+    entry.expiresAt = Date.now() + 60000
+    return items
+  }).catch(err => {
+    catalogueCache.delete(api)
+    throw err
+  }).finally(() => { entry.pending = null })
+  return entry.pending
+}
+
+async function fetchAllExercises(api) {
   const list = []
   let page = 1
   while (true) {
