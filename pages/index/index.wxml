@@ -13,36 +13,14 @@
         <text class="username">点击登录</text>
       </view>
       
-      <!-- 家庭切换 -->
-      <view class="family-switch" wx:if="{{isLoggedIn && families.length > 0}}" bindtap="switchFamily">
-        <text class="family-name">{{currentFamily.name || '选择家庭'}}</text>
-        <text class="family-arrow">▼</text>
+      <!-- 家庭成员和计划入口 -->
+      <view class="family-switch" wx:if="{{isLoggedIn && families.length > 0}}" bindtap="goToFamily">
+        <text class="family-name">{{currentFamily.name || '家庭成员和计划'}}</text>
+        <text class="family-arrow">›</text>
       </view>
     </view>
   </view>
   
-  <!-- 家庭选择弹窗 -->
-  <view class="family-popup" wx:if="{{showFamilyPopup}}" bindtap="closeFamilyPopup">
-    <view class="family-popup-content" catchtap="preventClose">
-      <view class="family-popup-header">
-        <text class="family-popup-title">选择家庭</text>
-        <text class="family-popup-close" bindtap="closeFamilyPopup">✕</text>
-      </view>
-      <scroll-view class="family-list" scroll-y style="height: {{families.length * 116}}rpx;">
-        <view class="family-item {{currentFamily.id === item.id ? 'active' : ''}}" 
-              wx:for="{{families}}" wx:key="id" 
-              bindtap="selectFamily" data-id="{{item.id}}">
-          <text class="family-item-name">{{item.name}}</text>
-          <text class="family-item-check" wx:if="{{currentFamily.id === item.id}}">✓</text>
-        </view>
-      </scroll-view>
-      <view class="family-popup-footer">
-        <button class="join-family-btn" bindtap="goToCreateFamily">创建新家庭</button>
-        <button class="join-family-btn" bindtap="goToJoinFamily">加入其他家庭</button>
-      </view>
-    </view>
-  </view>
-
   <!-- 轮播图 -->
   <swiper class="banner" indicator-dots autoplay circular interval="5000">
     <swiper-item wx:for="{{bannerList}}" wx:key="id">

@@ -41,7 +41,7 @@ test('unimplemented settings disclose their status without navigation or configu
 
 test('implemented settings still open their existing pages', () => {
   const routes = []
-  const { page } = loadPage('pages/profile/profile.js', async () => ({ code: 0 }), {}, {
+  const { page } = loadPage('pages/profile/profile.js', async () => ({ code: 0 }), { token: 'synthetic-token' }, {
     wx: { navigateTo: value => routes.push(value.url) }
   })
   for (const id of ['family', 'goals', 'profile', 'fontSize']) page.goToSetting({ currentTarget: { dataset: { id } } })

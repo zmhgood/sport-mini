@@ -365,6 +365,10 @@ Page(withFontSize({
   // 跳转到设置页面
   goToSetting(e) {
     const { id } = e.currentTarget.dataset
+    if (['family', 'goals', 'profile'].includes(id) && !wx.getStorageSync('token')) {
+      this.handleLogin()
+      return
+    }
     
     switch(id) {
       case 'family':

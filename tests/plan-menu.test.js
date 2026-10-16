@@ -57,12 +57,12 @@ test('existing family still exposes a create action without changing membership 
   assert.equal(storage.currentFamilyId, 4)
 })
 
-test('create from home closes family sheet and restores bottom navigation', () => {
-  const routes = [], { page } = loadPage('pages/index/index.js', () => {}, {}, { wx: { navigateTo: value => routes.push(value.url) } })
+test('home family entry navigates without hiding bottom navigation', () => {
+  const routes = [], { page } = loadPage('pages/index/index.js', () => {}, { token: 'synthetic-token' }, { wx: { navigateTo: value => routes.push(value.url) } })
   const tab = { setData(value) { Object.assign(this, value) } }; page.getTabBar = () => tab
-  page.switchFamily(); assert.equal(tab.hidden, true)
-  page.goToCreateFamily()
+  page.checkLogin = page.getRecommendExercises = page.updateProgress = page.loadFamilyGoals = () => {}
+  page.onShow()
+  page.goToFamily()
   assert.equal(tab.hidden, false)
-  assert.equal(page.data.showFamilyPopup, false)
-  assert.equal(routes[0], '/pages/family/join?type=create')
+  assert.equal(routes[0], '/pages/family/family')
 })

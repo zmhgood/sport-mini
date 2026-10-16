@@ -22,7 +22,6 @@ Page(withFontSize({
     totalPendingGoals: 0,  // 总待完成任务数
     families: [],
     currentFamily: {},
-    showFamilyPopup: false,
     currentCategory: 'all',
     todayProgress: {
       completed: 0,
@@ -40,15 +39,10 @@ Page(withFontSize({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0, hidden: false })
     }
-    this.setData({ showFamilyPopup: false })
     this.checkLogin()
     this.getRecommendExercises()
     this.updateProgress()
     this.loadFamilyGoals()
-  },
-
-  onHide() {
-    this.closeFamilyPopup()
   },
 
   // 初始化数据
@@ -145,51 +139,8 @@ Page(withFontSize({
 
   goToFamily() { wx.navigateTo({ url: '/pages/family/family' }) },
 
-  // 打开家庭选择弹窗
-  switchFamily() {
-    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ hidden: true })
-    }
-    this.setData({ showFamilyPopup: true })
-  },
-
-  // 关闭家庭选择弹窗
-  closeFamilyPopup() {
-    this.setData({ showFamilyPopup: false })
-    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ hidden: false })
-    }
-  },
-
-  // 阻止事件冒泡
-  preventClose() {
-    // 什么都不做，只是阻止冒泡
-  },
-
-  // 选择家庭
-  selectFamily(e) {
-    const familyId = e.currentTarget.dataset.id
-    const family = this.data.families.find(f => f.id === familyId)
-    if (family) {
-      wx.setStorageSync('currentFamilyId', familyId)
-      this.setData({ 
-        currentFamily: family,
-        familyName: family.name
-      })
-      this.closeFamilyPopup()
-      // 重新加载该家庭的任务
-      this.loadFamilyGoals()
-    }
-  },
-
-  goToCreateFamily() {
-    this.closeFamilyPopup()
-    wx.navigateTo({ url: '/pages/family/join?type=create' })
-  },
-
   // 跳转到加入家庭页面
   goToJoinFamily() {
-    this.closeFamilyPopup()
     wx.navigateTo({
       url: '/pages/family/join?type=join'
     })
@@ -229,7 +180,7 @@ Page(withFontSize({
 
   // 开始今日锻炼
   startTodayExercise() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/muscle/muscle'
     })
   },
@@ -242,11 +193,10 @@ Page(withFontSize({
     })
   },
 
-  // 跳转到肌肉部位
-  goToMuscle(e) {
-    const { id } = e.currentTarget.dataset
-    wx.navigateTo({
-      url: `/pages/muscle/muscle?groupId=${id}`
+  // 跳转到锻炼分类页
+  goToMuscle() {
+    wx.switchTab({
+      url: '/pages/muscle/muscle'
     })
   },
 
@@ -261,12 +211,16 @@ Page(withFontSize({
   // 跳转到目标列表
   goToGoalList() {
     wx.navigateTo({
-      url: '/pages/goal/list'
+      url: '/pages/goal/goal'
     })
   },
 
-  // 跳转到我的页统一登录
+  // 已登录查看我的页，未登录直接登录
   goToProfile() {
+    if (!wx.getStorageSync('token')) {
+      wx.navigateTo({ url: '/pages/login/login' })
+      return
+    }
     wx.switchTab({ url: '/pages/profile/profile' })
   },
 
