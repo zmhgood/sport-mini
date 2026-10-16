@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "name": "age uses integer keyboard",
+      "pass": true
+    },
+    {
+      "name": "age rejects 66.5",
+      "pass": true
+    },
+    {
+      "name": "age rejects -1",
+      "pass": true
+    },
+    {
+      "name": "age rejects 1e2",
+      "pass": true
+    },
+    {
+      "name": "age can clear",
+      "pass": true
+    },
+    {
+      "name": "height uses integer keyboard",
+      "pass": true
+    },
+    {
+      "name": "height rejects 66.5",
+      "pass": true
+    },
+    {
+      "name": "height rejects -1",
+      "pass": true
+    },
+    {
+      "name": "height rejects 1e2",
+      "pass": true
+    },
+    {
+      "name": "height can clear",
+      "pass": true
+    },
+    {
+      "name": "weight uses integer keyboard",
+      "pass": true
+    },
+    {
+      "name": "weight rejects 66.5",
+      "pass": true
+    },
+    {
+      "name": "weight rejects -1",
+      "pass": true
+    },
+    {
+      "name": "weight rejects 1e2",
+      "pass": true
+    },
+    {
+      "name": "weight can clear",
+      "pass": true
+    },
+    {
+      "name": "sets rejects decimal in rendered input",
+      "pass": true
+    },
+    {
+      "name": "sets remains empty while editing",
+      "pass": true
+    },
+    {
+      "name": "reps rejects decimal in rendered input",
+      "pass": true
+    },
+    {
+      "name": "reps remains empty while editing",
+      "pass": true
+    }
+  ],
+  "complete": true,
+  "environment": "Official simulator, iPhone 5, width 320px; synthetic inputs and mocked requests"
+}

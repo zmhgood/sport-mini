@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "name": "cancel then reopen preserves original nickname",
+      "pass": true
+    },
+    {
+      "name": "actual page save and readback succeed",
+      "pass": true
+    },
+    {
+      "name": "reopen retains all entered fields",
+      "pass": true
+    },
+    {
+      "name": "out of range blocked before request",
+      "pass": true
+    },
+    {
+      "name": "network failure preserves cache and releases loading",
+      "pass": true
+    },
+    {
+      "name": "clear optional fields persists on reopen",
+      "pass": true
+    },
+    {
+      "name": "server rejects invalid range without partial profile write",
+      "pass": true
+    }
+  ],
+  "restored": true,
+  "usesRealBackend": true,
+  "nativeBackMocked": true
+}

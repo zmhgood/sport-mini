@@ -49,7 +49,7 @@
       <text class="label">身高</text>
       <input 
         class="input" 
-        type="digit" 
+        type="number"
         placeholder="请输入身高"
         value="{{userInfo.height}}"
         bindinput="onHeightInput"
@@ -63,7 +63,7 @@
       <text class="label">体重</text>
       <input 
         class="input" 
-        type="digit" 
+        type="number"
         placeholder="请输入体重"
         value="{{userInfo.weight}}"
         bindinput="onWeightInput"

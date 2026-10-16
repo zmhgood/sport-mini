@@ -1,0 +1,11 @@
+priority,module,status,remaining_scope,verification
+P1,Database regression,Skipped this run,"26 existing integration tests: family, plan, permissions, statistics",Rerun on isolated MySQL; historical passes do not count for this change
+P1,Invitation refresh,Missing full verification,"Member permissions, old/new code validity, concurrent refresh/join",Two-account API and DB tests
+P1,Admin authentication lifecycle,Missing complete coverage,"Wrong password, disabled account, old token after disable, rate limits",Isolated account tests
+P1,Exercise CRUD,Missing full DB regression,Create/update/delete boundaries; deleting an exercise used by plans/history,DB integration and admin UI
+P1,System configuration,Further review needed,Public configuration response scope; partial failure of batch updates,Review field allowlist without exposing secrets
+P1,Upload failures,Partial validation covered,"Storage timeout/failure, cancel, decoding, authentication and asset access",Fault injection and storage integration
+P1,Profile multi-account concurrency,Single-account flow passed,Cross-account access and simultaneous device saves,Isolated users; do not change current personal profile
+P2,SQL database behavior,DryRun binding passed,Real MySQL results and wildcard semantics,Isolated MySQL; no destructive production testing
+P2,History scale,Bounds fixed; no load test,Full collection loading before pagination: memory and latency,Isolated large dataset
+P2,Real device compatibility,19 simulator checks passed,"Android keyboard, resume/offline, multiple accounts",Continue when user available

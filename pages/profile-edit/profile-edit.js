@@ -56,26 +56,28 @@ Page(withFontSize({
 
   // 年龄输入
   onAgeInput(e) {
-    const value = e.detail.value
-    this.setData({
-      'userInfo.age': value ? parseInt(value) : null
-    })
+    return this.setIntegerInput('age', e.detail.value)
   },
 
   // 身高输入
   onHeightInput(e) {
-    const value = e.detail.value
-    this.setData({
-      'userInfo.height': value ? parseInt(value) : null
-    })
+    return this.setIntegerInput('height', e.detail.value)
   },
 
   // 体重输入
   onWeightInput(e) {
-    const value = e.detail.value
-    this.setData({
-      'userInfo.weight': value ? parseInt(value) : null
-    })
+    return this.setIntegerInput('weight', e.detail.value)
+  },
+
+  setIntegerInput(field, value) {
+    if (!/^\d*$/.test(value)) {
+      const previous = this.data.userInfo[field]
+      this.setData({ [`userInfo.${field}`]: previous })
+      wx.showToast({ title: '只能输入整数', icon: 'none' })
+      return previous == null ? '' : String(previous)
+    }
+    this.setData({ [`userInfo.${field}`]: value === '' ? null : value })
+    return value
   },
 
   // 健康状况输入
@@ -89,17 +91,20 @@ Page(withFontSize({
   async onSave() {
     if (this.data.loading || this._completed) return
     const { userInfo } = this.data
+    const age = userInfo.age == null ? 0 : Number(userInfo.age)
+    const height = userInfo.height == null ? 0 : Number(userInfo.height)
+    const weight = userInfo.weight == null ? 0 : Number(userInfo.weight)
 
     // 验证
-    if (userInfo.age && (userInfo.age < 1 || userInfo.age > 150)) {
+    if (userInfo.age != null && (!Number.isInteger(age) || age < 1 || age > 150)) {
       wx.showToast({ title: '请输入正确的年龄', icon: 'none' })
       return
     }
-    if (userInfo.height && (userInfo.height < 50 || userInfo.height > 250)) {
+    if (userInfo.height != null && (!Number.isInteger(height) || height < 50 || height > 250)) {
       wx.showToast({ title: '请输入正确的身高', icon: 'none' })
       return
     }
-    if (userInfo.weight && (userInfo.weight < 20 || userInfo.weight > 300)) {
+    if (userInfo.weight != null && (!Number.isInteger(weight) || weight < 20 || weight > 300)) {
       wx.showToast({ title: '请输入正确的体重', icon: 'none' })
       return
     }
@@ -110,9 +115,9 @@ Page(withFontSize({
       const res = await api.request('/user/info', 'PUT', {
         nick_name: userInfo.nick_name,
         gender: userInfo.gender,
-        age: userInfo.age || 0,
-        height: userInfo.height || 0,
-        weight: userInfo.weight || 0,
+        age,
+        height,
+        weight,
         health_status: userInfo.health_status
       })
 

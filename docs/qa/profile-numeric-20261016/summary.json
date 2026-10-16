@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-16",
+  "ranges": {
+    "age": [
+      1,
+      150
+    ],
+    "height_cm": [
+      50,
+      250
+    ],
+    "weight_kg": [
+      20,
+      300
+    ],
+    "sets": [
+      1,
+      100
+    ],
+    "reps": [
+      1,
+      1000
+    ]
+  },
+  "validation": {
+    "mini_unit_passed": 168,
+    "simulator_input_passed": 19,
+    "real_profile_passed": 7,
+    "original_profile_restored_and_read_back": true,
+    "avatar_unchanged": true,
+    "native_navigation_mocked": true,
+    "backend_race_test_events": {
+      "passed": 105,
+      "skipped": 26,
+      "failed": 0,
+      "note": "Includes parent and child test events. Database integration tests skipped."
+    },
+    "sql_binding": {
+      "paths": 11,
+      "payloads_per_path": 4,
+      "passed": 44,
+      "mode": "GORM DryRun; no production attack or database connection"
+    },
+    "http_pagination_passed": 16,
+    "go_vet": "passed",
+    "go_build": "passed"
+  },
+  "limitations": [
+    "Isolated local database unavailable: 26 integration tests skipped, full database regression incomplete.",
+    "Simulator does not replace Android, native keyboard and multi-account testing.",
+    "Real profile test used current production backend; new backend validation tested locally only.",
+    "Parameter binding tests are not a full penetration test."
+  ],
+  "release": {
+    "deployed": false,
+    "uploaded": false,
+    "submitted_for_review": false,
+    "previous_uploaded_version": "1.0.20261016.3",
+    "current_changes_in_previous_version": false
+  }
+}

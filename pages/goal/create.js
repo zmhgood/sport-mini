@@ -221,19 +221,25 @@ Page(withFontSize({
   },
 
   onSetsInput(e) {
-    const index = e.currentTarget.dataset.index
-    const value = parseInt(e.detail.value) || 0
-    const selectedExercises = this.data.selectedExercises
-    selectedExercises[index].sets = value
-    this.setData({ selectedExercises })
+    return this.setExerciseInteger(e, 'sets')
   },
 
   onRepsInput(e) {
+    return this.setExerciseInteger(e, 'reps')
+  },
+
+  setExerciseInteger(e, field) {
     const index = e.currentTarget.dataset.index
-    const value = parseInt(e.detail.value) || 0
+    const value = e.detail.value
     const selectedExercises = this.data.selectedExercises
-    selectedExercises[index].reps = value
+    if (!/^\d*$/.test(value)) {
+      this.setData({ selectedExercises })
+      wx.showToast({ title: '只能输入整数', icon: 'none' })
+      return String(selectedExercises[index][field])
+    }
+    selectedExercises[index][field] = value === '' ? '' : Number(value)
     this.setData({ selectedExercises })
+    return value
   },
 
   removeExercise(e) {
@@ -257,6 +263,15 @@ Page(withFontSize({
 
     if (this.data.selectedExercises.length === 0) {
       wx.showToast({ title: '请添加至少一个动作', icon: 'none' })
+      return
+    }
+
+    if (this.data.selectedExercises.some(e => !Number.isInteger(e.sets) || e.sets < 1 || e.sets > 100)) {
+      wx.showToast({ title: '每个动作请输入1–100组', icon: 'none' })
+      return
+    }
+    if (this.data.selectedExercises.some(e => !Number.isInteger(e.reps) || e.reps < 1 || e.reps > 1000)) {
+      wx.showToast({ title: '每组请输入1–1000次', icon: 'none' })
       return
     }
 
