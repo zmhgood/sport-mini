@@ -1,6 +1,7 @@
 const { withFontSize } = require('../../utils/font-size')
 // pages/profile/profile.js
 const api = require('../../utils/api')
+const buildInfo = require('../../config/build-info')
 
 Page(withFontSize({
   data: {
@@ -46,8 +47,10 @@ Page(withFontSize({
 
   loadVersion() {
     const { envVersion, version } = wx.getAccountInfoSync().miniProgram
+    const packagedVersion = ['trial', 'release'].includes(envVersion) ? buildInfo.version : ''
+    const displayVersion = envVersion === 'release' ? version || packagedVersion : packagedVersion || version
     this.setData({
-      versionText: version ? `v${version}` : ({ develop: '开发版', trial: '体验版', release: '正式版' })[envVersion] || '版本信息暂不可用'
+      versionText: displayVersion ? `v${displayVersion}` : ({ develop: '开发版', trial: '体验版', release: '正式版' })[envVersion] || '版本信息暂不可用'
     })
   },
 
