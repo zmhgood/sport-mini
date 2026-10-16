@@ -142,28 +142,6 @@ const auth = {
   updateUserInfo: (data) => put('/user/info', data)
 }
 
-/**
- * 评论相关API
- */
-const comment = {
-  // 获取评论列表
-  getList: (exerciseId, page = 1, pageSize = 10) => 
-    get('/comments', { exercise_id: exerciseId, page, page_size: pageSize }),
-  
-  // 发表评论
-  create: (data) => post('/comments', data),
-  
-  // 删除评论
-  delete: (id) => del(`/comments/${id}`),
-  
-  // 点赞/取消点赞
-  toggleLike: (id) => post(`/comments/${id}/like`),
-  
-  // 获取我的评论
-  getMyComments: (page = 1, pageSize = 10) => 
-    get('/user/comments', { page, page_size: pageSize })
-}
-
 module.exports = {
   request,
   get,
@@ -172,7 +150,6 @@ module.exports = {
   del,
   upload,
   auth,
-  comment,
   BASE_URL,
   
   /**

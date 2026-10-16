@@ -20,4 +20,8 @@
     </view>
     <button class="btn-submit" bindtap="joinFamily" loading="{{loading}}" disabled="{{loading}}">加入</button>
   </view>
+  <view class="privacy-notice">
+    <text>创建或加入家庭后，家庭成员可查看彼此的昵称、头像，以及本家庭的计划和锻炼进度。家庭管理员可为成员安排、修改或暂停计划，任务自动更新。性别、年龄、身高、体重和健康状况不在家庭成员页面共享。请只向信任的人分享邀请码。</text>
+    <navigator url="/pages/privacy/privacy" class="privacy-link">查看隐私说明</navigator>
+  </view>
 </view>

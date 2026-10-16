@@ -52,3 +52,15 @@
   border: none;
   margin-top: 48rpx;
 }
+.privacy-notice {
+  margin: 24rpx 0;
+  padding: 0 24rpx;
+  font-size: calc(24rpx * var(--app-font-scale, 1));
+  line-height: 1.7;
+  color: #596970;
+}
+
+.privacy-link {
+  padding: 16rpx 0;
+  color: #176B73;
+}

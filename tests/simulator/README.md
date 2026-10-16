@@ -33,3 +33,16 @@ SDK 截图默认关闭；`MINI_QA_SCREENSHOTS=1` 才启用。优先用开发者�
 `font-size.cjs <label>` 运行前先把原项目编译到首页。脚本先验证家庭选择弹层，再从“我的”进入字号设置，检查三档实际渲染字号、重进保留、个人页底栏安全区、计划原生菜单、示范和完成按钮对齐、大字弹窗，以及已有家庭时的新建入口。字体偏好按设备保存，不随退出登录清除；仅接受标准100%、大号115%、特大130%三档。所有后端写入被拒绝，结束时恢复原有存储及请求。
 
 `plans.cjs` 的原生菜单通过 `wx.showActionSheet` 模拟选择验证权限和业务调用。`MINI_QA_SCREENSHOTS=0` 可在锁屏等无法截图时跳过截图，报告会明确标记视觉复核待完成；不能将该运行当作视觉验收通过。切换机型后串行复测，并核对报告中的实际窗口尺寸。
+# 提审前真实网络检查
+
+仓库的 `project.config.json` 默认启用 `urlCheck`，可直接导入本目录。原父目录项目也须在 `project.config.json` 和本机 `project.private.config.json` 中开启 `setting.urlCheck`，不能勾选“不校验合法域名”。模拟器普通开发模式仍连接本地服务；下面的检查显式使用与体验版一致的生产 API。
+
+```bash
+MINI_AUTOMATOR_PATH=/tmp/wechat-local-qa/node_modules/miniprogram-automator \
+MINI_AUTOMATOR_ENDPOINT=ws://127.0.0.1:9460 \
+node tests/simulator/domain-network.cjs --upload-avatar
+```
+
+该检查使用真实微信登录和网络，未配置域名必须先被拒绝，否则停止。`--upload-avatar` 会上传一张不含个人信息的测试 PNG，但不修改头像、昵称或锻炼数据。脚本不会打印登录 code 或 token；登录 token 只在本轮内存中使用。测试还会切换模拟器页面，用实际 `exercise-media` 图片加载回调验证公开 GIF 和测试图片；不模拟网络成功。报告中的 `getImageInfo` 是附加下载检查，需与实际图片组件结果区分。运行结束停在公开动图页；未覆盖系统头像选择、真机触控及后台隐私指引配置。
+
+发布时应使用仓库配置的 `setting.urlCheck=true`，并核对公众平台的 request、uploadFile 等域名配置；不要从历史上传目录复制关闭校验的设置。后台隐私保护指引需同步本次政策中的家庭可见范围、管理员计划权限和历史记录保留规则。
