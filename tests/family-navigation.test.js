@@ -78,6 +78,12 @@ test('home no-family join entry still opens the join form', () => {
   assert.deepEqual(f.routes, ['/pages/family/join?type=join'])
 })
 
+test('home share title invites the whole family to exercise', () => {
+  const f = load('pages/index/index.js')
+  assert.equal(f.page.onShareAppMessage().title, '爸妈动起来 - 带着家人一起动起来吧')
+  assert.equal(f.page.onShareAppMessage().path, '/pages/index/index')
+})
+
 test('legacy home action handlers use registered destinations and tab navigation', () => {
   const f = load('pages/index/index.js')
   f.page.startTodayExercise(); f.page.goToMuscle(); f.page.goToGoalList()

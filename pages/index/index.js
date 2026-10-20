@@ -227,7 +227,7 @@ Page(withFontSize({
   // 分享
   onShareAppMessage() {
     return {
-      title: '爸妈动起来 - 专为老年人设计的肌肉锻炼助手',
+      title: '爸妈动起来 - 带着家人一起动起来吧',
       path: '/pages/index/index'
     }
   }

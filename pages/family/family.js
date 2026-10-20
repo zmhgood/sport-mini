@@ -12,7 +12,11 @@ Page(withFontSize({
     members: [],
     goals: [],
     isAdmin: false,
-    currentUserId: null
+    currentUserId: null,
+    familyNameEditing: false,
+    familyNameDraft: '',
+    familyNameError: '',
+    renameSaving: false
   },
 
   onShow() {
@@ -64,10 +68,60 @@ Page(withFontSize({
   },
 
   onFamilyChange(e) {
+    if (this.data.renameSaving) return
     const index = parseInt(e.detail.value)
     const family = this.data.families[index]
     wx.setStorageSync('currentFamilyId', family.id)
+    this.cancelFamilyNameEdit()
     this.loadFamilies()
+  },
+
+  editFamilyName() {
+    if (!this.data.isAdmin || !this.data.family || this.data.renameSaving) return
+    this._renameFamilyId = this.data.family.id
+    this.setData({ familyNameEditing: true, familyNameDraft: this.data.family.name, familyNameError: '' })
+  },
+
+  onFamilyNameInput(e) {
+    this.setData({ familyNameDraft: Array.from(e.detail.value).slice(0, 64).join(''), familyNameError: '' })
+  },
+
+  cancelFamilyNameEdit() {
+    if (this.data.renameSaving) return
+    this._renameFamilyId = null
+    this.setData({ familyNameEditing: false, familyNameDraft: '', familyNameError: '' })
+  },
+
+  async saveFamilyName() {
+    if (this.data.renameSaving || !this.data.familyNameEditing) return
+    if (!this.data.isAdmin || !this.data.family || this.data.family.id !== this._renameFamilyId) {
+      this.setData({ familyNameError: '家庭或权限已变化，请重新进入后修改' })
+      return
+    }
+    const name = this.data.familyNameDraft.trim()
+    if (!name || Array.from(name).length > 64 || /[\u0000-\u001f\u007f-\u009f]/.test(name)) {
+      this.setData({ familyNameError: '请输入1～64个字，不含换行等控制字符' })
+      return
+    }
+    const familyId = this._renameFamilyId
+    this.setData({ renameSaving: true, familyNameError: '' })
+    try {
+      const res = await api.request(`/family/${familyId}/name`, 'PUT', { name })
+      if (res.code !== 0) throw new Error(res.message || '修改失败，请重试')
+      const updatedName = res.data.name
+      this.setData({
+        family: this.data.family && this.data.family.id === familyId ? { ...this.data.family, name: updatedName } : this.data.family,
+        families: this.data.families.map(f => f.id === familyId ? { ...f, name: updatedName } : f),
+        familyNameEditing: false,
+        familyNameDraft: ''
+      })
+      this._renameFamilyId = null
+      wx.showToast({ title: '名称已修改', icon: 'success' })
+    } catch (err) {
+      this.setData({ familyNameError: err.message || '修改失败，请重试' })
+    } finally {
+      this.setData({ renameSaving: false })
+    }
   },
 
   async loadGoals(familyId) {

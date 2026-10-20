@@ -24,7 +24,7 @@
   <view class="family-info" wx:if="{{families.length > 0}}">
     <!-- 家庭选择器 -->
     <view class="family-selector" wx:if="{{families.length > 1}}">
-      <picker mode="selector" range="{{families}}" range-key="name" value="{{currentFamilyIndex}}" bindchange="onFamilyChange">
+      <picker mode="selector" range="{{families}}" range-key="name" value="{{currentFamilyIndex}}" disabled="{{renameSaving}}" bindchange="onFamilyChange">
         <view class="selector-value">
           <text>{{family.name}}</text>
           <text class="selector-arrow">▼</text>
@@ -37,6 +37,18 @@
       <view class="family-header">
         <text class="family-name">{{family.name}}</text>
         <text class="member-count">{{members.length}}人</text>
+      </view>
+      <view wx:if="{{isAdmin}}" class="family-name-editor">
+        <button wx:if="{{!familyNameEditing}}" class="rename-entry" bindtap="editFamilyName">修改家庭名称</button>
+        <view wx:else>
+          <text class="rename-label">家庭名称（1～64个字）</text>
+          <input class="rename-input" value="{{familyNameDraft}}" maxlength="128" disabled="{{renameSaving}}" focus="{{familyNameEditing}}" bindinput="onFamilyNameInput" bindconfirm="saveFamilyName" confirm-type="done" cursor-spacing="120" adjust-position placeholder="请输入家庭名称" />
+          <text class="rename-error" wx:if="{{familyNameError}}">{{familyNameError}}</text>
+          <view class="rename-actions">
+            <button class="rename-cancel" disabled="{{renameSaving}}" bindtap="cancelFamilyNameEdit">取消</button>
+            <button class="rename-save" loading="{{renameSaving}}" disabled="{{renameSaving}}" bindtap="saveFamilyName">{{renameSaving ? '保存中' : '保存名称'}}</button>
+          </view>
+        </view>
       </view>
       <view class="invite-section" wx:if="{{isAdmin}}">
         <text class="invite-label">邀请码</text>

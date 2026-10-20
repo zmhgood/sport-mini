@@ -98,6 +98,41 @@
   border-radius: 16rpx;
 }
 
+.family-name-editor { margin-bottom: 24rpx; }
+.rename-entry {
+  margin: 0;
+  padding: 10rpx 20rpx;
+  width: auto;
+  min-height: 88rpx;
+  font-size: calc(28rpx * var(--app-font-scale, 1));
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 16rpx;
+}
+.rename-label { display: block; margin-bottom: 12rpx; font-size: calc(28rpx * var(--app-font-scale, 1)); }
+.rename-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100rpx;
+  padding: 18rpx;
+  color: #1E293B;
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  font-size: calc(32rpx * var(--app-font-scale, 1));
+}
+.rename-error { display: block; margin-top: 12rpx; font-size: calc(27rpx * var(--app-font-scale, 1)); color: #FFFFFF; }
+.rename-actions { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 16rpx; }
+.rename-actions button {
+  flex: 1;
+  min-width: 180rpx;
+  min-height: 88rpx;
+  margin: 0;
+  font-size: calc(30rpx * var(--app-font-scale, 1));
+  border-radius: 14rpx;
+}
+.rename-cancel { background: #EEF2FF; color: #334155; }
+.rename-save { background: #FFFFFF; color: #2563EB; }
+
 .invite-label {
   font-size: calc(26rpx * var(--app-font-scale, 1));
   opacity: 0.8;
