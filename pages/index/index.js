@@ -152,6 +152,8 @@ Page(withFontSize({
 
   goToFamily() { wx.navigateTo({ url: '/pages/family/family' }) },
 
+  goToCreateFamily() { wx.navigateTo({ url: '/pages/family/join?type=create' }) },
+
   // 跳转到加入家庭页面
   goToJoinFamily() {
     wx.navigateTo({

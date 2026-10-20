@@ -75,7 +75,10 @@
     <view class="empty-tip" wx:elif="{{isLoggedIn}}">
       <text>今日无安排</text>
       <button class="join-family-btn-small" wx:if="{{families.length > 0}}" bindtap="goToFamily">看看家人的安排</button>
-      <button class="join-family-btn-small" wx:else bindtap="goToJoinFamily">+加入家庭</button>
+      <view class="family-entry-actions" wx:else>
+        <button class="join-family-btn-small create-family-btn" bindtap="goToCreateFamily">创建家庭</button>
+        <button class="join-family-btn-small" bindtap="goToJoinFamily">加入家庭</button>
+      </view>
     </view>
     <view class="empty-tip" wx:else>请登录后查看家庭任务</view>
   </view>

@@ -70,12 +70,30 @@ test('guest private settings open login but font preference stays available', ()
   assert.deepEqual(f.routes, ['/pages/login/login', '/pages/login/login', '/pages/login/login', '/pages/font-size/font-size'])
 })
 
-test('home no-family join entry still opens the join form', () => {
+test('home without a family offers both create and join with distinct forms', () => {
   const f = load('pages/index/index.js')
   f.page.setData({ isLoggedIn: true, userInfo: {}, goalsLoading: false, hasTodayTasks: false })
-  assert.match(visibleText('pages/index/index.wxml', f.page.data), /加入家庭/)
+  const text = visibleText('pages/index/index.wxml', f.page.data)
+  assert.match(text, /创建家庭/)
+  assert.match(text, /加入家庭/)
+  f.page.goToCreateFamily()
   f.page.goToJoinFamily()
-  assert.deepEqual(f.routes, ['/pages/family/join?type=join'])
+  assert.deepEqual(f.routes, ['/pages/family/join?type=create', '/pages/family/join?type=join'])
+})
+
+test('home family onboarding stays hidden during loading, errors, guest mode or existing membership', () => {
+  for (const state of [
+    { isLoggedIn: true, goalsLoading: true },
+    { isLoggedIn: true, goalsLoading: false, goalsError: '今日安排加载失败，请重试' },
+    { isLoggedIn: false, goalsLoading: false },
+    { isLoggedIn: true, goalsLoading: false, families: [{ id: 1 }], currentFamily: { name: '测试家庭' } }
+  ]) {
+    const f = load('pages/index/index.js')
+    f.page.setData({ userInfo: {}, ...state })
+    const text = visibleText('pages/index/index.wxml', f.page.data)
+    assert.doesNotMatch(text, /创建家庭|加入家庭/)
+    if (state.families) assert.match(text, /看看家人的安排/)
+  }
 })
 
 test('home share title invites the whole family to exercise', () => {

@@ -265,6 +265,26 @@
   border-radius: 16rpx;
 }
 
+.family-entry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.family-entry-actions .join-family-btn-small {
+  flex: 1 1 220rpx;
+  min-height: 44px;
+  margin: 0;
+  padding: 16rpx 20rpx;
+  line-height: 1.5;
+}
+
+.family-entry-actions .create-family-btn {
+  color: #FFFFFF;
+  background: #176B73;
+}
+
 .category-tabs {
   display: flex;
   padding: 6rpx;
