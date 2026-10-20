@@ -3,6 +3,7 @@ const { withFontSize } = require('../../utils/font-size')
 const app = getApp()
 const api = require('../../utils/api')
 const { categoryForExercise, loadAllExercises } = require('../../utils/exercise-category')
+const { DEFAULT_BANNER_IMAGE, DEFAULT_BANNERS, bannerItems } = require('../../utils/banner')
 
 Page(withFontSize({
   data: {
@@ -40,6 +41,7 @@ Page(withFontSize({
       this.getTabBar().setData({ selected: 0, hidden: false })
     }
     this.checkLogin()
+    this.getBannerList()
     this.getRecommendExercises()
     this.updateProgress()
     this.loadFamilyGoals()
@@ -47,7 +49,6 @@ Page(withFontSize({
 
   // 初始化数据
   initData() {
-    this.getBannerList()
     this.getMuscleGroups()
     this.loadFamilyGoals()
   },
@@ -66,15 +67,27 @@ Page(withFontSize({
   },
 
   // 获取轮播图
-  getBannerList() {
-    // 模拟数据，实际调用后端接口
-    this.setData({
-      bannerList: [
-        { id: 1, title: '每日锻炼', desc: '坚持锻炼，健康长寿', image: '' },
-        { id: 2, title: '预防跌倒', desc: '下肢力量训练', image: '' },
-        { id: 3, title: '改善平衡', desc: '核心肌群锻炼', image: '' }
-      ]
-    })
+  async getBannerList() {
+    if (this._bannerLoading) return
+    this._bannerLoading = true
+    try {
+      const res = await api.request('/banners', 'GET')
+      if (res.code !== 0) throw new Error('轮播图加载失败')
+      this.setData({ bannerList: bannerItems(res.data) })
+      this._bannerLoaded = true
+    } catch (_) {
+      // Keep the last successful list, including an intentionally empty list.
+      if (!this._bannerLoaded) this.setData({ bannerList: DEFAULT_BANNERS.map(item => ({ ...item })) })
+    } finally {
+      this._bannerLoading = false
+    }
+  },
+
+  onBannerImageError(e) {
+    const index = Number(e.currentTarget.dataset.index)
+    const item = this.data.bannerList[index]
+    if (!item || item.image_url === DEFAULT_BANNER_IMAGE) return
+    this.setData({ bannerList: this.data.bannerList.map((banner, i) => i === index ? { ...banner, image_url: DEFAULT_BANNER_IMAGE } : banner) })
   },
 
   // 获取推荐锻炼

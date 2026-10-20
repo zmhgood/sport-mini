@@ -22,13 +22,13 @@
   </view>
   
   <!-- 轮播图 -->
-  <swiper class="banner" indicator-dots autoplay circular interval="5000">
+  <swiper wx:if="{{bannerList.length > 0}}" class="banner" indicator-dots="{{bannerList.length > 1}}" autoplay="{{bannerList.length > 1}}" circular="{{bannerList.length > 1}}" interval="5000">
     <swiper-item wx:for="{{bannerList}}" wx:key="id">
       <view class="banner-item">
-        <image class="banner-image" src="{{item.image || '/images/exercise/default-exercise.jpg'}}" mode="aspectFill"></image>
-        <view class="banner-text">
-          <text class="banner-title">{{item.title}}</text>
-          <text class="banner-desc">{{item.desc}}</text>
+        <image class="banner-image" src="{{item.image_url}}" mode="aspectFill" binderror="onBannerImageError" data-index="{{index}}"></image>
+        <view class="banner-text" wx:if="{{item.title || item.description}}">
+          <text class="banner-title" wx:if="{{item.title}}">{{item.title}}</text>
+          <text class="banner-desc" wx:if="{{item.description}}">{{item.description}}</text>
         </view>
       </view>
     </swiper-item>

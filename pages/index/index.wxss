@@ -119,12 +119,22 @@
 }
 
 .banner-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  overflow-wrap: anywhere;
   font-size: calc(38rpx * var(--app-font-scale, 1));
   font-weight: 700;
   line-height: 1.25;
 }
 
 .banner-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
   margin-top: 5rpx;
   font-size: calc(27rpx * var(--app-font-scale, 1));
   color: rgba(255, 255, 255, 0.9);
