@@ -11,7 +11,8 @@ function fixture(request = async () => ({ code: 0, data: { id: 4, name: '新家'
 
 test('only admins see and can open the name editor; cancel does not write', () => {
   const f = fixture()
-  assert.match(visibleText('pages/family/family.wxml', f.page.data), /修改家庭名称/)
+  assert.match(visibleText('pages/family/family.wxml', f.page.data), /改名/)
+  assert.doesNotMatch(visibleText('pages/family/family.wxml', f.page.data), /保存名称|家庭名称（/)
   f.page.editFamilyName()
   assert.equal(f.page.data.familyNameDraft, '旧家')
   assert.match(visibleText('pages/family/family.wxml', f.page.data), /保存名称/)
@@ -19,7 +20,7 @@ test('only admins see and can open the name editor; cancel does not write', () =
   assert.equal(f.page.data.familyNameEditing, false)
   assert.equal(f.writes.length, 0)
   f.page.setData({ isAdmin: false })
-  assert.doesNotMatch(visibleText('pages/family/family.wxml', f.page.data), /修改家庭名称|保存名称/)
+  assert.doesNotMatch(visibleText('pages/family/family.wxml', f.page.data), /改名|保存名称/)
   f.page.editFamilyName()
   assert.equal(f.page.data.familyNameEditing, false)
 })

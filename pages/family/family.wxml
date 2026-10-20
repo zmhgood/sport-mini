@@ -35,19 +35,19 @@
     <!-- 家庭信息卡片 -->
     <view class="family-card">
       <view class="family-header">
-        <text class="family-name">{{family.name}}</text>
+        <view class="family-title">
+          <text class="family-name">{{family.name}}</text>
+          <button wx:if="{{isAdmin && !familyNameEditing}}" class="rename-entry" size="mini" aria-label="修改家庭名称" bindtap="editFamilyName">改名</button>
+        </view>
         <text class="member-count">{{members.length}}人</text>
       </view>
-      <view wx:if="{{isAdmin}}" class="family-name-editor">
-        <button wx:if="{{!familyNameEditing}}" class="rename-entry" bindtap="editFamilyName">修改家庭名称</button>
-        <view wx:else>
-          <text class="rename-label">家庭名称（1～64个字）</text>
-          <input class="rename-input" value="{{familyNameDraft}}" maxlength="128" disabled="{{renameSaving}}" focus="{{familyNameEditing}}" bindinput="onFamilyNameInput" bindconfirm="saveFamilyName" confirm-type="done" cursor-spacing="120" adjust-position placeholder="请输入家庭名称" />
-          <text class="rename-error" wx:if="{{familyNameError}}">{{familyNameError}}</text>
-          <view class="rename-actions">
-            <button class="rename-cancel" disabled="{{renameSaving}}" bindtap="cancelFamilyNameEdit">取消</button>
-            <button class="rename-save" loading="{{renameSaving}}" disabled="{{renameSaving}}" bindtap="saveFamilyName">{{renameSaving ? '保存中' : '保存名称'}}</button>
-          </view>
+      <view wx:if="{{isAdmin && familyNameEditing}}" class="family-name-editor">
+        <text class="rename-label">家庭名称（1～64个字）</text>
+        <input class="rename-input" value="{{familyNameDraft}}" maxlength="128" disabled="{{renameSaving}}" focus="{{familyNameEditing}}" bindinput="onFamilyNameInput" bindconfirm="saveFamilyName" confirm-type="done" cursor-spacing="120" adjust-position placeholder="请输入家庭名称" />
+        <text class="rename-error" wx:if="{{familyNameError}}">{{familyNameError}}</text>
+        <view class="rename-actions">
+          <button class="rename-cancel" disabled="{{renameSaving}}" bindtap="cancelFamilyNameEdit">取消</button>
+          <button class="rename-save" loading="{{renameSaving}}" disabled="{{renameSaving}}" bindtap="saveFamilyName">{{renameSaving ? '保存中' : '保存名称'}}</button>
         </view>
       </view>
       <view class="invite-section" wx:if="{{isAdmin}}">
